@@ -3,20 +3,19 @@ version: "3.1"
 services:
   twitch-farmer-api:
     build: './twitch-farmer-api'
-    container_name: alo
     networks:
       - geral
     ports:
       - 80
     environment:
-      - DATABASE_HOST=$DATABASE_HOSTA
-      - DATABASE_PORT
-      - DATABASE_USERNAME
-      - DATABASE_PASSWORD
-      - DATABASE_DATABASE
-      - REDIS_HOST
-      - REDIS_PORT
-      - REDIS_PASSWORD
+      - TWITCH_FARMER_API_DATABASE_HOST
+      - TWITCH_FARMER_API_DATABASE_PORT
+      - TWITCH_FARMER_API_DATABASE_USERNAME
+      - TWITCH_FARMER_API_DATABASE_PASSWORD
+      - TWITCH_FARMER_API_DATABASE_DATABASE
+      - TWITCH_FARMER_API_JWT_SECRET
+      - TWITCH_FARMER_API_TWITCH_CLIENT_ID
+      - TWITCH_FARMER_API_TWITCH_CLIENT_SECRET
 
 networks:
   geral:
