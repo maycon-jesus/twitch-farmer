@@ -1,8 +1,9 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { TwitchAccountEntity } from './entities/twitchAccount.entity';
 import { TwitchApiService } from '../TwitchApi/twitchApi.service';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class TwitchAccountsService {
@@ -13,12 +14,26 @@ export class TwitchAccountsService {
   ) {}
 
   async getByTwitchUserId(twitchUserId: string) {
-    const user = await this.twitchAccounts.findOne({
+    const account = await this.twitchAccounts.findOne({
       where: {
         twitchUserId,
       },
     });
-    return user;
+    return account;
+  }
+
+  async getOne(where: FindOptionsWhere<TwitchAccountEntity>) {
+    const account = await this.twitchAccounts.findOne({
+      where,
+    });
+    return account;
+  }
+
+  async update(
+    data: QueryDeepPartialEntity<TwitchAccountEntity>,
+    where: FindOptionsWhere<TwitchAccountEntity>,
+  ) {
+    await this.twitchAccounts.update(where, data);
   }
 
   async insert(accountData: { code: string; owner: number }) {

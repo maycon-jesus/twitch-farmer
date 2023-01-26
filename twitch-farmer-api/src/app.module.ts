@@ -1,8 +1,10 @@
+import { TwitchApiQueueModule } from './queues/TwitchApiQueue/twitchApiQueue.module';
 import { UsersModule } from './modules/Users/users.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/Auth/auth.module';
 import { TwitchAccountsModule } from './modules/TwitchAccounts/twitchAccounts.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -16,9 +18,17 @@ import { TwitchAccountsModule } from './modules/TwitchAccounts/twitchAccounts.mo
       autoLoadEntities: true,
       synchronize: true,
     }),
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+        password: process.env.REDIS_PASSWORD,
+      },
+    }),
     UsersModule,
     AuthModule,
     TwitchAccountsModule,
+    TwitchApiQueueModule,
   ],
   controllers: [],
   providers: [],

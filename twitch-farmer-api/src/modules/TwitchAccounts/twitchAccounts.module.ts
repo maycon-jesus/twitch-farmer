@@ -14,5 +14,6 @@ import { TwitchAccountsService } from './twitchAccounts.service';
   ],
   providers: [TwitchAccountsService],
   controllers: [TwitchAccountsController],
+  exports: [TwitchAccountsService],
 })
 export class TwitchAccountsModule {}

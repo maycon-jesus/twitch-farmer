@@ -6,7 +6,7 @@ Object.keys(process.env)
   .filter((k) => k.startsWith('TWITCH_FARMER_API_'))
   .forEach((k) => {
     const nKey = k.replace('TWITCH_FARMER_API_', '');
-    process.env[nKey] = k;
+    process.env[nKey] = process.env[k];
   });
 
 async function bootstrap() {
