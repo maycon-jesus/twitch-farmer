@@ -9,7 +9,7 @@ services:
     ports:
       - 80
     environment:
-      - DATABASE_HOST=${DATABASE_HOSTA}
+      - DATABASE_HOST=$DATABASE_HOSTA
       - DATABASE_PORT
       - DATABASE_USERNAME
       - DATABASE_PASSWORD
