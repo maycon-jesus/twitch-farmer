@@ -6,8 +6,10 @@ services:
     container_name: alo
     networks:
       - geral
+    ports:
+      - 80
     environment:
-      - teste
+      - DATABASE_HOST=$DATABASE_HOSTA
 
 networks:
   geral:
