@@ -24,9 +24,16 @@ import { UserTwitchChannelsModule } from './modules/UserTwitchChannels/userTwitc
         host: process.env.REDIS_HOST,
         port: Number(process.env.REDIS_PORT),
         password: process.env.REDIS_PASSWORD,
+        reconnectOnError(err) {
+          if (err) {
+            return true;
+          }
+        },
+      },
+      defaultJobOptions: {
+        removeOnComplete: true,
       },
     }),
-    UsersModule,
     AuthModule,
     UserTwitchAccountsModule,
     TwitchApiQueueModule,

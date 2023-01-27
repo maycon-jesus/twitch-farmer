@@ -1,7 +1,12 @@
 import { UserTwitchAccountsService } from './../../modules/UserTwitchAccounts/userTwitchAccounts.service';
 import { TwitchApiService } from './../../modules/TwitchApi/twitchApi.service';
-import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
-import { Job } from 'bullmq';
+import {
+  InjectQueue,
+  OnWorkerEvent,
+  Processor,
+  WorkerHost,
+} from '@nestjs/bullmq';
+import { Job, Queue } from 'bullmq';
 import { DateTime } from 'luxon';
 
 interface RefreshTokenData {
@@ -13,21 +18,44 @@ export class TwitchApiQueueService extends WorkerHost {
   constructor(
     private twitchApi: TwitchApiService,
     private twitchAccounts: UserTwitchAccountsService,
+    @InjectQueue('twitch-api') private queueTwitchApi: Queue,
   ) {
     super();
   }
 
-  async process(job: Job<any, any, string>): Promise<any> {
-    console.log('aaaa', job.name);
-    if (job.name === 'refresh-token') {
-      console.log('bbbb');
-      await this.refreshToken(job.data);
-      console.log(this.twitchApi.validateToken);
-    }
-    // console.log(job, token);
+  @OnWorkerEvent('ready')
+  async queueAllAccounts() {
+    const accounts = await this.twitchAccounts.getAll({
+      where: {
+        tokenStatus: 'authorized',
+      },
+    });
+    accounts.forEach((account) => {
+      this.queueTwitchApi.add(
+        'refresh-token',
+        {
+          accountId: account.id,
+        },
+        {
+          repeatJobKey: 'refresh.' + account.id,
+          repeat: {
+            every: 3000000,
+            immediately: true,
+          },
+          jobId: 'refresh.' + account.id,
+        },
+      );
+    });
   }
 
-  protected async refreshToken(data: RefreshTokenData) {
+  async process(job: Job<any, any, string>): Promise<any> {
+    if (job.name === 'refresh-token') {
+      await this.refreshToken(job);
+    }
+  }
+
+  protected async refreshToken(job: Job<RefreshTokenData, any, string>) {
+    const data = job.data;
     const account = await this.twitchAccounts.getOne({
       id: data.accountId,
     });

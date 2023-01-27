@@ -13,6 +13,13 @@ export class UserTwitchAccountsService {
     private twitchApiService: TwitchApiService,
   ) {}
 
+  async getAll(opts?: { where?: FindOptionsWhere<UserTwitchAccountEntity> }) {
+    const allAccounts = await this.twitchAccounts.find({
+      where: opts.where,
+    });
+    return allAccounts;
+  }
+
   async getByTwitchUserId(twitchUserId: string) {
     const account = await this.twitchAccounts.findOne({
       where: {
