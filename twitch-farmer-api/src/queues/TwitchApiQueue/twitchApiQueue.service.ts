@@ -32,17 +32,17 @@ export class TwitchApiQueueService extends WorkerHost {
     });
     accounts.forEach((account) => {
       this.queueTwitchApi.add(
-        'refresh-token',
+        'validate-token',
         {
           accountId: account.id,
         },
         {
-          repeatJobKey: 'refresh.' + account.id,
+          repeatJobKey: 'validate.' + account.id,
           repeat: {
             every: 3000000,
             immediately: true,
           },
-          jobId: 'refresh.' + account.id,
+          jobId: 'validate.' + account.id,
         },
       );
     });
@@ -51,6 +51,8 @@ export class TwitchApiQueueService extends WorkerHost {
   async process(job: Job<any, any, string>): Promise<any> {
     if (job.name === 'refresh-token') {
       await this.refreshToken(job);
+    } else if (job.name === 'validate-token') {
+      await this.validateToken(job);
     }
   }
 
@@ -66,25 +68,64 @@ export class TwitchApiQueueService extends WorkerHost {
       refreshData.accessToken,
     );
 
+    await this.twitchAccounts.update(
+      {
+        accessToken: refreshData.accessToken,
+        refreshToken: refreshData.refreshToken,
+        tokenExpiresAt: validateData.expiresAt,
+      },
+      {
+        id: data.accountId,
+      },
+    );
+  }
+
+  protected async validateToken(job: Job<RefreshTokenData, any, string>) {
+    const data = job.data;
+    const account = await this.twitchAccounts.getOne({
+      id: data.accountId,
+    });
+    if (!account) throw new Error('Conta não encontrada!');
+
     const horasRestantes = DateTime.fromJSDate(account.tokenExpiresAt)
       .diffNow('hour')
       .toObject();
 
+    const jobParent = job.parent
+      ? {
+          queue: job.parent.queueKey,
+          id: job.parent.id,
+        }
+      : undefined;
+
     if (horasRestantes.hours < 1) {
-      await this.twitchAccounts.update(
+      await this.queueTwitchApi.add(
+        'refresh-token',
         {
-          accessToken: refreshData.accessToken,
-          refreshToken: refreshData.refreshToken,
-          tokenExpiresAt: validateData.expiresAt,
+          accountId: account.id,
         },
         {
-          id: data.accountId,
+          parent: jobParent,
         },
       );
+    } else {
+      try {
+        await this.twitchApi.validateToken(account.accessToken);
+      } catch {
+        await this.queueTwitchApi.add(
+          'refresh-token',
+          {
+            accountId: account.id,
+          },
+          {
+            parent: jobParent,
+          },
+        );
+      }
     }
   }
 
-  @OnWorkerEvent('error')
+  @OnWorkerEvent('failed')
   protected async onRefreshTokenFail(job: Job<any, any, string>) {
     if (job.name === 'refresh-token') {
       await this.twitchAccounts.update(
