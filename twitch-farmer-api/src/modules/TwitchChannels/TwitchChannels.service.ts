@@ -25,6 +25,7 @@ export class TwitchChannelsService {
     username: string;
     avatarUrl: string;
     twitchUserId: string;
+    displayName: string;
   }) {
     data.username = data.username.toLowerCase();
 
@@ -34,6 +35,7 @@ export class TwitchChannelsService {
       username: data.username,
       avatarUrl: data.avatarUrl,
       twitchUserId: data.twitchUserId,
+      displayName: data.displayName,
     });
     return {
       channelId: nChannel.id,
@@ -58,6 +60,7 @@ export class TwitchChannelsService {
       avatarUrl: streamerInfo.avatarUrl,
       twitchUserId: streamerInfo.id,
       username: streamerInfo.login,
+      displayName: streamerInfo.displayName,
     });
 
     const channel = await this.getOne({

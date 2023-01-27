@@ -21,6 +21,9 @@ export class TwitchChannelEntity {
   username: string;
 
   @Column()
+  displayName: string;
+
+  @Column()
   avatarUrl: string;
 
   @Column({
