@@ -20,6 +20,16 @@ export class UserTwitchAccountsService {
     return allAccounts;
   }
 
+  async getAllByUser(userId: number) {
+    return await this.twitchAccounts.find({
+      where: {
+        owner: {
+          id: userId,
+        },
+      },
+    });
+  }
+
   async getByTwitchUserId(twitchUserId: string) {
     const account = await this.twitchAccounts.findOne({
       where: {

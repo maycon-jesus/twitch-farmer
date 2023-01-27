@@ -2,6 +2,7 @@ import { UserTwitchAccountsService } from './userTwitchAccounts.service';
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Session,
@@ -28,6 +29,29 @@ export class UserTwitchAccountsController {
     });
     return {
       id: data.id,
+    };
+  }
+
+  @Get()
+  @HttpCode(200)
+  @UseGuards(AuthGuard)
+  async listMyAccounts(@Session() session: SessionData) {
+    const accounts = await this.userTwitchAccountsService.getAllByUser(
+      session.sub,
+    );
+    const accountsMap = accounts.map(
+      ({ id, avatarUrl, createdAt, updatedAt, username }) => {
+        return {
+          id,
+          avatarUrl,
+          createdAt,
+          updatedAt,
+          username,
+        };
+      },
+    );
+    return {
+      data: accountsMap,
     };
   }
 }
