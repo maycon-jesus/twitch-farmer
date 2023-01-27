@@ -1,7 +1,7 @@
+import { UserTwitchAccountsService } from './../../modules/UserTwitchAccounts/userTwitchAccounts.service';
 import { TwitchApiService } from './../../modules/TwitchApi/twitchApi.service';
-import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import { TwitchAccountsService } from 'src/modules/TwitchAccounts/twitchAccounts.service';
 import { DateTime } from 'luxon';
 
 interface RefreshTokenData {
@@ -12,7 +12,7 @@ interface RefreshTokenData {
 export class TwitchApiQueueService extends WorkerHost {
   constructor(
     private twitchApi: TwitchApiService,
-    private twitchAccounts: TwitchAccountsService,
+    private twitchAccounts: UserTwitchAccountsService,
   ) {
     super();
   }
@@ -51,6 +51,20 @@ export class TwitchApiQueueService extends WorkerHost {
         },
         {
           id: data.accountId,
+        },
+      );
+    }
+  }
+
+  @OnWorkerEvent('error')
+  protected async onRefreshTokenFail(job: Job<any, any, string>) {
+    if (job.name === 'refresh-token') {
+      await this.twitchAccounts.update(
+        {
+          tokenStatus: 'unauthorized',
+        },
+        {
+          id: job.data.accountId,
         },
       );
     }

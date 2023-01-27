@@ -1,3 +1,4 @@
+import { UserTwitchAccountsService } from './../UserTwitchAccounts/userTwitchAccounts.service';
 import { HttpException, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { DateTime } from 'luxon';
@@ -61,6 +62,30 @@ export class TwitchApiService {
     return {
       id: user.id,
       email: user.email,
+      login: user.login,
+      displayName: user.display_name,
+      avatarUrl: user.profile_image_url,
+    };
+  }
+
+  async getStreamerInfo(login: string, accessToken: string) {
+    const { data } = await axios.get(`https://api.twitch.tv/helix/users`, {
+      params: {
+        login,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+        'client-id': process.env.TWITCH_CLIENT_ID,
+      },
+    });
+
+    if (!data.data.length)
+      throw new HttpException('Usuário não encontrado!', 400);
+
+    const user = data.data[0];
+
+    return {
+      id: user.id,
       login: user.login,
       displayName: user.display_name,
       avatarUrl: user.profile_image_url,

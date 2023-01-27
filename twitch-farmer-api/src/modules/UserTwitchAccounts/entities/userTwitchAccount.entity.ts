@@ -11,7 +11,7 @@ import {
 @Entity({
   name: 'twitch_accounts',
 })
-export class TwitchAccountEntity {
+export class UserTwitchAccountEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -48,4 +48,7 @@ export class TwitchAccountEntity {
 
   @Column()
   tokenExpiresAt: Date;
+
+  @Column()
+  tokenStatus: 'authorized' | 'unauthorized';
 }

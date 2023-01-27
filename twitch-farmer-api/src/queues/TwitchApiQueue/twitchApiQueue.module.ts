@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { TwitchApiQueueService } from './twitchApiQueue.service';
-import { TwitchAccountsModule } from 'src/modules/TwitchAccounts/twitchAccounts.module';
 import { TwitchApiModule } from 'src/modules/TwitchApi/twitchApi.module';
+import { UserTwitchAccountsModule } from 'src/modules/UserTwitchAccounts/userTwitchAccounts.module';
 
 @Module({
   imports: [
     BullModule.registerQueue({
       name: 'twitch-api',
     }),
-    TwitchAccountsModule,
+    UserTwitchAccountsModule,
     TwitchApiModule,
   ],
   providers: [TwitchApiQueueService],

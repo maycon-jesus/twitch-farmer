@@ -1,15 +1,15 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpException } from '@nestjs/common';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { TwitchAccountEntity } from './entities/twitchAccount.entity';
+import { UserTwitchAccountEntity } from './entities/userTwitchAccount.entity';
 import { TwitchApiService } from '../TwitchApi/twitchApi.service';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
-export class TwitchAccountsService {
+export class UserTwitchAccountsService {
   constructor(
-    @InjectRepository(TwitchAccountEntity)
-    private twitchAccounts: Repository<TwitchAccountEntity>,
+    @InjectRepository(UserTwitchAccountEntity)
+    private twitchAccounts: Repository<UserTwitchAccountEntity>,
     private twitchApiService: TwitchApiService,
   ) {}
 
@@ -22,16 +22,39 @@ export class TwitchAccountsService {
     return account;
   }
 
-  async getOne(where: FindOptionsWhere<TwitchAccountEntity>) {
+  async getOne(where: FindOptionsWhere<UserTwitchAccountEntity>) {
     const account = await this.twitchAccounts.findOne({
       where,
     });
     return account;
   }
 
+  async getRandomAccessToken() {
+    const account = await this.twitchAccounts.findOne({
+      where: {
+        tokenStatus: 'authorized',
+      },
+      order: {
+        tokenExpiresAt: {
+          direction: 'desc',
+        },
+      },
+    });
+
+    if (!account)
+      throw new HttpException(
+        'Nenhuma conta elegivel para obter informações do canal',
+        500,
+      );
+
+    return {
+      accessToken: account.accessToken,
+    };
+  }
+
   async update(
-    data: QueryDeepPartialEntity<TwitchAccountEntity>,
-    where: FindOptionsWhere<TwitchAccountEntity>,
+    data: QueryDeepPartialEntity<UserTwitchAccountEntity>,
+    where: FindOptionsWhere<UserTwitchAccountEntity>,
   ) {
     await this.twitchAccounts.update(where, data);
   }
@@ -65,6 +88,7 @@ export class TwitchAccountsService {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       tokenExpiresAt: validateToken.expiresAt,
+      tokenStatus: 'authorized',
     });
 
     return {

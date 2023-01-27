@@ -1,4 +1,4 @@
-import { TwitchAccountsService } from './twitchAccounts.service';
+import { UserTwitchAccountsService } from './userTwitchAccounts.service';
 import {
   Body,
   Controller,
@@ -12,8 +12,8 @@ import { insertTwitchAccountDto } from './dto/insertTwitchAccount.dto';
 import { SessionData } from 'src/@types/sessionData';
 
 @Controller('twitch-accounts')
-export class TwitchAccountsController {
-  constructor(private twitchAccountsService: TwitchAccountsService) {}
+export class UserTwitchAccountsController {
+  constructor(private userTwitchAccountsService: UserTwitchAccountsService) {}
 
   @Post()
   @HttpCode(200)
@@ -22,7 +22,7 @@ export class TwitchAccountsController {
     @Session() session: SessionData,
     @Body() body: insertTwitchAccountDto,
   ) {
-    const data = await this.twitchAccountsService.insert({
+    const data = await this.userTwitchAccountsService.insert({
       code: body.code,
       owner: session.sub,
     });

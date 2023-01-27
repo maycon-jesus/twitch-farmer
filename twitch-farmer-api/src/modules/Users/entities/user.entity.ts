@@ -1,4 +1,5 @@
-import { TwitchAccountEntity } from 'src/modules/TwitchAccounts/entities/twitchAccount.entity';
+import { UserTwitchChannelsEntity } from './../../UserTwitchChannels/entities/userTwitchChannels.entity';
+import { UserTwitchAccountEntity } from 'src/modules/UserTwitchAccounts/entities/userTwitchAccount.entity';
 import { Entity, OneToMany } from 'typeorm';
 import {
   Column,
@@ -34,6 +35,9 @@ export class UserEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => TwitchAccountEntity, (t) => t.twitchUserId)
-  twitchAccounts: TwitchAccountEntity[];
+  @OneToMany(() => UserTwitchAccountEntity, (t) => t.owner)
+  twitchAccounts: UserTwitchAccountEntity[];
+
+  @OneToMany(() => UserTwitchChannelsEntity, (t) => t.user)
+  twitchChannels: UserTwitchChannelsEntity[];
 }

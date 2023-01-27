@@ -1,10 +1,11 @@
+import { UserTwitchAccountsModule } from './modules/UserTwitchAccounts/userTwitchAccounts.module';
 import { TwitchApiQueueModule } from './queues/TwitchApiQueue/twitchApiQueue.module';
 import { UsersModule } from './modules/Users/users.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/Auth/auth.module';
-import { TwitchAccountsModule } from './modules/TwitchAccounts/twitchAccounts.module';
 import { BullModule } from '@nestjs/bullmq';
+import { UserTwitchChannelsModule } from './modules/UserTwitchChannels/userTwitchChannels.module';
 
 @Module({
   imports: [
@@ -27,8 +28,9 @@ import { BullModule } from '@nestjs/bullmq';
     }),
     UsersModule,
     AuthModule,
-    TwitchAccountsModule,
+    UserTwitchAccountsModule,
     TwitchApiQueueModule,
+    UserTwitchChannelsModule,
   ],
   controllers: [],
   providers: [],
