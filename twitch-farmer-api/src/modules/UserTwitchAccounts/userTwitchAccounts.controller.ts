@@ -1,9 +1,13 @@
 import { UserTwitchAccountsService } from './userTwitchAccounts.service';
 import {
+  BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
+  NotFoundException,
+  Param,
   Post,
   Session,
   UseGuards,
@@ -11,8 +15,10 @@ import {
 import { AuthGuard } from 'src/guards/auth.guard';
 import { insertTwitchAccountDto } from './dto/insertTwitchAccount.dto';
 import { SessionData } from 'src/@types/sessionData';
+import { MicroServiceGuard } from 'src/guards/microservice.guard';
+import { UserHasTwitchAccountPermissionGuard } from 'src/guards/userHasTwitchAccountPermission.guard';
 
-@Controller('twitch-accounts')
+@Controller('users/:userId/twitch-accounts')
 export class UserTwitchAccountsController {
   constructor(private userTwitchAccountsService: UserTwitchAccountsService) {}
 
@@ -53,5 +59,22 @@ export class UserTwitchAccountsController {
     return {
       data: accountsMap,
     };
+  }
+
+  @Delete(':accountId')
+  @HttpCode(201)
+  @UseGuards(AuthGuard)
+  @UseGuards(UserHasTwitchAccountPermissionGuard)
+  async deleteAccount(@Param('accountId') accountId: string) {
+    const accountIdNumber = Number(accountId);
+    if (Number.isNaN(accountIdNumber) || !Number.isInteger(accountIdNumber))
+      throw new BadRequestException('Id da conta inválido');
+    const account = await this.userTwitchAccountsService.getOne({
+      id: accountIdNumber,
+    });
+    if (!account) throw new NotFoundException('Conta não encontrada');
+    if (account.owner.id !== accountIdNumber)
+      throw new NotFoundException('Conta não encontrada');
+    await this.userTwitchAccountsService.deleteAccount(accountIdNumber);
   }
 }

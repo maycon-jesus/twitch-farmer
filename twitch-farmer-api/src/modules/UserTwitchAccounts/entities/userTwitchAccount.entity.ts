@@ -31,6 +31,7 @@ export class UserTwitchAccountEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.twitchAccounts, {
     nullable: false,
+    eager: true,
   })
   owner: UserEntity;
 

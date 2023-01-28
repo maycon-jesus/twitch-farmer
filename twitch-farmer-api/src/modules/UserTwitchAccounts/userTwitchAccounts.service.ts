@@ -125,4 +125,10 @@ export class UserTwitchAccountsService {
       id: nAccount.id,
     };
   }
+
+  async deleteAccount(accountId: number) {
+    await this.twitchAccounts.delete({
+      id: accountId,
+    });
+  }
 }
