@@ -1,4 +1,3 @@
-import { UserTwitchAccountsService } from './userTwitchAccounts.service';
 import {
   BadRequestException,
   Body,
@@ -11,12 +10,14 @@ import {
   Post,
   Session,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { insertTwitchAccountDto } from './dto/insertTwitchAccount.dto';
 import { SessionData } from 'src/@types/sessionData';
-import { MicroServiceGuard } from 'src/guards/microservice.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { UserHasTwitchAccountPermissionGuard } from 'src/guards/userHasTwitchAccountPermission.guard';
+import { IdsToNumberPipe } from 'src/pipes/IdsToNumber.pipe';
+import { insertTwitchAccountDto } from './dto/insertTwitchAccount.dto';
+import { UserTwitchAccountsService } from './userTwitchAccounts.service';
 
 @Controller('users/:userId/twitch-accounts')
 export class UserTwitchAccountsController {
@@ -76,5 +77,26 @@ export class UserTwitchAccountsController {
     if (account.owner.id !== accountIdNumber)
       throw new NotFoundException('Conta não encontrada');
     await this.userTwitchAccountsService.deleteAccount(accountIdNumber);
+  }
+
+  @Get(':accountId')
+  @HttpCode(200)
+  @UsePipes(IdsToNumberPipe)
+  @UseGuards(AuthGuard)
+  @UseGuards(UserHasTwitchAccountPermissionGuard)
+  async getAccountDetails(@Param('accountId') accountId: number) {
+    const account = await this.userTwitchAccountsService.getOne({
+      id: accountId,
+    });
+    if (!account) throw new NotFoundException('Conta não encontrada');
+
+    return {
+      id: account.id,
+      avatarUrl: account.avatarUrl,
+      username: account.username,
+      createdAt: account.createdAt,
+      updatedAt: account.updatedAt,
+      tokenStatus: account.tokenStatus,
+    };
   }
 }
