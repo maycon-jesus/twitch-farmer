@@ -1,7 +1,14 @@
-import { UserTwitchAccountsService } from './../UserTwitchAccounts/userTwitchAccounts.service';
+import {
+  PromiseDataError,
+  PromiseDataSuccess,
+} from './../../@types/PromiseData.d';
 import { HttpException, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { DateTime } from 'luxon';
+import { PromiseData } from 'src/@types/PromiseData';
+import { CustomError } from 'src/utils/PromiseError';
+
+type RefreshTokenErrorsCodes = 'REFRESH_TOKEN_INVALID';
 
 @Injectable()
 export class TwitchApiService {
@@ -93,16 +100,31 @@ export class TwitchApiService {
   }
 
   async refreshToken(refreshToken: string) {
-    const { data } = await axios.post(`https://id.twitch.tv/oauth2/token`, {
-      client_id: process.env.TWITCH_CLIENT_ID,
-      client_secret: process.env.TWITCH_CLIENT_SECRET,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    });
+    const refreshTokenData = await axios
+      .post(`https://id.twitch.tv/oauth2/token`, {
+        client_id: process.env.TWITCH_CLIENT_ID,
+        client_secret: process.env.TWITCH_CLIENT_SECRET,
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+      })
+      .catch((err) => {
+        if (
+          err.response &&
+          err.response.status >= 400 &&
+          err.response.status <= 499
+        ) {
+          return new CustomError<RefreshTokenErrorsCodes>(err.message, {
+            code: 'REFRESH_TOKEN_INVALID',
+          });
+        }
+        throw err;
+      });
+
+    if (refreshTokenData instanceof CustomError) return refreshTokenData;
 
     return {
-      accessToken: data.access_token,
-      refreshToken: data.refresh_token,
+      accessToken: refreshTokenData.data.access_token,
+      refreshToken: refreshTokenData.data.refresh_token,
     };
   }
 }

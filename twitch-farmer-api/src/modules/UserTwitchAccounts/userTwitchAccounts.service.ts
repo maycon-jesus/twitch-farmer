@@ -4,10 +4,16 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 import { UserTwitchAccountEntity } from './entities/userTwitchAccount.entity';
 import { TwitchApiService } from '../TwitchApi/twitchApi.service';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import {
+  TwitchAccountCreatedEvent,
+  TwitchAccountCreatedEventName,
+} from './events/TwitchAccountCreated.event';
 
 @Injectable()
 export class UserTwitchAccountsService {
   constructor(
+    private eventEmitter: EventEmitter2,
     @InjectRepository(UserTwitchAccountEntity)
     private twitchAccounts: Repository<UserTwitchAccountEntity>,
     private twitchApiService: TwitchApiService,
@@ -30,7 +36,7 @@ export class UserTwitchAccountsService {
     });
   }
 
-  async getByTwitchUserId(twitchUserId: string) {
+  async getOneByTwitchUserId(twitchUserId: string) {
     const account = await this.twitchAccounts.findOne({
       where: {
         twitchUserId,
@@ -88,7 +94,7 @@ export class UserTwitchAccountsService {
       tokens.accessToken,
     );
 
-    const userAlreadyExists = await this.getByTwitchUserId(userData.id);
+    const userAlreadyExists = await this.getOneByTwitchUserId(userData.id);
     if (userAlreadyExists)
       throw new HttpException(`Essa conta ja esta registrada no sistema`, 400);
 
@@ -107,6 +113,13 @@ export class UserTwitchAccountsService {
       tokenExpiresAt: validateToken.expiresAt,
       tokenStatus: 'authorized',
     });
+
+    this.eventEmitter.emit(
+      TwitchAccountCreatedEventName,
+      new TwitchAccountCreatedEvent({
+        accountId: nAccount.id,
+      }),
+    );
 
     return {
       id: nAccount.id,

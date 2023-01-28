@@ -1,11 +1,11 @@
 import { UserTwitchAccountsModule } from './modules/UserTwitchAccounts/userTwitchAccounts.module';
-import { TwitchApiQueueModule } from './queues/TwitchApiQueue/twitchApiQueue.module';
-import { UsersModule } from './modules/Users/users.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/Auth/auth.module';
 import { BullModule } from '@nestjs/bullmq';
 import { UserTwitchChannelsModule } from './modules/UserTwitchChannels/userTwitchChannels.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { TwitchApiQueueModule } from './queues/TwitchApiQueue/twitchApiQueue.module';
 
 @Module({
   imports: [
@@ -34,10 +34,11 @@ import { UserTwitchChannelsModule } from './modules/UserTwitchChannels/userTwitc
         removeOnComplete: true,
       },
     }),
+    EventEmitterModule.forRoot(),
     AuthModule,
     UserTwitchAccountsModule,
-    TwitchApiQueueModule,
     UserTwitchChannelsModule,
+    TwitchApiQueueModule,
   ],
   controllers: [],
   providers: [],
