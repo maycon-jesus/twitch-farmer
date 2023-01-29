@@ -24,6 +24,7 @@ export class UserTwitchChannelsEntity {
 
   @ManyToOne(() => TwitchChannelEntity, (t) => t.usersChannels, {
     nullable: false,
+    eager: true,
   })
   channel: TwitchChannelEntity;
 }

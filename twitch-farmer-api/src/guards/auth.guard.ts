@@ -25,11 +25,14 @@ export class AuthGuard implements CanActivate {
 
     const payload = this.getPayload(authorization);
 
-    if (
-      request.params.userId &&
-      payload.sub.toString() != request.params.userId
-    )
-      throw new ForbiddenException();
+    if (request.params.userId == 'me')
+      request.params.userId = payload.sub.toString();
+
+    // if (
+    //   request.params.userId &&
+    //   payload.sub.toString() != request.params.userId
+    // )
+    //   throw new ForbiddenException();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

@@ -22,6 +22,15 @@ export class UserTwitchChannelsService {
     return relation;
   }
 
+  async getUserChannels(userId: number) {
+    const channels = await this.userTwitchChannelRepository.find({
+      where: {
+        userId,
+      },
+    });
+    return channels;
+  }
+
   async insert(data: { userId: number; channelUsername: string }) {
     const channel = await this.twitchChannelsService.getChannelInfoAndInsert({
       username: data.channelUsername,
@@ -46,5 +55,13 @@ export class UserTwitchChannelsService {
       username: channel.username,
       id: channel.id,
     };
+  }
+
+  async deleteChannel(data: { userId: number; channelId: number }) {
+    await this.userTwitchChannelRepository.delete({
+      userId: data.userId,
+      channelId: data.channelId,
+    });
+    return;
   }
 }

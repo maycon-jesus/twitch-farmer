@@ -41,7 +41,7 @@ export class UserTwitchAccountsController {
 
   @Get()
   @HttpCode(200)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, UserHasTwitchAccountPermissionGuard)
   async listMyAccounts(@Session() session: SessionData) {
     const accounts = await this.userTwitchAccountsService.getAllByUser(
       session.sub,
@@ -64,8 +64,7 @@ export class UserTwitchAccountsController {
 
   @Delete(':accountId')
   @HttpCode(201)
-  @UseGuards(AuthGuard)
-  @UseGuards(UserHasTwitchAccountPermissionGuard)
+  @UseGuards(AuthGuard, UserHasTwitchAccountPermissionGuard)
   async deleteAccount(@Param('accountId') accountId: string) {
     const accountIdNumber = Number(accountId);
     if (Number.isNaN(accountIdNumber) || !Number.isInteger(accountIdNumber))
@@ -82,9 +81,12 @@ export class UserTwitchAccountsController {
   @Get(':accountId')
   @HttpCode(200)
   @UsePipes(IdsToNumberPipe)
-  @UseGuards(AuthGuard)
-  @UseGuards(UserHasTwitchAccountPermissionGuard)
-  async getAccountDetails(@Param('accountId') accountId: number) {
+  @UseGuards(AuthGuard, UserHasTwitchAccountPermissionGuard)
+  async getAccountDetails(
+    @Param('accountId') accountId: number,
+    @Param() params: any,
+  ) {
+    console.log(params);
     const account = await this.userTwitchAccountsService.getOne({
       id: accountId,
     });
