@@ -9,6 +9,7 @@ import { PromiseData } from 'src/@types/PromiseData';
 import { CustomError } from 'src/utils/PromiseError';
 
 type RefreshTokenErrorsCodes = 'REFRESH_TOKEN_INVALID';
+type ValidateTokenErrorsCodes = 'ACCESS_TOKEN_INVALID';
 
 @Injectable()
 export class TwitchApiService {
@@ -31,11 +32,26 @@ export class TwitchApiService {
   }
 
   async validateToken(token: string) {
-    const { data } = await axios.get('https://id.twitch.tv/oauth2/validate', {
-      headers: {
-        Authorization: 'OAuth ' + token,
-      },
-    });
+    const apiResponse = await axios
+      .get('https://id.twitch.tv/oauth2/validate', {
+        headers: {
+          Authorization: 'OAuth ' + token,
+        },
+      })
+      .catch((err) => {
+        if (
+          err.response &&
+          err.response.status >= 400 &&
+          err.response.status <= 499
+        ) {
+          return new CustomError<ValidateTokenErrorsCodes>(err, {
+            code: 'ACCESS_TOKEN_INVALID',
+          });
+        }
+      });
+
+    if (apiResponse instanceof CustomError) return apiResponse;
+    const { data } = apiResponse;
 
     const expiresAt = DateTime.fromMillis(Date.now())
       .plus({

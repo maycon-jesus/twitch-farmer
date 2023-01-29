@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { UserTwitchAccountEntity } from './entities/userTwitchAccount.entity';
 import { TwitchApiService } from '../TwitchApi/twitchApi.service';
@@ -9,6 +9,7 @@ import {
   TwitchAccountCreatedEvent,
   TwitchAccountCreatedEventName,
 } from './events/TwitchAccountCreated.event';
+import { CustomError } from 'src/utils/PromiseError';
 
 @Injectable()
 export class UserTwitchAccountsService {
@@ -86,9 +87,13 @@ export class UserTwitchAccountsService {
     const tokens = await this.twitchApiService.exchangeCodeToTokens(
       accountData.code,
     );
+
     const validateToken = await this.twitchApiService.validateToken(
       tokens.accessToken,
     );
+    if (validateToken instanceof CustomError)
+      throw new BadRequestException('Aplicativo não possui acesso a sua conta');
+
     const userData = await this.twitchApiService.getAccountInfoById(
       validateToken.userId,
       tokens.accessToken,

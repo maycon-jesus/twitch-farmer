@@ -71,6 +71,20 @@ export class TwitchApiQueueWorker extends WorkerHost {
       refreshData.accessToken,
     );
 
+    if (validateData instanceof CustomError) {
+      if (validateData.code === 'ACCESS_TOKEN_INVALID') {
+        await this.userTwitchAccounts.update(
+          {
+            tokenStatus: 'unauthorized',
+          },
+          {
+            id: job.data.accountId,
+          },
+        );
+      }
+      return;
+    }
+
     await this.userTwitchAccounts.update(
       {
         accessToken: refreshData.accessToken,
@@ -114,15 +128,19 @@ export class TwitchApiQueueWorker extends WorkerHost {
         { parent: jobParent },
       );
     } else {
-      try {
-        await this.twitchApi.validateToken(account.accessToken);
-      } catch {
-        await this.twitchApiQueueEvent.pushToQueueRefreshToken(
-          {
-            accountId: account.id,
-          },
-          { parent: jobParent },
-        );
+      const tokenValidation = await this.twitchApi.validateToken(
+        account.accessToken,
+      );
+      if (tokenValidation instanceof CustomError) {
+        if (tokenValidation.code === 'ACCESS_TOKEN_INVALID') {
+          await this.twitchApiQueueEvent.pushToQueueRefreshToken(
+            {
+              accountId: account.id,
+            },
+            { parent: jobParent },
+          );
+        }
+        return;
       }
     }
   }

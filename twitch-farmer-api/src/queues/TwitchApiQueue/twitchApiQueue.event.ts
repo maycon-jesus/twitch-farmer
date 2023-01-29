@@ -33,7 +33,7 @@ export class TwitchApiQueueEvent {
       repeatJobKey: 'validate.' + data.accountId,
       repeat: {
         every: 3000000,
-        immediately: false,
+        immediately: true,
       },
       jobId: 'validate.' + data.accountId,
     });
