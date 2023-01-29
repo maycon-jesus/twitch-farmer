@@ -1,6 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import helmet from 'helmet';
+import * as compression from 'compression';
 
 Object.keys(process.env)
   .filter((k) => k.startsWith('TWITCH_FARMER_API_'))
@@ -11,6 +13,8 @@ Object.keys(process.env)
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet());
+  app.use(compression());
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
