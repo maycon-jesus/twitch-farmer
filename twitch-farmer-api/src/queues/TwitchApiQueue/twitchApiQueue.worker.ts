@@ -1,74 +1,36 @@
-import {
-  InjectQueue,
-  OnWorkerEvent,
-  Processor,
-  WorkerHost,
-} from '@nestjs/bullmq';
-import { Job, Queue } from 'bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+import { Job } from 'bullmq';
 import { DateTime } from 'luxon';
-import { CustomError } from 'src/utils/PromiseError';
-import { OnEvent } from '@nestjs/event-emitter';
 import { TwitchApiService } from 'src/modules/TwitchApi/twitchApi.service';
 import { UserTwitchAccountsService } from 'src/modules/UserTwitchAccounts/userTwitchAccounts.service';
-
-interface RefreshTokenData {
-  accountId: number;
-}
-
-interface OnTwitchAccountCreatedData {
-  accountId: number;
-}
+import { CustomError } from 'src/utils/PromiseError';
+import {
+  TwitchApiQueueEvent,
+  TwitchQueueRefreshTokenData,
+  TwitchQueueValidateTokenData,
+} from './twitchApiQueue.event';
 
 @Processor('twitch-api')
-export class TwitchApiQueueService extends WorkerHost {
+export class TwitchApiQueueWorker extends WorkerHost {
   constructor(
+    private twitchApiQueueEvent: TwitchApiQueueEvent,
+    private userTwitchAccounts: UserTwitchAccountsService,
     private twitchApi: TwitchApiService,
-    private twitchAccounts: UserTwitchAccountsService,
-    @InjectQueue('twitch-api') private queueTwitchApi: Queue,
   ) {
     super();
   }
 
-  @OnEvent('twitch-accounts.created')
-  async onNewTwitchAccount(data: OnTwitchAccountCreatedData) {
-    await this.queueTwitchApi.add(
-      'validate-token',
-      {
-        accountId: data.accountId,
-      },
-      {
-        repeatJobKey: 'validate.' + data.accountId,
-        repeat: {
-          every: 3000000,
-          immediately: false,
-        },
-        jobId: 'validate.' + data.accountId,
-      },
-    );
-  }
-
   @OnWorkerEvent('ready')
   async queueAllAccounts() {
-    const accounts = await this.twitchAccounts.getAll({
+    const accounts = await this.userTwitchAccounts.getAll({
       where: {
         tokenStatus: 'authorized',
       },
     });
     accounts.forEach(async (account) => {
-      await this.queueTwitchApi.add(
-        'validate-token',
-        {
-          accountId: account.id,
-        },
-        {
-          repeat: {
-            every: 3000000,
-            immediately: true,
-          },
-          repeatJobKey: 'validate.' + account.id,
-          jobId: 'validate.' + account.id,
-        },
-      );
+      await this.twitchApiQueueEvent.pushToQueueValidateToken({
+        accountId: account.id,
+      });
     });
   }
 
@@ -80,9 +42,11 @@ export class TwitchApiQueueService extends WorkerHost {
     }
   }
 
-  protected async refreshToken(job: Job<RefreshTokenData, any, string>) {
+  protected async refreshToken(
+    job: Job<TwitchQueueRefreshTokenData, any, string>,
+  ) {
     const data = job.data;
-    const account = await this.twitchAccounts.getOne({
+    const account = await this.userTwitchAccounts.getOne({
       id: data.accountId,
     });
     if (!account) throw new Error('Conta não encontrada!');
@@ -90,7 +54,7 @@ export class TwitchApiQueueService extends WorkerHost {
     const refreshData = await this.twitchApi.refreshToken(account.refreshToken);
     if (refreshData instanceof CustomError) {
       if (refreshData.code === 'REFRESH_TOKEN_INVALID') {
-        await this.twitchAccounts.update(
+        await this.userTwitchAccounts.update(
           {
             tokenStatus: 'unauthorized',
           },
@@ -107,7 +71,7 @@ export class TwitchApiQueueService extends WorkerHost {
       refreshData.accessToken,
     );
 
-    await this.twitchAccounts.update(
+    await this.userTwitchAccounts.update(
       {
         accessToken: refreshData.accessToken,
         refreshToken: refreshData.refreshToken,
@@ -119,13 +83,15 @@ export class TwitchApiQueueService extends WorkerHost {
     );
   }
 
-  protected async validateToken(job: Job<RefreshTokenData, any, string>) {
+  protected async validateToken(
+    job: Job<TwitchQueueValidateTokenData, any, string>,
+  ) {
     const data = job.data;
-    const account = await this.twitchAccounts.getOne({
+    const account = await this.userTwitchAccounts.getOne({
       id: data.accountId,
     });
     if (!account) {
-      await this.queueTwitchApi.removeRepeatableByKey(job.repeatJobKey);
+      await this.twitchApiQueueEvent.removeRepeatableJobByKey(job.repeatJobKey);
       return;
     }
 
@@ -141,28 +107,21 @@ export class TwitchApiQueueService extends WorkerHost {
       : undefined;
 
     if (horasRestantes.hours < 1) {
-      await this.queueTwitchApi.add(
-        'refresh-token',
+      await this.twitchApiQueueEvent.pushToQueueRefreshToken(
         {
           accountId: account.id,
         },
-        {
-          parent: jobParent,
-        },
+        { parent: jobParent },
       );
     } else {
       try {
         await this.twitchApi.validateToken(account.accessToken);
       } catch {
-        console.log('erro validacao');
-        await this.queueTwitchApi.add(
-          'refresh-token',
+        await this.twitchApiQueueEvent.pushToQueueRefreshToken(
           {
             accountId: account.id,
           },
-          {
-            parent: jobParent,
-          },
+          { parent: jobParent },
         );
       }
     }

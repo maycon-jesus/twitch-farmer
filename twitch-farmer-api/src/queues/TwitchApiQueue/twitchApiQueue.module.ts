@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
-import { TwitchApiQueueService } from './twitchApiQueue.service';
 import { TwitchApiModule } from 'src/modules/TwitchApi/twitchApi.module';
 import { UserTwitchAccountsModule } from 'src/modules/UserTwitchAccounts/userTwitchAccounts.module';
+import { TwitchApiQueueEvent } from './twitchApiQueue.event';
+import { TwitchApiQueueWorker } from './twitchApiQueue.worker';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { UserTwitchAccountsModule } from 'src/modules/UserTwitchAccounts/userTwi
     UserTwitchAccountsModule,
     TwitchApiModule,
   ],
-  providers: [TwitchApiQueueService],
+  providers: [TwitchApiQueueEvent, TwitchApiQueueWorker],
   exports: [],
 })
 export class TwitchApiQueueModule {}
