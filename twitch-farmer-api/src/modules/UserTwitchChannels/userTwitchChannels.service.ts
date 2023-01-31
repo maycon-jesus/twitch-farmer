@@ -22,11 +22,17 @@ export class UserTwitchChannelsService {
     return relation;
   }
 
-  async getUserChannels(userId: number) {
+  async getUserChannels(
+    userId: number,
+    opts?: {
+      loadEagerRelations?: boolean;
+    },
+  ) {
     const channels = await this.userTwitchChannelRepository.find({
       where: {
         userId,
       },
+      loadEagerRelations: opts?.loadEagerRelations,
     });
     return channels;
   }

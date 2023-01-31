@@ -2,13 +2,21 @@ import { createUserDto } from './dto/createUser.dto';
 import { UserEntity } from './entities/user.entity';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsSelect, Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsSelect, Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private users: Repository<UserEntity>,
   ) {}
+
+  async count(options?: FindManyOptions<UserEntity>) {
+    return await this.users.count(options);
+  }
+
+  async find(options: FindManyOptions<UserEntity>) {
+    return await this.users.find(options);
+  }
 
   async getById(userId: number) {
     const user = await this.users.findOne({

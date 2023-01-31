@@ -32,8 +32,7 @@ export class TwitchApiQueueEvent {
     await this.queueTwitchApi.add('validate-token', data, {
       repeatJobKey: 'validate.' + data.accountId,
       repeat: {
-        every: 3000000,
-        immediately: true,
+        pattern: '0 * * * *',
       },
       jobId: 'validate.' + data.accountId,
     });

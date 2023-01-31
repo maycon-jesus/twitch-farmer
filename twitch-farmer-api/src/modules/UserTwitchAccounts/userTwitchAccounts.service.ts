@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, HttpException, BadRequestException } from '@nestjs/common';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { UserTwitchAccountEntity } from './entities/userTwitchAccount.entity';
 import { TwitchApiService } from '../TwitchApi/twitchApi.service';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -20,10 +20,8 @@ export class UserTwitchAccountsService {
     private twitchApiService: TwitchApiService,
   ) {}
 
-  async getAll(opts?: { where?: FindOptionsWhere<UserTwitchAccountEntity> }) {
-    const allAccounts = await this.twitchAccounts.find({
-      where: opts.where,
-    });
+  async getAll(opts?: FindManyOptions<UserTwitchAccountEntity>) {
+    const allAccounts = await this.twitchAccounts.find(opts);
     return allAccounts;
   }
 

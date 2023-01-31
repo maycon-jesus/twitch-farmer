@@ -6,6 +6,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { UserTwitchChannelsModule } from './modules/UserTwitchChannels/userTwitchChannels.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TwitchApiQueueModule } from './queues/TwitchApiQueue/twitchApiQueue.module';
+import { PrivateModule } from './modules/Private/private.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { TwitchApiQueueModule } from './queues/TwitchApiQueue/twitchApiQueue.mod
       },
     }),
     EventEmitterModule.forRoot(),
+    PrivateModule,
     AuthModule,
     UserTwitchAccountsModule,
     UserTwitchChannelsModule,

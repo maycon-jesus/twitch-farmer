@@ -16,5 +16,6 @@ import { AuthGuardModule } from '../AuthGuard/authGuard.module';
   ],
   providers: [UserTwitchChannelsService],
   controllers: [UserTwitchChannelsController],
+  exports: [UserTwitchChannelsService],
 })
 export class UserTwitchChannelsModule {}

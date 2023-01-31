@@ -35,6 +35,7 @@ export class TwitchApiQueueWorker extends WorkerHost {
   }
 
   async process(job: Job<any, any, string>): Promise<any> {
+    console.log('process');
     if (job.name === 'refresh-token') {
       await this.refreshToken(job);
     } else if (job.name === 'validate-token') {
