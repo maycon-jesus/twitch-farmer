@@ -9,13 +9,7 @@ export class UsersPrivateController {
 
   @Get()
   async getAllUsers() {
-    const allUsers = await this.usersService.find({
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const allUsers = await this.usersService.find();
 
     return allUsers;
   }

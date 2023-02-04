@@ -14,7 +14,7 @@ export class UsersService {
     return await this.users.count(options);
   }
 
-  async find(options: FindManyOptions<UserEntity>) {
+  async find(options?: FindManyOptions<UserEntity>) {
     return await this.users.find(options);
   }
 
