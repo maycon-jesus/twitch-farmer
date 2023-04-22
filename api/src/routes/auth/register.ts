@@ -58,14 +58,14 @@ export class AuthRegisterRoute extends RouteBase {
                         ],
                     });
 
-                await this.dd.users.create({
+                const nUser = await this.dd.users.create({
                     email: body.data.email,
                     firstName: body.data.firstName,
                     lastName: body.data.lastName,
                     password: body.data.password,
                 });
 
-                await this.dd.inviteCodes.markInviteUsed(body.data.inviteCode);
+                await this.dd.inviteCodes.markInviteUsed(body.data.inviteCode, nUser.id);
 
                 res.json({ success: true });
             } catch (err: any) {

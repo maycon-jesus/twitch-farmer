@@ -1,10 +1,10 @@
 import { ControllerBase } from '../base/Controller';
 import { ErrorMaker } from '../libs/ErrorMaker';
 
-type RolePermissions = 'GENERATE_INVITE_CODE';
+export type RolePermission = 'GENERATE_INVITE_CODE';
 
 export class RolesController extends ControllerBase {
-    async getRolePermissions(roleId: string): Promise<RolePermissions[]> {
+    async getRolePermissions(roleId: string): Promise<RolePermission[]> {
         const role = await this.dd.database.db('user_roles').where({ id: roleId }).first();
         if (!role)
             throw new ErrorMaker({
@@ -16,9 +16,9 @@ export class RolesController extends ControllerBase {
                 ],
             });
 
-        const permissions = Object.entries(role).reduce<RolePermissions[]>((p, v) => {
+        const permissions = Object.entries(role).reduce<RolePermission[]>((p, v) => {
             if (v[0].startsWith('PERM_') && v[1]) {
-                p.push(v[0].replace('PERM_', '') as RolePermissions);
+                p.push(v[0].replace('PERM_', '') as RolePermission);
                 return p;
             }
             return p;

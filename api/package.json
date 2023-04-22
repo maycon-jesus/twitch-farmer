@@ -6,7 +6,8 @@
     "scripts": {
         "start": "ts-node --project tsconfig.json .",
         "knex:migration:make": "knex migrate:make -x ts",
-        "knex:seed:make": "knex seed:make -x ts"
+        "knex:seed:make": "knex seed:make -x ts",
+        "dev": "nodemon --config ./nodemon.json ."
     },
     "keywords": [],
     "author": "",
@@ -17,6 +18,7 @@
         "@types/jsonwebtoken": "^9.0.1",
         "@types/node": "^18.15.11",
         "@types/uuid": "^9.0.1",
+        "nodemon": "^2.0.22",
         "typescript": "^5.0.4"
     },
     "dependencies": {

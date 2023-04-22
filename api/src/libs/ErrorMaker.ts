@@ -1,3 +1,5 @@
+import type { ZodIssue } from 'zod';
+
 export type ErrorTypes =
     | 'form_validation'
     | 'database'
@@ -21,10 +23,7 @@ interface optsOther extends optsBase {
 
 interface optsFormValidation extends optsBase {
     type: 'form_validation';
-    errors: {
-        key: string;
-        message: string;
-    }[];
+    errors: ZodIssue[];
 }
 
 type opts = optsOther | optsFormValidation;

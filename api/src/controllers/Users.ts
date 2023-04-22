@@ -47,6 +47,8 @@ export class UsersController extends ControllerBase {
                     type: 'database',
                 });
             });
+
+        return { id };
     }
 
     async findOne(userId: string): Promise<IUser> {
