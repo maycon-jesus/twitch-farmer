@@ -16,10 +16,10 @@ export class InviteCodesController extends ControllerBase {
         const c = await this.dd.database.db('invite_codes').where({ code }).first();
         if (!c)
             throw new ErrorMaker({
-                type: 'not_found',
+                type: 'forbidden',
                 errors: [
                     {
-                        message: 'Código de convite não encontrado',
+                        message: 'Código de convite não existe ou é inválido!',
                     },
                 ],
             });

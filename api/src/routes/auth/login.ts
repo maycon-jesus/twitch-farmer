@@ -38,7 +38,6 @@ export class AuthLoginRoute extends RouteBase {
 
                 res.json({ token: loginData.token });
             } catch (err: any) {
-                console.log(err);
                 const e = ErrorToResponse(err);
                 res.status(e.status).json(e.error);
             }

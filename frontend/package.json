@@ -1,0 +1,26 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "nuxt": "^3.4.2",
+    "sass": "^1.62.0",
+    "unplugin-icons": "^0.16.1",
+    "vite-plugin-vuetify": "^1.0.2"
+  },
+  "dependencies": {
+    "@iconify/json": "^2.2.54",
+    "@pinia/nuxt": "^0.4.9",
+    "nuxt-icons": "^3.2.1",
+    "pinia": "^2.0.35",
+    "vuetify": "^3.1.15",
+    "zod": "^3.21.4"
+  }
+}
