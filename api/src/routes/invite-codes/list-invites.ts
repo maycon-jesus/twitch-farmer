@@ -25,6 +25,13 @@ export class InviteCodesListRoute extends RouteBase {
                 const invitesCount = await this.dd.inviteCodes.countInvites({
                     ownerId: req.jwt.userId,
                 });
+
+                res.json({
+                    data: invites,
+                    total: invitesCount.count,
+                    actualPage: query.data.page,
+                    totalPages: Math.ceil(invitesCount.count / query.data.limit),
+                });
             } catch (err: any) {
                 const e = ErrorToResponse(err);
                 res.status(e.status).json(e.error);

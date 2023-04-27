@@ -4,9 +4,9 @@ import { useUserDataStore } from '~/store/userData';
 export default defineNuxtRouteMiddleware(async (to) => {
     const userStore = useUserDataStore();
     const ui = useUi();
-    ui.startLoading();
 
     if (userStore.userData) return;
+    ui.startLoading();
 
     try {
         await userStore.getUserData();

@@ -47,7 +47,8 @@ export class InviteCodesController extends ControllerBase {
             .db('invite_codes')
             .where({ ownerId: data.ownerId })
             .offset(offset)
-            .limit(data.limit);
+            .limit(data.limit)
+            .orderBy('createdAt', 'desc');
     }
 
     async countInvites(data: { ownerId: string }): Promise<{ count: number }> {

@@ -14,7 +14,7 @@ export default defineNuxtPlugin((nuxt) => {
                         primary: '#907ad6',
                         secondary: '#dabfff',
                         background: '#2c2a4a',
-                        surface: '#4f518c',
+                        surface: '#3E3E6B',
                     },
                 },
             },

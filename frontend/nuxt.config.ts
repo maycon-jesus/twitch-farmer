@@ -7,10 +7,11 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             API_BASE_URL: process.env.API_BASE_URL,
+            APP_URL: process.env.APP_URL,
         },
     },
 
-    css: ['~/assets/css/destyle.css', 'vuetify/styles'],
+    css: ['~/assets/css/reset.css', 'vuetify/styles'],
 
     modules: ['unplugin-icons/nuxt', 'nuxt-icons', '@pinia/nuxt'],
     plugins: ['~/plugins/vuetify'],

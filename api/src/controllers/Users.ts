@@ -2,6 +2,7 @@ import { ControllerBase } from '../base/Controller';
 import { v4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { ErrorMaker } from '../libs/ErrorMaker';
+import { join } from 'path';
 
 export interface IUser {
     id: string;

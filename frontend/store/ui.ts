@@ -13,11 +13,12 @@ export const useUi = defineStore('ui', {
     },
     actions: {
         startLoading() {
-            console.log('al');
             this.loadingCount++;
+            console.log('startLoading', this.loadingCount);
         },
         endLoading() {
             this.loadingCount--;
+            console.log('endLoading', this.loadingCount);
         },
     },
 });

@@ -12,5 +12,8 @@ export const useUserDataStore = defineStore('user-data', {
             const userData = await this.$api<any>('/users/me');
             this.userData = userData;
         },
+        async reset() {
+            this.userData = null;
+        },
     },
 });

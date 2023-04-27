@@ -22,7 +22,7 @@ const ui = useUi();
     justify-content: center;
     align-items: center;
     background-color: rgb(var(--v-theme-background));
-    z-index: 10;
+    z-index: 2000;
     transition: all 0.3;
 }
 .loader {

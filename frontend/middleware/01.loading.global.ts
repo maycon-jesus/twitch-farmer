@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
     if (!hookDefined.value) {
         app.hook('page:finish', () => {
-            console.log('alo');
+            console.log('hook:finish');
             ui.endLoading();
         });
         hookDefined.value = true;
