@@ -9,18 +9,18 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@types/node": "^18.16.1",
-    "nuxt": "^3.4.2",
+    "@types/node": "^18.16.2",
+    "nuxt": "^3.4.3",
     "sass": "^1.62.1",
     "unplugin-icons": "^0.16.1",
     "vite-plugin-vuetify": "^1.0.2"
   },
   "dependencies": {
-    "@iconify/json": "^2.2.55",
+    "@iconify/json": "^2.2.57",
     "@pinia/nuxt": "^0.4.9",
     "nuxt-icons": "^3.2.1",
     "pinia": "^2.0.35",
-    "vuetify": "^3.1.15",
+    "vuetify": "^3.2.1",
     "zod": "^3.21.4"
   }
 }

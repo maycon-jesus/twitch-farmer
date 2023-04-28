@@ -7,7 +7,7 @@
         </v-row>
         <v-row justify="end">
             <v-col cols="auto">
-                <dashboard-invites-button-create-invite />
+                <dashboard-invites-button-create-invite @created:invite="getInvites(undefined, false)" />
             </v-col>
         </v-row>
         <v-row>
@@ -29,6 +29,15 @@
                         </tr>
                     </tbody>
                 </v-table>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="12">
+                <v-pagination
+                    :length="invites.totalPages"
+                    :model-value="invites.actualPage"
+                    @update:model-value="getInvites"
+                ></v-pagination>
             </v-col>
         </v-row>
     </v-container>
@@ -53,21 +62,34 @@ const invites = ref<{
         usedBy: null | string;
     }[];
     total: number;
-    atualPage: number;
+    actualPage: number;
     totalPages: number;
-}>({ data: [], atualPage: 0, total: 0, totalPages: 0 });
+}>({ data: [], actualPage: 1, total: 0, totalPages: 0 });
 
-ui.startLoading();
-const data = api<{
-    data: any[];
-    total: number;
-    atualPage: number;
-    totalPages: number;
-}>('/invite-codes')
-    .then((data) => {
-        invites.value = data;
+const getInvites = (page: number = 1, showLoading: boolean = true) => {
+    if (showLoading) {
+        ui.startLoading();
+    }
+
+    api<{
+        data: any[];
+        total: number;
+        actualPage: number;
+        totalPages: number;
+    }>('/invite-codes', {
+        query: {
+            page,
+        },
     })
-    .finally(() => {
-        ui.endLoading();
-    });
+        .then((data) => {
+            invites.value = data;
+        })
+        .finally(() => {
+            if (showLoading) {
+                ui.endLoading();
+            }
+        });
+};
+
+getInvites(1);
 </script>

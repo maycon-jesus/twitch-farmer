@@ -1,7 +1,7 @@
 <template>
     <v-btn @click="modalOpen = true">Criar novo convite</v-btn>
 
-    <v-dialog max-width="500" v-model="modalOpen">
+    <v-dialog max-width="500" v-model="modalOpen" persistent>
         <v-card :loading="modalState.loading">
             <v-card-title>{{ modalState.title }} </v-card-title>
             <v-expand-transition v-show="modalState.apiError">
@@ -24,7 +24,7 @@
             <v-expand-transition v-show="modalState.showCloseBtn">
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text color="on-surface" @click="modalOpen = false">Fechar</v-btn>
+                    <v-btn text color="on-surface" @click="closeModal()">Fechar</v-btn>
                 </v-card-actions>
             </v-expand-transition>
         </v-card>
@@ -34,6 +34,10 @@
 <script setup lang="ts">
 import iconError from '~icons/material-symbols/error-rounded';
 const runtimeConfig = useRuntimeConfig();
+const emits = defineEmits<{
+    (e: 'created:invite'): void;
+    (e: 'modal-closed'): void;
+}>();
 
 const api = useApi();
 const modalOpen = ref(false);
@@ -66,7 +70,7 @@ const createInvite = () => {
     api<{ code: string }>('/invite-codes', { method: 'post' })
         .then((data) => {
             inviteData.value.code = data.code;
-            inviteData.value.url = `${runtimeConfig.public.APP_URL}/?invite-code=${data.code}`;
+            inviteData.value.url = `${runtimeConfig.public.APP_URL}/registrar?invite-code=${data.code}`;
             modalState.value = {
                 loading: false,
                 title: 'Convite criado com sucesso!',
@@ -74,6 +78,7 @@ const createInvite = () => {
                 showInvite: true,
                 apiError: null,
             };
+            emits('created:invite');
         })
         .catch((err) => {
             if (err === 'unknown') {
@@ -88,6 +93,11 @@ const createInvite = () => {
                 apiError: err.errors[0].message,
             };
         });
+};
+
+const closeModal = () => {
+    emits('modal-closed');
+    modalOpen.value = false;
 };
 
 watchEffect(() => {
