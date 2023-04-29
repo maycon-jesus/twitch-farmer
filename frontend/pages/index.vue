@@ -8,6 +8,11 @@
     >
         <v-card class="card-login">
             <v-container fluid>
+                <v-row v-if="errorMessage">
+                    <v-col cols="12">
+                        <LazyRegisterLoginErrorMessage :message="errorMessage" />
+                    </v-col>
+                </v-row>
                 <v-row>
                     <v-col cols="12">
                         <div class="titles-wrapper">
@@ -65,6 +70,7 @@ const route = useRoute();
 const formValid = ref(false);
 const formLoading = ref(false);
 const apiError = ref<null | string>(null);
+const errorMessage = ref<null | string>((route.query['error-message'] as string) || null);
 const data = reactive({
     email: sessionStorage.getItem('login.email') || '',
     password: sessionStorage.getItem('login.password') || '',

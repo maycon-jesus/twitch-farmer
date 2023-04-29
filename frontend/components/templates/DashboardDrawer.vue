@@ -1,0 +1,83 @@
+<template>
+    <v-navigation-drawer :model-value="ui.drawerOpen" @update:model-value="ui.setDrawerOpen" app :permanent="isDesktop">
+        <v-list>
+            <v-list-subheader>Geral</v-list-subheader>
+            <v-list-item :to="{ name: 'index' }" disabled>
+                <template #prepend>
+                    <v-icon :icon="iconTwitch"></v-icon>
+                </template>
+                <v-list-item-title>Contas</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'index' }" disabled>
+                <template #prepend>
+                    <v-icon :icon="iconLive"></v-icon>
+                </template>
+                <v-list-item-title>Canais</v-list-item-title>
+            </v-list-item>
+
+            <v-list-subheader>Resgates</v-list-subheader>
+            <v-list-item :to="{ name: 'index' }" disabled>
+                <template #prepend>
+                    <v-icon :icon="iconGift"></v-icon>
+                </template>
+                <v-list-item-title>Resgates</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'index' }" disabled>
+                <template #prepend>
+                    <v-icon :icon="iconBot"></v-icon>
+                </template>
+                <v-list-item-title class="break">Resgatador automático</v-list-item-title>
+            </v-list-item>
+
+            <v-list-subheader>Outros</v-list-subheader>
+            <v-list-item :to="{ name: 'dashboard-convites' }">
+                <template #prepend>
+                    <v-icon :icon="iconInvite"></v-icon>
+                </template>
+                <v-list-item-title>Convidar amigos</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'index' }" disabled>
+                <template #prepend>
+                    <v-icon :icon="iconNotes"></v-icon>
+                </template>
+                <v-list-item-title>Notas de lançamento</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'index' }" disabled>
+                <template #prepend>
+                    <v-icon :icon="iconTutorial"></v-icon>
+                </template>
+                <v-list-item-title>Tutoriais</v-list-item-title>
+            </v-list-item>
+        </v-list>
+    </v-navigation-drawer>
+</template>
+
+<script setup lang="ts">
+import iconInvite from '~icons/mdi/invite';
+import iconTwitch from '~icons/mdi/twitch';
+import iconGift from '~icons/mdi/gift';
+import iconLive from '~icons/solar/play-stream-bold';
+import iconBot from '~icons/fluent/bot-20-filled';
+import iconNotes from '~icons/mdi/feature-highlight';
+import iconTutorial from '~icons/material-symbols/school';
+import { useUi } from '~/store/ui';
+import { useDisplay } from 'vuetify/lib/framework.mjs';
+
+const ui = useUi();
+const display = useDisplay();
+const isDesktop = ref(false);
+
+if (display.mdAndUp.value) {
+    ui.setDrawerOpen(true);
+    isDesktop.value = true;
+} else {
+    ui.setDrawerOpen(false);
+    isDesktop.value = false;
+}
+</script>
+
+<style scoped lang="scss">
+.break {
+    white-space: normal;
+}
+</style>

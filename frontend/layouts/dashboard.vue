@@ -2,10 +2,11 @@
     <v-app>
         <ui-loading />
         <templates-header />
+        <templates-dashboard-drawer />
         <v-main class="main">
             <slot></slot>
         </v-main>
-        <v-footer>GGG</v-footer>
+        <v-footer app absolute>GGG</v-footer>
     </v-app>
 </template>
 

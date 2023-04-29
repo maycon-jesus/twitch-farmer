@@ -4,6 +4,7 @@ export const useUi = defineStore('ui', {
     state() {
         return {
             loadingCount: 0,
+            drawerOpen: false,
         };
     },
     getters: {
@@ -19,6 +20,12 @@ export const useUi = defineStore('ui', {
         endLoading() {
             this.loadingCount--;
             console.log('endLoading', this.loadingCount);
+        },
+        toggleDrawerOpen() {
+            this.drawerOpen = !this.drawerOpen;
+        },
+        setDrawerOpen(value: boolean) {
+            this.drawerOpen = value;
         },
     },
 });

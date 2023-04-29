@@ -1,6 +1,9 @@
 <template>
     <v-app-bar>
-        <v-app-bar-title>Twitch Farmer BOT</v-app-bar-title>
+        <template #prepend>
+            <v-app-bar-nav-icon class="mr-2" :icon="menuIcon" @click="ui.toggleDrawerOpen()" />
+            <v-app-bar-title class="mr-2">Twitch Farmer BOT</v-app-bar-title>
+        </template>
 
         <v-menu>
             <template #activator="{ props }">
@@ -15,6 +18,8 @@
 </template>
 
 <script setup lang="ts">
+import menuIcon from '~icons/material-symbols/menu';
+import { useUi } from '~/store/ui';
 import { useUserDataStore } from '~/store/userData';
 
 defineProps<{
@@ -22,6 +27,7 @@ defineProps<{
 }>();
 
 const userData = useUserDataStore();
+const ui = useUi();
 </script>
 
 <style lang="scss">

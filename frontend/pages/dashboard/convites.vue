@@ -48,6 +48,7 @@ import { useUi } from '~/store/ui';
 
 definePageMeta({
     layout: 'dashboard',
+    middleware: ['auth'],
 });
 
 const api = useApi();

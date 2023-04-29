@@ -21,7 +21,7 @@ export const useApi = () => {
                 router.push({
                     name: 'index',
                     query: {
-                        errorMessage: 'Estamos em manutenção no momento. Por favor aguarde...',
+                        'error-message': 'Estamos em manutenção no momento. Por favor aguarde...',
                     },
                 });
             } else {
@@ -34,7 +34,12 @@ export const useApi = () => {
                 const router = useRouter();
                 const userData = useUserDataStore();
                 userData.reset();
-                router.push('/');
+                router.push({
+                    name: 'index',
+                    query: {
+                        'error-message': 'Seu acesso expirou. Faça login novamente!',
+                    },
+                });
             }
             throw err.response._data;
         },
