@@ -1,15 +1,8 @@
-import { RouteBase } from '../../base/Route';
-import { Request, Response } from 'express';
-import { z } from 'zod';
-import { ErrorMaker, ErrorToResponse } from '../../libs/ErrorMaker';
+import {RouteBase} from '../../base/Route';
+import {z} from 'zod';
+import {ErrorMaker, ErrorToResponse} from '../../libs/ErrorMaker';
 
 export class AuthRegisterRoute extends RouteBase {
-    constructor() {
-        super({
-            path: '/register',
-        });
-    }
-
     private bodyValidator = z.object({
         firstName: z
             .string({
@@ -40,12 +33,18 @@ export class AuthRegisterRoute extends RouteBase {
             .uuid('Código inválido'),
     });
 
+    constructor() {
+        super({
+            path: '/register',
+        });
+    }
+
     run(): void {
         this.router.post('/', async (req, res) => {
             try {
                 const body = this.bodyValidator.safeParse(req.body);
                 if (!body.success)
-                    return res.status(400).json({ errorType: 'form_validation', errors: body.error.errors });
+                    return res.status(400).json({errorType: 'form_validation', errors: body.error.errors});
 
                 const inviteCode = await this.dd.inviteCodes.getInviteByCode(body.data.inviteCode);
                 if (inviteCode.used)
@@ -67,7 +66,7 @@ export class AuthRegisterRoute extends RouteBase {
 
                 await this.dd.inviteCodes.markInviteUsed(body.data.inviteCode, nUser.id);
 
-                res.json({ success: true });
+                res.json({success: true});
             } catch (err: any) {
                 const e = ErrorToResponse(err);
                 res.status(e.status).json(e.error);

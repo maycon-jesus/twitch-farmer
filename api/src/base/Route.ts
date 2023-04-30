@@ -1,14 +1,13 @@
 import express from 'express';
-import { IDependencys, getDependencys } from '../libs/DependencysManager';
-import type { Request, Response } from 'express';
-import { MiddlewareBase } from './Middleware';
+import {getDependencys, IDependencys} from '../libs/DependencysManager';
+import {MiddlewareBase} from './Middleware';
 
 export type RouteMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'use';
 
 export abstract class RouteBase {
     public router: express.Router;
-    private path: string;
     protected dd: IDependencys;
+    private path: string;
 
     constructor(
         config: {

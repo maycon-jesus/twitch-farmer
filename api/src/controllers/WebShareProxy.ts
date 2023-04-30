@@ -1,6 +1,6 @@
-import { ControllerBase } from '../base/Controller';
-import axios, { AxiosRequestConfig } from 'axios';
-import { ErrorMaker } from '../libs/ErrorMaker';
+import {ControllerBase} from '../base/Controller';
+import axios, {AxiosRequestConfig} from 'axios';
+import {ErrorMaker} from '../libs/ErrorMaker';
 
 export type WebShareProxy = {
     id: string;
@@ -14,9 +14,10 @@ export type WebShareProxy = {
 
 export class WebShareProxyController extends ControllerBase {
     proxyList: WebShareProxy[] = [];
+
     constructor() {
         super();
-        this.loadProxys();
+        this.loadProxys().then();
     }
 
     async loadProxys(page = 1) {
@@ -34,7 +35,7 @@ export class WebShareProxyController extends ControllerBase {
             .catch(() => {
                 throw new ErrorMaker({
                     type: 'other',
-                    errors: [{ message: 'Ocorreu um erro ao carregar os proxys' }],
+                    errors: [{message: 'Ocorreu um erro ao carregar os proxys'}],
                 });
             });
         this.proxyList.push(
@@ -52,7 +53,7 @@ export class WebShareProxyController extends ControllerBase {
         );
 
         if (proxys.data.next) {
-            this.loadProxys(page + 1);
+            await this.loadProxys(page + 1);
         }
     }
 

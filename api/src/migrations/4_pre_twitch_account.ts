@@ -1,4 +1,4 @@
-import { Knex } from 'knex';
+import {Knex} from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('pre_twitch_account', (table) => {
@@ -10,4 +10,6 @@ export async function up(knex: Knex): Promise<void> {
     });
 }
 
-export async function down(knex: Knex): Promise<void> {}
+export async function down(knex: Knex): Promise<void> {
+    return knex.schema.dropTable('pre_twitch_account')
+}
