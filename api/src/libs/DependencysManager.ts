@@ -1,7 +1,10 @@
 import { AuthController } from '../controllers/Auth';
 import { InviteCodesController } from '../controllers/InviteCodes';
 import { RolesController } from '../controllers/Roles';
+import { TwitchAccountsController } from '../controllers/TwitchAccounts';
+import { TwitchApiController } from '../controllers/TwitchApi';
 import { UsersController } from '../controllers/Users';
+import { WebShareProxyController } from '../controllers/WebShareProxy';
 import { DatabaseModule } from '../modules/Database.module';
 import { RoutesModule } from '../modules/Routes.module';
 
@@ -12,6 +15,9 @@ export interface IDependencys {
     roles: RolesController;
     auth: AuthController;
     inviteCodes: InviteCodesController;
+    twitchApi: TwitchApiController;
+    twitchAccounts: TwitchAccountsController;
+    webShareProxy: WebShareProxyController;
 }
 
 const dependencys: {
