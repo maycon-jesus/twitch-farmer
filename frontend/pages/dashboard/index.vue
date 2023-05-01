@@ -1,67 +1,66 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="12">
-                <DashboardTemplatePageTitle title="Dashboard"></DashboardTemplatePageTitle>
+            <v-col cols='12'>
+                <DashboardTemplatePageTitle title='Dashboard'></DashboardTemplatePageTitle>
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="12">
-                <div class="cards-list" :class="{ tablet: $vuetify.display.mdAndDown, mobile: $vuetify.display.xs }">
+            <v-col cols='12'>
+                <div :class='{ tablet: $vuetify.display.mdAndDown, mobile: $vuetify.display.xs }' class='cards-list'>
                     <DashboardHomePageCard
-                        title="Contas"
-                        description="Gerencie suas contas da twitch"
-                        :to="{ name: 'index' }"
-                        :icon="iconTwitch"
-                        coming-soon
+                        :icon='iconTwitch'
+                        :to="{ name: 'dashboard-contas' }"
+                        description='Gerencie suas contas da twitch'
+                        title='Contas'
                     />
                     <DashboardHomePageCard
-                        title="Canais"
-                        description="Gerencie seus canais de farm"
+                        :icon='iconLive'
                         :to="{ name: 'index' }"
-                        :icon="iconLive"
                         coming-soon
+                        description='Gerencie seus canais de farm'
+                        title='Canais'
                     />
                     <DashboardHomePageCard
-                        title="Convidar amigos"
-                        description="Crie um link de convite para chamar seus amigos para farmar com você"
+                        :icon='iconInvite'
                         :to="{ name: 'dashboard-convites' }"
-                        :icon="iconInvite"
+                        description='Crie um link de convite para chamar seus amigos para farmar com você'
+                        title='Convidar amigos'
                     />
                     <DashboardHomePageCard
-                        title="Resgates"
-                        description="Acompanhe de forma facilitada todos os seus resgates"
+                        :icon='iconGift'
                         :to="{ name: 'index' }"
-                        :icon="iconGift"
                         coming-soon
+                        description='Acompanhe de forma facilitada todos os seus resgates'
+                        title='Resgates'
                     />
                     <DashboardHomePageCard
-                        title="Resgatador automático"
-                        description="Configure seu bot de resgates automatizado"
+                        :icon='iconBot'
                         :to="{ name: 'index' }"
-                        :icon="iconBot"
                         coming-soon
+                        description='Configure seu bot de resgates automatizado'
+                        title='Resgatador automático'
                     />
                     <DashboardHomePageCard
-                        title="Tutoriais"
-                        description="Aprenda como utilizar alguns recursos do site"
+                        :icon='iconTutorial'
                         :to="{ name: 'index' }"
-                        :icon="iconTutorial"
                         coming-soon
+                        description='Aprenda como utilizar alguns recursos do site'
+                        title='Tutoriais'
                     />
                     <DashboardHomePageCard
-                        title="Notas de lançamento"
-                        description="Acompanhe todas as novidades que estão por vir"
+                        :icon='iconNotes'
                         :to="{ name: 'index' }"
-                        :icon="iconNotes"
                         coming-soon
+                        description='Acompanhe todas as novidades que estão por vir'
+                        title='Notas de lançamento'
                     />
                 </div>
             </v-col>
         </v-row>
     </v-container>
 </template>
-<script setup lang="ts">
+<script lang='ts' setup>
 import iconInvite from '~icons/mdi/invite';
 import iconTwitch from '~icons/mdi/twitch';
 import iconGift from '~icons/mdi/gift';
@@ -72,23 +71,23 @@ import iconTutorial from '~icons/material-symbols/school';
 
 definePageMeta({
     middleware: ['auth'],
-    layout: 'dashboard-index',
+    layout: 'dashboard-index'
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .cards-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    // margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  // margin: auto;
 
-    &.tablet {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  &.tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-    &.mobile {
-        grid-template-columns: repeat(1, 1fr);
-    }
+  &.mobile {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 </style>

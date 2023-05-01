@@ -11,7 +11,7 @@ export class TwitchAccountsController extends ControllerBase {
         });
 
         const baseUrl = 'https://id.twitch.tv/oauth2/authorize';
-        const query = `response_type=code&client_id=${process.env.TWITCH_BOT_CLIENT_ID}&redirect_uri=${process.env.FRONTEND_URL}&scope=chat:edit chat:read whispers:read whispers:edit user:read:email&state=${code}&force_verify=true`;
+        const query = `response_type=code&client_id=${process.env.TWITCH_BOT_CLIENT_ID}&redirect_uri=${process.env.FRONTEND_URL}/public/add-account&scope=chat:edit chat:read whispers:read whispers:edit user:read:email&state=${code}&force_verify=true`;
         return baseUrl + '?' + query;
     }
 
@@ -74,6 +74,10 @@ export class TwitchAccountsController extends ControllerBase {
             displayName: accountDetails.displayName,
             profileImageUrl: accountDetails.profileImageUrl,
         };
+    }
+
+    async deleteAccount(accountId: string){
+        await this.dd.database.db('twitch_accounts').where({id: accountId}).del()
     }
 
     async setStreamElementsToken(accountId: string, streamElementsToken: string) {

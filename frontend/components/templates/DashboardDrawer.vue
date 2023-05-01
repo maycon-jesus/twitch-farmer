@@ -1,16 +1,17 @@
 <template>
-    <v-navigation-drawer :model-value="ui.drawerOpen" @update:model-value="ui.setDrawerOpen" app :permanent="isDesktop">
+    <v-navigation-drawer :model-value='ui.drawerOpen' :permanent='isDesktop as any' app
+                         @update:model-value='ui.setDrawerOpen'>
         <v-list>
             <v-list-subheader>Geral</v-list-subheader>
-            <v-list-item :to="{ name: 'index' }" disabled>
+            <v-list-item :to="{ name: 'dashboard-contas' }">
                 <template #prepend>
-                    <v-icon :icon="iconTwitch"></v-icon>
+                    <v-icon :icon='iconTwitch'></v-icon>
                 </template>
                 <v-list-item-title>Contas</v-list-item-title>
             </v-list-item>
             <v-list-item :to="{ name: 'index' }" disabled>
                 <template #prepend>
-                    <v-icon :icon="iconLive"></v-icon>
+                    <v-icon :icon='iconLive'></v-icon>
                 </template>
                 <v-list-item-title>Canais</v-list-item-title>
             </v-list-item>
@@ -18,33 +19,33 @@
             <v-list-subheader>Resgates</v-list-subheader>
             <v-list-item :to="{ name: 'index' }" disabled>
                 <template #prepend>
-                    <v-icon :icon="iconGift"></v-icon>
+                    <v-icon :icon='iconGift'></v-icon>
                 </template>
                 <v-list-item-title>Resgates</v-list-item-title>
             </v-list-item>
             <v-list-item :to="{ name: 'index' }" disabled>
                 <template #prepend>
-                    <v-icon :icon="iconBot"></v-icon>
+                    <v-icon :icon='iconBot'></v-icon>
                 </template>
-                <v-list-item-title class="break">Resgatador automático</v-list-item-title>
+                <v-list-item-title class='break'>Resgatador automático</v-list-item-title>
             </v-list-item>
 
             <v-list-subheader>Outros</v-list-subheader>
             <v-list-item :to="{ name: 'dashboard-convites' }">
                 <template #prepend>
-                    <v-icon :icon="iconInvite"></v-icon>
+                    <v-icon :icon='iconInvite'></v-icon>
                 </template>
                 <v-list-item-title>Convidar amigos</v-list-item-title>
             </v-list-item>
             <v-list-item :to="{ name: 'index' }" disabled>
                 <template #prepend>
-                    <v-icon :icon="iconNotes"></v-icon>
+                    <v-icon :icon='iconNotes'></v-icon>
                 </template>
                 <v-list-item-title>Notas de lançamento</v-list-item-title>
             </v-list-item>
             <v-list-item :to="{ name: 'index' }" disabled>
                 <template #prepend>
-                    <v-icon :icon="iconTutorial"></v-icon>
+                    <v-icon :icon='iconTutorial'></v-icon>
                 </template>
                 <v-list-item-title>Tutoriais</v-list-item-title>
             </v-list-item>
@@ -52,7 +53,7 @@
     </v-navigation-drawer>
 </template>
 
-<script setup lang="ts">
+<script lang='ts' setup>
 import iconInvite from '~icons/mdi/invite';
 import iconTwitch from '~icons/mdi/twitch';
 import iconGift from '~icons/mdi/gift';
@@ -76,8 +77,8 @@ if (display.mdAndUp.value) {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang='scss' scoped>
 .break {
-    white-space: normal;
+  white-space: normal;
 }
 </style>

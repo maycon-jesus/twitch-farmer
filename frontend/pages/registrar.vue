@@ -1,93 +1,93 @@
 <template>
     <div
-        class="wrapper"
         :class="{
             'pa-4': $vuetify.display.xs,
             'pa-6': !$vuetify.display.xs,
         }"
+        class='wrapper'
     >
-        <v-card class="card-login">
+        <v-card class='card-login'>
             <v-container fluid>
                 <v-row>
-                    <v-col cols="12">
-                        <div class="titles-wrapper">
-                            <h1 class="text-h4">Twitch Farmer BOT</h1>
+                    <v-col cols='12'>
+                        <div class='titles-wrapper'>
+                            <h1 class='text-h4'>Twitch Farmer BOT</h1>
                         </div>
                     </v-col>
                 </v-row>
                 <RegisterLoginSelector />
-                <v-form v-if="step == 0" v-model="formValid" @submit.prevent="onSubmit" :disabled="formLoading">
+                <v-form v-if='step == 0' v-model='formValid' :disabled='formLoading' @submit.prevent='onSubmit'>
                     <v-row>
-                        <v-col cols="12" sm="6">
+                        <v-col cols='12' sm='6'>
                             <v-text-field
-                                label="Nome"
-                                autocomplete="given-name"
-                                name="given-name"
-                                :rules="[validations.firstName]"
-                                v-model="data.firstName"
+                                v-model='data.firstName'
+                                :rules='[validations.firstName]'
+                                autocomplete='given-name'
+                                label='Nome'
+                                name='given-name'
                             ></v-text-field>
                         </v-col>
-                        <v-col cols="12" sm="6">
+                        <v-col cols='12' sm='6'>
                             <v-text-field
-                                label="Sobrenome"
-                                autocomplete="family-name"
-                                name="family-name"
-                                :rules="[validations.lastName]"
-                                v-model="data.lastName"
+                                v-model='data.lastName'
+                                :rules='[validations.lastName]'
+                                autocomplete='family-name'
+                                label='Sobrenome'
+                                name='family-name'
                             ></v-text-field>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols='12'>
                             <v-text-field
-                                label="Email"
-                                autocomplete="email"
-                                name="email"
-                                :rules="[validations.email]"
-                                v-model="data.email"
+                                v-model='data.email'
+                                :rules='[validations.email]'
+                                autocomplete='email'
+                                label='Email'
+                                name='email'
                             ></v-text-field>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols='12'>
                             <FormTextFieldPassword
-                                label="Senha"
-                                autocomplete="new-password"
-                                name="new-password"
-                                :rules="[validations.password]"
-                                v-model="data.password"
+                                v-model='data.password'
+                                :rules='[validations.password]'
+                                autocomplete='new-password'
+                                label='Senha'
+                                name='new-password'
                             ></FormTextFieldPassword>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols='12'>
                             <FormTextFieldPassword
-                                label="Digite a senha novamente"
-                                autocomplete="new-password"
-                                name="new-password2"
-                                :rules="[validations.confirmPassword]"
-                                v-model="data.confirmPassword"
+                                v-model='data.confirmPassword'
+                                :rules='[validations.confirmPassword]'
+                                autocomplete='new-password'
+                                label='Digite a senha novamente'
+                                name='new-password2'
                             ></FormTextFieldPassword>
                         </v-col>
-                        <v-col cols="12">
+                        <v-col cols='12'>
                             <v-text-field
-                                label="Código de convite"
-                                :rules="[validations.inviteCode]"
-                                v-model="data.inviteCode"
+                                v-model='data.inviteCode'
+                                :rules='[validations.inviteCode]'
+                                label='Código de convite'
                             ></v-text-field>
                         </v-col>
                     </v-row>
-                    <v-row justify="center">
-                        <v-col cols="auto">
-                            <v-btn size="large" type="submit" :loading="formLoading">Registrar</v-btn>
+                    <v-row justify='center'>
+                        <v-col cols='auto'>
+                            <v-btn :loading='formLoading' size='large' type='submit'>Registrar</v-btn>
                         </v-col>
                     </v-row>
-                    <v-expand-transition v-show="apiError">
+                    <v-expand-transition v-show='apiError'>
                         <v-row>
-                            <v-col cols="12">
-                                <v-alert type="error">{{ apiError }}</v-alert>
+                            <v-col cols='12'>
+                                <v-alert type='error'>{{ apiError }}</v-alert>
                             </v-col>
                         </v-row>
                     </v-expand-transition>
                 </v-form>
-                <v-row justify="center" v-if="step == 1">
-                    <v-col cols="auto" class="text-center">
-                        <nuxt-icon class="icon-success" name="register/success" filled></nuxt-icon>
-                        <p class="text-h6">Conta criada com sucesso!</p>
+                <v-row v-if='step == 1' justify='center'>
+                    <v-col class='text-center' cols='auto'>
+                        <nuxt-icon class='icon-success' filled name='register/success'></nuxt-icon>
+                        <p class='text-h6'>Conta criada com sucesso!</p>
                     </v-col>
                 </v-row>
             </v-container>
@@ -95,8 +95,10 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang='ts' setup>
 import { z } from 'zod';
+import { ref } from 'vue';
+
 const route = useRoute();
 const router = useRouter();
 const $api = useApi();
@@ -111,14 +113,14 @@ const data = reactive({
     email: '',
     password: '',
     confirmPassword: '',
-    inviteCode: route.query['invite-code'] || '',
+    inviteCode: route.query['invite-code'] || ''
 });
 
 const validations = {
     firstName: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O primeiro nome é um campo obrigatório',
+                required_error: 'O primeiro nome é um campo obrigatório'
             })
             .nonempty('Informe seu nome')
             .trim();
@@ -143,7 +145,7 @@ const validations = {
     email: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O email é um campo obrigatório',
+                required_error: 'O email é um campo obrigatório'
             })
             .email('Informe um email válido');
 
@@ -157,7 +159,7 @@ const validations = {
     password: (val: any) => {
         const validator = z
             .string({
-                required_error: 'A senha é um campo obrigatório',
+                required_error: 'A senha é um campo obrigatório'
             })
             .nonempty('Informe uma senha')
             .min(8, 'O mínimo de caracteres para a senha é 8')
@@ -173,13 +175,13 @@ const validations = {
     confirmPassword: (val: any) => {
         const validator = z
             .string({
-                required_error: 'A senha é um campo obrigatório',
+                required_error: 'A senha é um campo obrigatório'
             })
             .superRefine((pass, ctx) => {
                 if (pass !== data.password) {
                     ctx.addIssue({
                         code: 'custom',
-                        message: 'As senhas devem ser iguais',
+                        message: 'As senhas devem ser iguais'
                     });
                 }
             });
@@ -194,7 +196,7 @@ const validations = {
     inviteCode: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O código de convite é um campo obrigatório',
+                required_error: 'O código de convite é um campo obrigatório'
             })
             .trim()
             .uuid('Código inválido');
@@ -205,7 +207,7 @@ const validations = {
             return true;
         }
         return validation.error.errors[0].message;
-    },
+    }
 };
 
 const onSubmit = async () => {
@@ -219,7 +221,7 @@ const onSubmit = async () => {
             lastName: data.lastName,
             email: data.email,
             password: data.password,
-            inviteCode: data.inviteCode,
+            inviteCode: data.inviteCode
         },
         async onResponse(res) {
             if (res.response.status !== 200) {
@@ -230,38 +232,39 @@ const onSubmit = async () => {
                 window.sessionStorage.setItem('login.email', data.email);
                 window.sessionStorage.setItem('login.password', data.password);
                 router.push({
-                    name: 'Index',
+                    name: 'Index'
                 });
             }
-        },
+        }
     }).finally(() => {
         formLoading.value = false;
     });
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
+
 .card-login {
-    width: 500px;
-    max-width: 500px;
+  width: 500px;
+  max-width: 500px;
 
-    .titles-wrapper {
-        padding: 1.5rem;
+  .titles-wrapper {
+    padding: 1.5rem;
 
-        h1 {
-            text-align: center;
-        }
+    h1 {
+      text-align: center;
     }
+  }
 }
 
 .icon-success {
-    font-size: 96px;
-    line-height: 96px;
+  font-size: 96px;
+  line-height: 96px;
 }
 </style>

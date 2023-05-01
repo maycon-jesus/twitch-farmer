@@ -1,17 +1,7 @@
 import { useUi } from '~/store/ui';
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(() => {
     const ui = useUi();
-    const app = useNuxtApp();
-    const hookDefined = useState('loading-paga-hook-defined', () => false);
 
-    ui.startLoading();
-
-    if (!hookDefined.value) {
-        app.hook('page:finish', () => {
-            console.log('hook:finish');
-            ui.endLoading();
-        });
-        hookDefined.value = true;
-    }
+    ui.startLoading('page-loading');
 });
