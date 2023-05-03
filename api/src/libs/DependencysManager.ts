@@ -7,6 +7,9 @@ import { UsersController } from '../controllers/Users';
 import { WebShareProxyController } from '../controllers/WebShareProxy';
 import { DatabaseModule } from '../modules/Database.module';
 import { RoutesModule } from '../modules/Routes.module';
+import { SecretsController } from '../controllers/Secrets';
+import { TwitchChannelsController } from '../controllers/TwitchChannels';
+import { StreamElementsApiController } from '../controllers/StreamElementsApi';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -18,6 +21,9 @@ export interface IDependencys {
     twitchApi: TwitchApiController;
     twitchAccounts: TwitchAccountsController;
     webShareProxy: WebShareProxyController;
+    secrets: SecretsController;
+    twitchChannels: TwitchChannelsController;
+    streamElementsApi: StreamElementsApiController;
 }
 
 const dependencys: {

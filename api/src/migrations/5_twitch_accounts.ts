@@ -1,9 +1,9 @@
-import {Knex} from 'knex';
+import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('twitch_accounts', (table) => {
         table.uuid('id').primary();
-        table.string('ownerId').defaultTo(null);
+        table.string('ownerId');
 
         table.string('email').notNullable();
         table.string('login').notNullable();

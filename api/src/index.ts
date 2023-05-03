@@ -1,21 +1,24 @@
 import './types/express';
 import express from 'express';
 import http from 'http';
-import dotenv from "dotenv"
-import {RoutesModule} from './modules/Routes.module';
-import {DatabaseModule} from './modules/Database.module';
-import {UsersController} from './controllers/Users';
-import {setDependency} from './libs/DependencysManager';
-import {RolesController} from './controllers/Roles';
-import {AuthController} from './controllers/Auth';
-import {InviteCodesController} from './controllers/InviteCodes';
-import {TwitchApiController} from './controllers/TwitchApi';
-import {TwitchAccountsController} from './controllers/TwitchAccounts';
-import {WebShareProxyController} from './controllers/WebShareProxy';
+import dotenv from 'dotenv';
+import { RoutesModule } from './modules/Routes.module';
+import { DatabaseModule } from './modules/Database.module';
+import { UsersController } from './controllers/Users';
+import { setDependency } from './libs/DependencysManager';
+import { RolesController } from './controllers/Roles';
+import { AuthController } from './controllers/Auth';
+import { InviteCodesController } from './controllers/InviteCodes';
+import { TwitchApiController } from './controllers/TwitchApi';
+import { TwitchAccountsController } from './controllers/TwitchAccounts';
+import { WebShareProxyController } from './controllers/WebShareProxy';
+import { SecretsController } from './controllers/Secrets';
+import { TwitchChannelsController } from './controllers/TwitchChannels';
+import { StreamElementsApiController } from './controllers/StreamElementsApi';
 
 dotenv.config({
     path: './.env'
-})
+});
 
 const app = express();
 
@@ -43,6 +46,15 @@ function loadControllers() {
 
     const webShareProxyController = new WebShareProxyController();
     setDependency('webShareProxy', webShareProxyController);
+
+    const secretsController = new SecretsController();
+    setDependency('secrets', secretsController);
+
+    const twitchChannelsController = new TwitchChannelsController();
+    setDependency('twitchChannels', twitchChannelsController);
+
+    const streamElementsApi = new StreamElementsApiController();
+    setDependency('streamElementsApi', streamElementsApi);
 }
 
 database.runMigrations().then(() => {

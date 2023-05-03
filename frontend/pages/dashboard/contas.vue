@@ -16,13 +16,17 @@
             </v-col>
         </v-row>
         <v-row justify='center'>
-            <v-col v-for='account in accountsToShow' :key='account.id' cols='12'>
+            <v-col cols='12'>
                 <div class='accounts-list'>
-                    <lazy-dashboard-accounts-account-resume-card :key='account.id' :account='account'
-                                                                 @account-updated='getAccounts(false)' />
+                    <lazy-dashboard-accounts-account-resume-card
+                        v-for='account in accountsToShow'
+                        :key='account.id'
+                        :account='account'
+                        @account-updated='getAccounts(false)'
+                    />
                 </div>
             </v-col>
-            <v-col v-if='accountsToShow.length===0' cols='8'>
+            <v-col v-if='accountsToShow.length === 0' cols='8'>
                 <v-alert variant='tonal'>
                     {{ search ? 'Nenhuma conta encontrada!' : 'Você não adicionou nenhuma conta ainda' }}
                 </v-alert>
@@ -50,8 +54,7 @@ const accountsToShow = computed(() => {
     return accounts.value.filter((a) => {
         const searchLowerCase = search.value.toLowerCase();
         if (a.login.toLowerCase().includes(searchLowerCase)) return true;
-        if (a.displayName.toLowerCase().includes(searchLowerCase)) return true;
-        return false;
+        return a.displayName.toLowerCase().includes(searchLowerCase);
     });
 });
 
@@ -61,7 +64,7 @@ const getAccounts = (showLoading: boolean = true) => {
     }
 
     api('/twitch-accounts')
-        .then(_accounts => {
+        .then((_accounts) => {
             accounts.value = _accounts as any;
         })
         .finally(() => {
@@ -69,15 +72,25 @@ const getAccounts = (showLoading: boolean = true) => {
                 ui.endLoading();
             }
         });
-};
-
-getAccounts();
-</script>
-
-<style lang='scss' scoped>
-.accounts-list {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
 }
-</style>
+
+getAccounts()
+< /;script>
+
+< style;
+lang = 'scss';
+scoped >
+.accounts - list;
+{
+    display: flex;
+    flex - flow;
+:
+    row;
+    wrap;
+    justify - content;
+:
+    center;
+    gap: 15;
+    px;
+}
+</style>;

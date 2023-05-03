@@ -39,7 +39,48 @@ export class TwitchApiController extends ControllerBase {
             login: user.login,
             displayName: user.display_name,
             profileImageUrl: user.profile_image_url,
-            email: user.email,
+            email: user.email
+        };
+    }
+
+    async getAccountDetailsByLogin(
+        login: string
+    ): Promise<{
+        id: string;
+        login: string;
+        displayName: string;
+        profileImageUrl: string;
+    }> {
+        const accessToken = await this.dd.secrets.getTwitchToken();
+        const users = await axios
+            .get(`https://api.twitch.tv/helix/users`, {
+                params: {
+                    login: login
+                },
+                headers: {
+                    Authorization: 'Bearer ' + accessToken,
+                    'Client-Id': process.env.TWITCH_BOT_CLIENT_ID
+                },
+                proxy: this.dd.webShareProxy.getRandomProxyForAxios()
+            })
+            .catch((err) => {
+                console.log(err);
+                throw new ErrorMaker({
+                    type: 'other',
+                    errors: [{ message: 'Não encontramos este usuário no banco de dados da twitch' }]
+                });
+            });
+        if (users.data.data.length <= 0) throw new ErrorMaker({
+            type: 'other',
+            errors: [{ message: 'Não encontramos este usuário no banco de dados da twitch' }]
+        });
+        const user = users.data.data[0];
+
+        return {
+            id: user.id,
+            login: user.login,
+            displayName: user.display_name,
+            profileImageUrl: user.profile_image_url
         };
     }
 
@@ -50,7 +91,7 @@ export class TwitchApiController extends ControllerBase {
         const tokenData = await axios
             .get(`https://id.twitch.tv/oauth2/validate`, {
                 headers: {
-                    Authorization: 'OAuth ' + accessToken,
+                    Authorization: 'OAuth ' + accessToken
                 },
                 proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
             })
