@@ -96,8 +96,8 @@
 </template>
 
 <script lang="ts" setup>
-import { z } from 'zod';
-import { ref } from 'vue';
+import { z } from 'zod'
+import { ref } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -125,95 +125,95 @@ const validations = {
             .nonempty('Informe seu nome')
             .trim()
 
-        const validation = validator.safeParse(val;)
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.firstName = validation.data;
-            return true;
+            data.firstName = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     lastName: (val: any) => {
-        const validator = z.string().nonempty('Informe seu sobrenome').trim();
+        const validator = z.string().nonempty('Informe seu sobrenome').trim()
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.lastName = validation.data;
-            return true;
+            data.lastName = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     email: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O email é um campo obrigatório'
+                required_error: 'O email é um campo obrigatório',
             })
             .email('Informe um email válido')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.email = validation.data;
-            return true;
+            data.email = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     password: (val: any) => {
         const validator = z
             .string({
-                required_error: 'A senha é um campo obrigatório'
+                required_error: 'A senha é um campo obrigatório',
             })
             .nonempty('Informe uma senha')
             .min(8, 'O mínimo de caracteres para a senha é 8')
             .max(50, 'O máximo de caracteres para a senha é 50')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.password = validation.data;
-            return true;
+            data.password = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     confirmPassword: (val: any) => {
         const validator = z
             .string({
-                required_error: 'A senha é um campo obrigatório'
+                required_error: 'A senha é um campo obrigatório',
             })
             .superRefine((pass, ctx) => {
                 if (pass !== data.password) {
                     ctx.addIssue({
                         code: 'custom',
-                        message: 'As senhas devem ser iguais'
+                        message: 'As senhas devem ser iguais',
                     })
                 }
             })
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.password = validation.data;
-            return true;
+            data.password = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     inviteCode: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O código de convite é um campo obrigatório'
+                required_error: 'O código de convite é um campo obrigatório',
             })
             .trim()
             .uuid('Código inválido')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.inviteCode = validation.data;
-            return true;
+            data.inviteCode = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
 }
 
 const onSubmit = async () => {
-    if (!formValid.value) return;
-    formLoading.value = true;
-    apiError.value = null;
+    if (!formValid.value) return
+    formLoading.value = true
+    apiError.value = null
     $api('/auth/register', {
         method: 'post',
         body: {
@@ -221,25 +221,25 @@ const onSubmit = async () => {
             lastName: data.lastName,
             email: data.email,
             password: data.password,
-            inviteCode: data.inviteCode
+            inviteCode: data.inviteCode,
         },
         async onResponse(res) {
             if (res.response.status !== 200) {
-                const data = await res.response._data;
-                apiError.value = data.errors[0].message;
+                const data = await res.response._data
+                apiError.value = data.errors[0].message
             } else {
-                step.value++;
-                window.sessionStorage.setItem('login.email', data.email);
-                window.sessionStorage.setItem('login.password', data.password);
+                step.value++
+                window.sessionStorage.setItem('login.email', data.email)
+                window.sessionStorage.setItem('login.password', data.password)
                 router
                     .push({
-                        name: 'Index'
+                        name: 'Index',
                     })
-                    .then();
+                    .then()
             }
         },
     }).finally(() => {
-        formLoading.value = false;
+        formLoading.value = false
     })
 }
 </script>

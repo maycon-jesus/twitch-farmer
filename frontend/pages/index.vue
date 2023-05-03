@@ -62,9 +62,9 @@
 
 <script lang="ts" setup>
 // noinspection TypeScriptCheckImport
-import iconError from '~icons/material-symbols/error-rounded';
-import { ref } from 'vue';
-import { z } from 'zod';
+import iconError from '~icons/material-symbols/error-rounded'
+import { ref } from 'vue'
+import { z } from 'zod'
 
 const $api = useApi()
 const router = useRouter()
@@ -98,22 +98,22 @@ const validators = {
         const validator = z
             .string({
                 required_error: 'A senha é um campo obrigatório',
-            )
+            })
             .nonempty('Informe sua senha')
             .min(8, 'O mínimo de caracteres para a senha é 8')
             .max(50, 'O máximo de caracteres para a senha é 50')
 
-        cons;t validation = validator.safeParse(val)
-        if (v;alidation.success) {
+        const validation = validator.safeParse(val)
+        if (validation.success) {
             data.password = validation.data
-            r;eturn true
+            return true
         }
 
         return validation.error.errors[0].message
     },
 }
 
-con;st onSubmit = () => {
+const onSubmit = () => {
     if (!formValid.value) return
     formLoading.value = true
     apiError.value = null

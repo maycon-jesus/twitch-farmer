@@ -21,13 +21,13 @@ export default defineNuxtConfig({
         plugins: [
             vuetify({
                 styles: {
-                    configFile: '/assets/css/vuetify.scs',
-               },
-            ),
-       ],
+                    configFile: '/assets/css/vuetify.scss',
+                },
+            }),
+        ],
     },
 
     build: {
-        transpile: ['vuetify],
-   },
+        transpile: ['vuetify'],
+    },
 })
