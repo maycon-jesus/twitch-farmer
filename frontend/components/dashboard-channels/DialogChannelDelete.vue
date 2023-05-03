@@ -5,7 +5,7 @@
             <v-card-text>
                 <p class="text-body-1">
                     Você tem certeza que deseja excluir a o canal
-                    <strong class="text-primary">{{ $props.accountName }}</strong
+                    <strong class="text-primary">{{ $props.channelName }}</strong
                     >?
                 </p>
             </v-card-text>

@@ -99,34 +99,33 @@
 import { z } from 'zod';
 import { ref } from 'vue';
 
-const route = useRoute();
-const router = useRouter();
-const $api = useApi();
+const route = useRoute()
+const router = useRouter()
+const $api = useApi()
 
-const formValid = ref(false);
-const formLoading = ref(false);
-const apiError = ref<null | string>(null);
-const step = ref(0);
+const formValid = ref(false)
+const formLoading = ref(false)
+const apiError = ref<null | string>(null)
+const step = ref(0)
 const data = reactive({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    inviteCode: route.query['invite-code'] || ''
-});
+    inviteCode: route.query['invite-code'] || '',
+})
 
 const validations = {
     firstName: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O primeiro nome é um campo obrigatório'
+                required_error: 'O primeiro nome é um campo obrigatório',
             })
             .nonempty('Informe seu nome')
-            .trim();
+            .trim()
 
-        const validation = validator.safeParse(val;
-    )
+        const validation = validator.safeParse(val;)
         if (validation.success) {
             data.firstName = validation.data;
             return true;
@@ -183,7 +182,7 @@ const validations = {
                     ctx.addIssue({
                         code: 'custom',
                         message: 'As senhas devem ser iguais'
-                    });
+                    })
                 }
             })
 

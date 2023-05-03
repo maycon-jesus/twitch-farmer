@@ -8,8 +8,8 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             API_BASE_URL: process.env.API_BASE_URL,
-            APP_URL: process.env.APP_URL
-        }
+            APP_URL: process.env.APP_URL,
+        },
     },
 
     css: ['~/assets/css/reset.css', 'vuetify/styles'],
@@ -21,13 +21,13 @@ export default defineNuxtConfig({
         plugins: [
             vuetify({
                 styles: {
-                    configFile: '/assets/css/vuetify.scs'
-                }
-            )
-        ]
+                    configFile: '/assets/css/vuetify.scs',
+               },
+            ),
+       ],
     },
 
     build: {
         transpile: ['vuetify],
-    }
+   },
 })

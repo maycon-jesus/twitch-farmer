@@ -32,6 +32,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 // noinspection TypeScriptCheckImport
 import iconError from '~icons/material-symbols/error-rounded'
 

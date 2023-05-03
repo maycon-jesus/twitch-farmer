@@ -125,6 +125,7 @@ const addChannel = () => {
         .then(() => {
             resetForm()
             emits('channel-added')
+            modalOpen.value = false
         })
         .catch((err) => {
             apiError.value = err.errors[0].message

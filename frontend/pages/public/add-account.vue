@@ -66,8 +66,7 @@ const accountData = ref({
     login: '',
     displayName: '',
 })
-onst
-cardError = (error: string) => {
+const cardError = (error: string) => {
     cardState.value = {
         loading: false,
         title: 'Ocorreu um erro ao adicionar a conta.',

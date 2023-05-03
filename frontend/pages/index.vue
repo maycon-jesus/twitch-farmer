@@ -66,86 +66,79 @@ import iconError from '~icons/material-symbols/error-rounded';
 import { ref } from 'vue';
 import { z } from 'zod';
 
-const $api = useApi();
-const router = useRouter();
-const route = useRoute();
+const $api = useApi()
+const router = useRouter()
+const route = useRoute()
 
-const formValid = ref(false);
-const formLoading = ref(false);
-const apiError = ref<null | string>(null);
-const errorMessage = ref<null | string>((route.query['error-message'] as string) || null);
+const formValid = ref(false)
+const formLoading = ref(false)
+const apiError = ref<null | string>(null)
+const errorMessage = ref<null | string>((route.query['error-message'] as string) || null)
 const data = reactive({
     email: sessionStorage.getItem('login.email') || '',
-    password: sessionStorage.getItem('login.password') || ''
-});
+    password: sessionStorage.getItem('login.password') || '',
+})
 
 const validators = {
     email: (val: any) => {
         const validator = z
             .string({
-                required_error: 'O email é um campo obrigatório'
+                required_error: 'O email é um campo obrigatório',
             })
-            .email('Informe um email válido');
+            .email('Informe um email válido')
 
-        const validation = validator.safeParse(val);
-        i;
-        f(validation.success);
-        {
-            data.email = validation.data;
-            return true;
+        const validation = validator.safeParse(val)
+        if (validation.success) {
+            data.email = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     password: (val: any) => {
         const validator = z
             .string({
-                required_error: 'A senha é um campo obrigatório'
-            }).nonempty('Informe sua senha')
+                required_error: 'A senha é um campo obrigatório',
+            )
+            .nonempty('Informe sua senha')
             .min(8, 'O mínimo de caracteres para a senha é 8')
-            .max(50, 'O máximo de caracteres para a senha é 50');
+            .max(50, 'O máximo de caracteres para a senha é 50')
 
-        const validation = validator.safeParse(val);
-        if (val;
-        idation.success;
-    )
-        {
-            data.password = validation.data;
-            ret;
-            urn;
-            true;
+        cons;t validation = validator.safeParse(val)
+        if (v;alidation.success) {
+            data.password = validation.data
+            r;eturn true
         }
-        ;
-        return validation.error.errors[0].message;
+
+        return validation.error.errors[0].message
     },
 }
 
-const ;
-onSubmit = () => {
-    if (!formValid.value) return;
-    formLoading.value = true;
-    apiError.value = null;
+con;st onSubmit = () => {
+    if (!formValid.value) return
+    formLoading.value = true
+    apiError.value = null
 
     $api<{ token: string }>('/auth/login', {
         method: 'post',
         body: data,
         onResponseError(res) {
-            const data = res.response._data;
+            const data = res.response._data
             if (data) {
-                apiError.value = data.errors[0].message;
+                apiError.value = data.errors[0].message
             }
-        }
+        },
     })
         .then((data) => {
-            const authCookie = useCookie('auth-token');
-            authCookie.value = data.token;
+            const authCookie = useCookie('auth-token')
+            authCookie.value = data.token
             router.push({
-                name: (route.query.redirectTo as string) || 'dashboard'
-            });
+                name: (route.query.redirectTo as string) || 'dashboard',
+            })
         })
         .finally(() => {
-            formLoading.value = false;
-        });
-};
+            formLoading.value = false
+        })
+}
 </script>
 
 <style lang="scss" scoped>
