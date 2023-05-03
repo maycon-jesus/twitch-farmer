@@ -42,7 +42,7 @@
 </style>
 
 <style>
-/*noinspection ALL*/
+/*noinspection CssUnusedSymbol,CssUnresolvedCustomProperty*/
 .active-tab {
     background-color: rgb(var(--v-theme-primary));
     color: rgb(var(--v-theme-on-primary));

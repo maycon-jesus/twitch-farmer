@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.16.2",
-    "nuxt": "^3.3.3",
+    "nuxt": "^3.4.3",
     "prettier": "^2.8.8",
     "sass": "^1.62.1",
     "unplugin-icons": "^0.16.1",
