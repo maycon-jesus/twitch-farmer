@@ -6,13 +6,13 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const ui = useUi()
 
     if (userStore.userData) return
-    ui.startLoading()
+    ui.startLoading('auth-middleware')
 
     try {
         await userStore.getUserData()
-        ui.endLoading()
+        ui.endLoading('auth-middleware')
     } catch (err) {
-        ui.endLoading()
+        ui.endLoading('auth-middleware')
         const userData = useUserDataStore()
         await userData.reset()
         return navigateTo(
