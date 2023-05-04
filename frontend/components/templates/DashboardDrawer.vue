@@ -59,18 +59,12 @@
 
 <script lang="ts" setup>
 // noinspection TypeScriptCheckImport
-import iconInvite from '~icons/mdi/invite'
-// noinspection TypeScriptCheckImport
-import iconTwitch from '~icons/mdi/twitch'
-// noinspection TypeScriptCheckImport
-import iconGift from '~icons/mdi/gift'
-// noinspection TypeScriptCheckImport
-import iconLive from '~icons/solar/play-stream-bold'
-// noinspection TypeScriptCheckImport
-import iconBot from '~icons/fluent/bot-20-filled'
-// noinspection TypeScriptCheckImport
-import iconNotes from '~icons/mdi/feature-highlight'
-// noinspection TypeScriptCheckImport
+import iconInvite from '~icons/mdi/invite' // noinspection TypeScriptCheckImport
+import iconTwitch from '~icons/mdi/twitch' // noinspection TypeScriptCheckImport
+import iconGift from '~icons/mdi/gift' // noinspection TypeScriptCheckImport
+import iconLive from '~icons/solar/play-stream-bold' // noinspection TypeScriptCheckImport
+import iconBot from '~icons/fluent/bot-20-filled' // noinspection TypeScriptCheckImport
+import iconNotes from '~icons/mdi/feature-highlight' // noinspection TypeScriptCheckImport
 import iconTutorial from '~icons/material-symbols/school'
 import { useUi } from '~/store/ui'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
@@ -79,13 +73,15 @@ const ui = useUi()
 const display = useDisplay()
 const isDesktop = ref(false)
 
-if (display.mdAndUp.value) {
-    ui.setDrawerOpen(true)
-    isDesktop.value = true
-} else {
-    ui.setDrawerOpen(false)
-    isDesktop.value = false
-}
+watchEffect(() => {
+    if (display.mdAndUp.value) {
+        ui.setDrawerOpen(true)
+        isDesktop.value = true
+    } else {
+        ui.setDrawerOpen(false)
+        isDesktop.value = false
+    }
+})
 </script>
 
 <style lang="scss" scoped>
