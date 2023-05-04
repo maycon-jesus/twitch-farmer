@@ -1,18 +1,20 @@
-import { useUi } from '~/store/ui';
-import { useUserDataStore } from '~/store/userData';
+import { useUi } from '~/store/ui'
+import { useUserDataStore } from '~/store/userData'
 
 export default defineNuxtRouteMiddleware(async (to) => {
-    const userStore = useUserDataStore();
-    const ui = useUi();
+    const userStore = useUserDataStore()
+    const ui = useUi()
 
-    if (userStore.userData) return;
-    ui.startLoading();
+    if (userStore.userData) return
+    ui.startLoading()
 
     try {
-        await userStore.getUserData();
-        ui.endLoading();
+        await userStore.getUserData()
+        ui.endLoading()
     } catch (err) {
-        ui.endLoading();
+        ui.endLoading()
+        const userData = useUserDataStore()
+        await userData.reset()
         return navigateTo(
             {
                 name: 'index',
@@ -21,6 +23,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
                 },
             },
             { replace: true }
-        );
+        )
     }
-});
+})

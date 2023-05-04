@@ -34,6 +34,8 @@ const emits = defineEmits<{
 }>()
 
 const $api = useApi()
+const { $toast } = useNuxtApp()
+
 const dialogOpen = ref(props.modelValue || false)
 const loading = ref(false)
 const error = ref<null | string>(null)
@@ -46,6 +48,7 @@ const deleteChannel = () => {
         .then(() => {
             dialogOpen.value = false
             emits('channel-deleted')
+            $toast.success('Canal removido com sucesso!')
         })
         .catch((err) => {
             error.value = err.errors[0].message

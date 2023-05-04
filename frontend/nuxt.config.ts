@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     css: ['~/assets/css/reset.css', 'vuetify/styles'],
 
     modules: ['unplugin-icons/nuxt', 'nuxt-icons', '@pinia/nuxt'],
-    plugins: ['~/plugins/loading', '~/plugins/vuetify'],
+    plugins: ['~/plugins/loading', '~/plugins/vuetify', '~/plugins/toast'],
 
     vite: {
         plugins: [

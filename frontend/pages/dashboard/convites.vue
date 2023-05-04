@@ -43,54 +43,55 @@
     </v-container>
 </template>
 
-<script setup lang="ts">
-import { useUi } from '~/store/ui';
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { useUi } from '~/store/ui'
 
 definePageMeta({
     layout: 'dashboard',
     middleware: ['auth'],
-});
+})
 
-const api = useApi();
-const ui = useUi();
+const api = useApi()
+const ui = useUi()
 const invites = ref<{
     data: {
-        code: string;
-        createdAt: string;
-        ownerId: string;
-        updateAt: string;
-        used: 0 | 1;
-        usedBy: null | string;
-    }[];
-    total: number;
-    actualPage: number;
-    totalPages: number;
-}>({ data: [], actualPage: 1, total: 0, totalPages: 0 });
+        code: string
+        createdAt: string
+        ownerId: string
+        updateAt: string
+        used: 0 | 1
+        usedBy: null | string
+    }[]
+    total: number
+    actualPage: number
+    totalPages: number
+}>({ data: [], actualPage: 1, total: 0, totalPages: 0 })
 
 const getInvites = (page: number = 1, showLoading: boolean = true) => {
     if (showLoading) {
-        ui.startLoading();
+        ui.startLoading()
     }
 
     api<{
-        data: any[];
-        total: number;
-        actualPage: number;
-        totalPages: number;
+        data: any[]
+        total: number
+        actualPage: number
+        totalPages: number
     }>('/invite-codes', {
         query: {
             page,
         },
     })
         .then((data) => {
-            invites.value = data;
+            invites.value = data
         })
         .finally(() => {
             if (showLoading) {
-                ui.endLoading();
+                ui.endLoading()
             }
-        });
-};
+        })
+}
 
-getInvites(1);
+getInvites(1)
 </script>

@@ -28,17 +28,6 @@ export const useApi = () => {
             throw 'unknown'
         },
         onResponseError(err) {
-            // if (err.response.status === 403) {
-            //     const router = useRouter();
-            //     const userData = useUserDataStore();
-            //     userData.reset();
-            //     router.push({
-            //         name: 'index',
-            //         query: {
-            //             'error-message': 'Seu acesso expirou. Faça login novamente!'
-            //         }
-            //     });
-            // }
             throw err.response._data
         },
     })

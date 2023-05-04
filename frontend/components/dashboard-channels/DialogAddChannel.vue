@@ -51,6 +51,8 @@ import { z } from 'zod'
 // noinspection TypeScriptCheckImport
 import iconError from '~icons/material-symbols/error'
 
+const { $toast } = useNuxtApp()
+
 const props = defineProps<{
     modelValue?: boolean
 }>()
@@ -126,6 +128,7 @@ const addChannel = () => {
             resetForm()
             emits('channel-added')
             modalOpen.value = false
+            $toast.success('Canal adicionado com sucesso!')
         })
         .catch((err) => {
             apiError.value = err.errors[0].message
