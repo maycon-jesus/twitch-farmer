@@ -1,7 +1,7 @@
 <template>
     <v-app-bar>
         <template #prepend>
-            <v-app-bar-nav-icon :icon="menuIcon" class="mr-2" @click="ui.toggleDrawerOpen()" />
+            <v-app-bar-nav-icon v-if="!hideMenu" :icon="menuIcon" class="mr-2" @click="ui.toggleDrawerOpen()" />
             <v-app-bar-title class="mr-2">Twitch Farmer BOT</v-app-bar-title>
         </template>
 
@@ -29,6 +29,7 @@ import { useUserDataStore } from '~/store/userData'
 
 defineProps<{
     basic?: boolean
+    hideMenu?: boolean
 }>()
 
 const userData = useUserDataStore()

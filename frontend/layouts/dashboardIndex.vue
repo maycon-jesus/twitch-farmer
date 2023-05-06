@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <ui-loading />
-        <templates-header />
+        <templates-header hide-menu />
         <v-main class="main">
             <slot></slot>
         </v-main>
