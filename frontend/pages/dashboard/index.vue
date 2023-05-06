@@ -49,9 +49,8 @@
                     />
                     <DashboardHomePageCard
                         :icon="iconNotes"
-                        :to="{ name: 'index' }"
-                        coming-soon
                         description="Acompanhe todas as novidades que estão por vir"
+                        href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento"
                         title="Notas de lançamento"
                     />
                 </div>
@@ -61,18 +60,12 @@
 </template>
 <script lang="ts" setup>
 // noinspection TypeScriptCheckImport
-import iconInvite from '~icons/mdi/invite'
-// noinspection TypeScriptCheckImport
-import iconTwitch from '~icons/mdi/twitch'
-// noinspection TypeScriptCheckImport
-import iconGift from '~icons/mdi/gift'
-// noinspection TypeScriptCheckImport
-import iconLive from '~icons/solar/play-stream-bold'
-// noinspection TypeScriptCheckImport
-import iconBot from '~icons/fluent/bot-20-filled'
-// noinspection TypeScriptCheckImport
-import iconNotes from '~icons/mdi/feature-highlight'
-// noinspection TypeScriptCheckImport
+import iconInvite from '~icons/mdi/invite' // noinspection TypeScriptCheckImport
+import iconTwitch from '~icons/mdi/twitch' // noinspection TypeScriptCheckImport
+import iconGift from '~icons/mdi/gift' // noinspection TypeScriptCheckImport
+import iconLive from '~icons/solar/play-stream-bold' // noinspection TypeScriptCheckImport
+import iconBot from '~icons/fluent/bot-20-filled' // noinspection TypeScriptCheckImport
+import iconNotes from '~icons/mdi/feature-highlight' // noinspection TypeScriptCheckImport
 import iconTutorial from '~icons/material-symbols/school'
 
 definePageMeta({
