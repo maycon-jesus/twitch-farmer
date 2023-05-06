@@ -1,10 +1,10 @@
 <template>
     <div
-        class="wrapper"
         :class="{
             'pa-4': $vuetify.display.xs,
             'pa-6': !$vuetify.display.xs,
         }"
+        class="wrapper"
     >
         <v-card class="card-login">
             <v-container fluid>
@@ -16,64 +16,64 @@
                     </v-col>
                 </v-row>
                 <RegisterLoginSelector />
-                <v-form v-if="step == 0" v-model="formValid" @submit.prevent="onSubmit" :disabled="formLoading">
+                <v-form v-if="step == 0" v-model="formValid" :disabled="formLoading" @submit.prevent="onSubmit">
                     <v-row>
                         <v-col cols="12" sm="6">
                             <v-text-field
-                                label="Nome"
-                                autocomplete="given-name"
-                                name="given-name"
-                                :rules="[validations.firstName]"
                                 v-model="data.firstName"
+                                :rules="[validations.firstName]"
+                                autocomplete="given-name"
+                                label="Nome"
+                                name="given-name"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6">
                             <v-text-field
-                                label="Sobrenome"
-                                autocomplete="family-name"
-                                name="family-name"
-                                :rules="[validations.lastName]"
                                 v-model="data.lastName"
+                                :rules="[validations.lastName]"
+                                autocomplete="family-name"
+                                label="Sobrenome"
+                                name="family-name"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <v-text-field
-                                label="Email"
-                                autocomplete="email"
-                                name="email"
-                                :rules="[validations.email]"
                                 v-model="data.email"
+                                :rules="[validations.email]"
+                                autocomplete="email"
+                                label="Email"
+                                name="email"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <FormTextFieldPassword
-                                label="Senha"
-                                autocomplete="new-password"
-                                name="new-password"
-                                :rules="[validations.password]"
                                 v-model="data.password"
+                                :rules="[validations.password]"
+                                autocomplete="new-password"
+                                label="Senha"
+                                name="new-password"
                             ></FormTextFieldPassword>
                         </v-col>
                         <v-col cols="12">
                             <FormTextFieldPassword
-                                label="Digite a senha novamente"
-                                autocomplete="new-password"
-                                name="new-password2"
-                                :rules="[validations.confirmPassword]"
                                 v-model="data.confirmPassword"
+                                :rules="[validations.confirmPassword]"
+                                autocomplete="new-password"
+                                label="Digite a senha novamente"
+                                name="new-password2"
                             ></FormTextFieldPassword>
                         </v-col>
                         <v-col cols="12">
                             <v-text-field
-                                label="Código de convite"
-                                :rules="[validations.inviteCode]"
                                 v-model="data.inviteCode"
+                                :rules="[validations.inviteCode]"
+                                label="Código de convite"
                             ></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row justify="center">
                         <v-col cols="auto">
-                            <v-btn size="large" type="submit" :loading="formLoading">Registrar</v-btn>
+                            <v-btn :loading="formLoading" size="large" type="submit">Registrar</v-btn>
                         </v-col>
                     </v-row>
                     <v-expand-transition v-show="apiError">
@@ -84,9 +84,9 @@
                         </v-row>
                     </v-expand-transition>
                 </v-form>
-                <v-row justify="center" v-if="step == 1">
-                    <v-col cols="auto" class="text-center">
-                        <nuxt-icon class="icon-success" name="register/success" filled></nuxt-icon>
+                <v-row v-if="step == 1" justify="center">
+                    <v-col class="text-center" cols="auto">
+                        <nuxt-icon class="icon-success" filled name="register/success"></nuxt-icon>
                         <p class="text-h6">Conta criada com sucesso!</p>
                     </v-col>
                 </v-row>
@@ -95,16 +95,22 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import { z } from 'zod';
-const route = useRoute();
-const router = useRouter();
-const $api = useApi();
+<script lang="ts" setup>
+import { z } from 'zod'
+import { ref } from 'vue'
 
-const formValid = ref(false);
-const formLoading = ref(false);
-const apiError = ref<null | string>(null);
-const step = ref(0);
+useSeoMeta({
+    title: 'Registrar',
+})
+
+const route = useRoute()
+const router = useRouter()
+const $api = useApi()
+
+const formValid = ref(false)
+const formLoading = ref(false)
+const apiError = ref<null | string>(null)
+const step = ref(0)
 const data = reactive({
     firstName: '',
     lastName: '',
@@ -112,7 +118,7 @@ const data = reactive({
     password: '',
     confirmPassword: '',
     inviteCode: route.query['invite-code'] || '',
-});
+})
 
 const validations = {
     firstName: (val: any) => {
@@ -121,38 +127,38 @@ const validations = {
                 required_error: 'O primeiro nome é um campo obrigatório',
             })
             .nonempty('Informe seu nome')
-            .trim();
+            .trim()
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.firstName = validation.data;
-            return true;
+            data.firstName = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     lastName: (val: any) => {
-        const validator = z.string().nonempty('Informe seu sobrenome').trim();
+        const validator = z.string().nonempty('Informe seu sobrenome').trim()
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.lastName = validation.data;
-            return true;
+            data.lastName = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     email: (val: any) => {
         const validator = z
             .string({
                 required_error: 'O email é um campo obrigatório',
             })
-            .email('Informe um email válido');
+            .email('Informe um email válido')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.email = validation.data;
-            return true;
+            data.email = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     password: (val: any) => {
         const validator = z
@@ -161,14 +167,14 @@ const validations = {
             })
             .nonempty('Informe uma senha')
             .min(8, 'O mínimo de caracteres para a senha é 8')
-            .max(50, 'O máximo de caracteres para a senha é 50');
+            .max(50, 'O máximo de caracteres para a senha é 50')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.password = validation.data;
-            return true;
+            data.password = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     confirmPassword: (val: any) => {
         const validator = z
@@ -180,16 +186,16 @@ const validations = {
                     ctx.addIssue({
                         code: 'custom',
                         message: 'As senhas devem ser iguais',
-                    });
+                    })
                 }
-            });
+            })
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.password = validation.data;
-            return true;
+            data.password = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     inviteCode: (val: any) => {
         const validator = z
@@ -197,21 +203,21 @@ const validations = {
                 required_error: 'O código de convite é um campo obrigatório',
             })
             .trim()
-            .uuid('Código inválido');
+            .uuid('Código inválido')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.inviteCode = validation.data;
-            return true;
+            data.inviteCode = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
-};
+}
 
 const onSubmit = async () => {
-    if (!formValid.value) return;
-    formLoading.value = true;
-    apiError.value = null;
+    if (!formValid.value) return
+    formLoading.value = true
+    apiError.value = null
     $api('/auth/register', {
         method: 'post',
         body: {
@@ -223,21 +229,23 @@ const onSubmit = async () => {
         },
         async onResponse(res) {
             if (res.response.status !== 200) {
-                const data = await res.response._data;
-                apiError.value = data.errors[0].message;
+                const data = await res.response._data
+                apiError.value = data.errors[0].message
             } else {
-                step.value++;
-                window.sessionStorage.setItem('login.email', data.email);
-                window.sessionStorage.setItem('login.password', data.password);
-                router.push({
-                    name: 'Index',
-                });
+                step.value++
+                window.sessionStorage.setItem('login.email', data.email)
+                window.sessionStorage.setItem('login.password', data.password)
+                router
+                    .push({
+                        name: 'Index',
+                    })
+                    .then()
             }
         },
     }).finally(() => {
-        formLoading.value = false;
-    });
-};
+        formLoading.value = false
+    })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -247,6 +255,7 @@ const onSubmit = async () => {
     align-items: center;
     min-height: 100vh;
 }
+
 .card-login {
     width: 500px;
     max-width: 500px;

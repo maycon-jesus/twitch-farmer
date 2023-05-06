@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('invite_codes', (table) => {
         table.uuid('code').primary();
-        table.string('ownerId').defaultTo(null);
+        table.string('ownerId');
         table.string('usedBy').defaultTo(null);
         table.boolean('used').notNullable().defaultTo(false);
         table.dateTime('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'));
@@ -13,4 +13,6 @@ export async function up(knex: Knex): Promise<void> {
     });
 }
 
-export async function down(knex: Knex): Promise<void> {}
+export async function down(knex: Knex): Promise<void> {
+    return knex.schema.dropTable('invite_codes');
+}

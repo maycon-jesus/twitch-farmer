@@ -1,5 +1,5 @@
-import { IDependencys, getDependencys } from "../libs/DependencysManager";
+import { getDependencys, IDependencys } from '../libs/DependencysManager';
 
 export abstract class ControllerBase {
-  protected dd: IDependencys = getDependencys();
+    protected dd: IDependencys = getDependencys();
 }

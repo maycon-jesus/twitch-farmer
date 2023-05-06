@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Global types" pattern="file[api]:src/types/*" />
+</component>

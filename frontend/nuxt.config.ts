@@ -2,18 +2,26 @@ import vuetify from 'vite-plugin-vuetify';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    // @ts-ignore
     ssr: false,
 
     runtimeConfig: {
         public: {
             API_BASE_URL: process.env.API_BASE_URL,
+            APP_URL: process.env.APP_URL,
         },
     },
 
-    css: ['~/assets/css/destyle.css', 'vuetify/styles'],
+    app: {
+        head: {
+            titleTemplate: '%s - Twitch BOT',
+        },
+    },
+
+    css: ['~/assets/css/reset.css', 'vuetify/styles'],
 
     modules: ['unplugin-icons/nuxt', 'nuxt-icons', '@pinia/nuxt'],
-    plugins: ['~/plugins/vuetify'],
+    plugins: ['~/plugins/loading', '~/plugins/vuetify', '~/plugins/toast'],
 
     vite: {
         plugins: [
@@ -28,4 +36,4 @@ export default defineNuxtConfig({
     build: {
         transpile: ['vuetify'],
     },
-});
+})

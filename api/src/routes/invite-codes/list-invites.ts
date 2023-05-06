@@ -5,8 +5,15 @@ import { ErrorMaker, ErrorToResponse } from '../../libs/ErrorMaker';
 export class InviteCodesListRoute extends RouteBase {
     run(): void {
         const validation = z.object({
-            page: z.number().int().min(1).optional().default(1),
-            limit: z.number().int().min(1).max(100).optional().default(25),
+            page: z
+                .number({
+                    coerce: true,
+                })
+                .int()
+                .min(1)
+                .optional()
+                .default(1),
+            limit: z.number({ coerce: true }).int().min(1).max(100).optional().default(25),
         });
         this.router.get('/', async (req, res) => {
             try {
@@ -24,6 +31,13 @@ export class InviteCodesListRoute extends RouteBase {
                 });
                 const invitesCount = await this.dd.inviteCodes.countInvites({
                     ownerId: req.jwt.userId,
+                });
+
+                res.json({
+                    data: invites,
+                    total: invitesCount.count,
+                    actualPage: query.data.page,
+                    totalPages: Math.ceil(invitesCount.count / query.data.limit),
                 });
             } catch (err: any) {
                 const e = ErrorToResponse(err);

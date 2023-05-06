@@ -2,11 +2,6 @@ import { RouteBase } from '../../base/Route';
 import { ErrorToResponse } from '../../libs/ErrorMaker';
 
 export class InviteCodesGenerateRoute extends RouteBase {
-    constructor() {
-        super({
-            path: '/generate-invite-code',
-        });
-    }
     run(): void {
         this.router.post('/', async (req, res) => {
             try {

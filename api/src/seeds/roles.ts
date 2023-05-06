@@ -7,6 +7,6 @@ export async function seed(knex: Knex): Promise<void> {
     await knex('user_roles').insert([
         { id: 'admin', name: 'Admin', PERM_GENERATE_INVITE_CODE: 1 },
         { id: 'founder', name: 'Fundador', PERM_GENERATE_INVITE_CODE: 1 },
-        { id: 'user', name: 'Usuário', PERM_GENERATE_INVITE_CODE: 0 },
+        { id: 'user', name: 'Usuário', PERM_GENERATE_INVITE_CODE: 1 },
     ]);
 }

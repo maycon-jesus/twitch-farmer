@@ -1,0 +1,24 @@
+import { Knex } from 'knex';
+
+export async function up(knex: Knex): Promise<void> {
+    return knex.schema.createTable('twitch_channels', (table) => {
+        table.uuid('id').primary();
+        table.string('ownerId').defaultTo(null);
+
+        table.string('userId').notNullable();
+        table.string('login').notNullable();
+        table.string('displayName').notNullable();
+        table.string('profileImageUrl').notNullable();
+
+        table.string('streamElementsUserAlias').notNullable();
+        table.string('streamElementsUserId').notNullable();
+
+        table.dateTime('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'));
+        table.dateTime('updatedAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+        table.foreign('ownerId').references('users.id');
+    });
+}
+
+export async function down(knex: Knex): Promise<void> {
+    return knex.schema.dropTable('twitch_channels');
+}

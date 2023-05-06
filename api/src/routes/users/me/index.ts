@@ -10,6 +10,4 @@ export class UsersMeRoute extends RouteBase {
             childs: [new UsersMeGetInfoRoute()],
         });
     }
-
-    run(): void {}
 }

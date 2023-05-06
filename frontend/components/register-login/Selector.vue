@@ -2,13 +2,13 @@
     <v-row>
         <v-col cols="12">
             <div
-                class="tabs"
                 :class="{
                     'tabs-mobile': $vuetify.display.smAndDown,
                 }"
+                class="tabs"
             >
-                <NuxtLink to="/" active-class="active-tab" class="tab text-subtitle-1">Entrar</NuxtLink>
-                <NuxtLink to="/registrar" active-class="active-tab" class="tab text-subtitle-1">Registrar</NuxtLink>
+                <NuxtLink active-class="active-tab" class="tab text-subtitle-1" to="/">Entrar</NuxtLink>
+                <NuxtLink active-class="active-tab" class="tab text-subtitle-1" to="/registrar">Registrar</NuxtLink>
             </div>
         </v-col>
     </v-row>
@@ -26,6 +26,7 @@
 
     &.tabs-mobile {
         flex-flow: row wrap;
+
         .tab {
             width: 100%;
         }
@@ -41,8 +42,9 @@
 </style>
 
 <style>
+/*noinspection CssUnusedSymbol,CssUnresolvedCustomProperty*/
 .active-tab {
-    background-color: rgb(var(--v-theme-secondary));
-    color: rgb(var(--v-theme-on-secondary));
+    background-color: rgb(var(--v-theme-primary));
+    color: rgb(var(--v-theme-on-primary));
 }
 </style>

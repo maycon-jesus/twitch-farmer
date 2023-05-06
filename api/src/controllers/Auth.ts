@@ -20,7 +20,7 @@ export class AuthController extends ControllerBase {
             .select('password', 'email', 'id', 'role')
             .where({ email: data.email })
             .first()
-            .catch((err) => {
+            .catch(() => {
                 throw new ErrorMaker({
                     errors: [
                         {
@@ -76,8 +76,7 @@ export class AuthController extends ControllerBase {
 
     async validateToken(token: string): Promise<IJWTPayload> {
         try {
-            const payload = jsonwebtoken.verify(token, process.env.JWT_SECRET!) as IJWTPayload;
-            return payload;
+            return jsonwebtoken.verify(token, process.env.JWT_SECRET!) as IJWTPayload;
         } catch {
             throw new ErrorMaker({
                 type: 'unauthorized',

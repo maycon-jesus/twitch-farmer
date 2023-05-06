@@ -1,13 +1,18 @@
 <template>
     <div
-        class="wrapper"
         :class="{
             'pa-4': $vuetify.display.xs,
             'pa-6': !$vuetify.display.xs,
         }"
+        class="wrapper"
     >
         <v-card class="card-login">
             <v-container fluid>
+                <v-row v-if="errorMessage">
+                    <v-col cols="12">
+                        <LazyRegisterLoginErrorMessage :message="errorMessage" />
+                    </v-col>
+                </v-row>
                 <v-row>
                     <v-col cols="12">
                         <div class="titles-wrapper">
@@ -20,33 +25,33 @@
                     <v-row>
                         <v-col cols="12">
                             <v-text-field
-                                label="Email"
-                                autocomplete="email"
-                                name="email"
                                 v-model="data.email"
                                 :rules="[validators.email]"
+                                autocomplete="email"
+                                label="Email"
+                                name="email"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <FormTextFieldPassword
-                                label="Digite a senha novamente"
-                                autocomplete="current-password"
-                                name="current-password"
                                 v-model="data.password"
                                 :rules="[validators.password]"
+                                autocomplete="current-password"
+                                label="Digite a senha novamente"
+                                name="current-password"
                             ></FormTextFieldPassword>
                         </v-col>
                     </v-row>
                     <v-expand-transition v-show="apiError">
                         <v-row>
                             <v-col cols="12">
-                                <v-alert type="error" :icon="iconError">{{ apiError }}</v-alert>
+                                <v-alert :icon="iconError" type="error">{{ apiError }}</v-alert>
                             </v-col>
                         </v-row>
                     </v-expand-transition>
                     <v-row justify="center">
                         <v-col cols="auto">
-                            <v-btn size="large" type="submit" :loading="formLoading">Entrar</v-btn>
+                            <v-btn :loading="formLoading" size="large" type="submit">Entrar</v-btn>
                         </v-col>
                     </v-row>
                 </v-form>
@@ -55,20 +60,28 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import iconError from '~icons/material-symbols/error-rounded';
-import { z } from 'zod';
-const $api = useApi();
-const router = useRouter();
-const route = useRoute();
+<script lang="ts" setup>
+// noinspection TypeScriptCheckImport
+import iconError from '~icons/material-symbols/error-rounded'
+import { ref } from 'vue'
+import { z } from 'zod'
 
-const formValid = ref(false);
-const formLoading = ref(false);
-const apiError = ref<null | string>(null);
+useSeoMeta({
+    title: 'Entrar',
+})
+
+const $api = useApi()
+const router = useRouter()
+const route = useRoute()
+
+const formValid = ref(false)
+const formLoading = ref(false)
+const apiError = ref<null | string>(null)
+const errorMessage = ref<null | string>((route.query['error-message'] as string) || null)
 const data = reactive({
     email: sessionStorage.getItem('login.email') || '',
     password: sessionStorage.getItem('login.password') || '',
-});
+})
 
 const validators = {
     email: (val: any) => {
@@ -76,14 +89,14 @@ const validators = {
             .string({
                 required_error: 'O email é um campo obrigatório',
             })
-            .email('Informe um email válido');
+            .email('Informe um email válido')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.email = validation.data;
-            return true;
+            data.email = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+        return validation.error.errors[0].message
     },
     password: (val: any) => {
         const validator = z
@@ -92,43 +105,44 @@ const validators = {
             })
             .nonempty('Informe sua senha')
             .min(8, 'O mínimo de caracteres para a senha é 8')
-            .max(50, 'O máximo de caracteres para a senha é 50');
+            .max(50, 'O máximo de caracteres para a senha é 50')
 
-        const validation = validator.safeParse(val);
+        const validation = validator.safeParse(val)
         if (validation.success) {
-            data.password = validation.data;
-            return true;
+            data.password = validation.data
+            return true
         }
-        return validation.error.errors[0].message;
+
+        return validation.error.errors[0].message
     },
-};
+}
 
 const onSubmit = () => {
-    if (!formValid.value) return;
-    formLoading.value = true;
-    apiError.value = null;
+    if (!formValid.value) return
+    formLoading.value = true
+    apiError.value = null
 
     $api<{ token: string }>('/auth/login', {
         method: 'post',
         body: data,
         onResponseError(res) {
-            const data = res.response._data;
+            const data = res.response._data
             if (data) {
-                apiError.value = data.errors[0].message;
+                apiError.value = data.errors[0].message
             }
         },
     })
         .then((data) => {
-            const authCookie = useCookie('auth-token');
-            authCookie.value = data.token;
+            const authCookie = useCookie('auth-token')
+            authCookie.value = data.token
             router.push({
                 name: (route.query.redirectTo as string) || 'dashboard',
-            });
+            })
         })
         .finally(() => {
-            formLoading.value = false;
-        });
-};
+            formLoading.value = false
+        })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -138,6 +152,7 @@ const onSubmit = () => {
     align-items: center;
     min-height: 100vh;
 }
+
 .card-login {
     width: 500px;
     max-width: 500px;

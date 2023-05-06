@@ -30,11 +30,11 @@ export class InviteCodesController extends ControllerBase {
         await this.dd.database.db('invite_codes').where({ code }).update({ used: 1, usedBy });
     }
 
-    async generateInviteCode(data: { ownerId: string }) {
+    async generateInviteCode(data?: { ownerId: string }) {
         const code = v4();
         await this.dd.database.db('invite_codes').insert({
             code,
-            ownerId: data.ownerId,
+            ownerId: data?.ownerId,
         });
         return {
             code,
@@ -43,11 +43,12 @@ export class InviteCodesController extends ControllerBase {
 
     async listInvites(data: { ownerId: string; page: number; limit: number }): Promise<IInviteCode[]> {
         const offset = data.page * data.limit - data.limit;
-        return await this.dd.database
+        return this.dd.database
             .db('invite_codes')
             .where({ ownerId: data.ownerId })
             .offset(offset)
-            .limit(data.limit);
+            .limit(data.limit)
+            .orderBy('createdAt', 'desc');
     }
 
     async countInvites(data: { ownerId: string }): Promise<{ count: number }> {
