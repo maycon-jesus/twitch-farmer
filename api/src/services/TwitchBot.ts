@@ -55,7 +55,22 @@ class TwitchBot {
     }
 
     async disconnect() {
-        return await this.tmiClient.disconnect();
+        return await this.tmiClient
+            .disconnect()
+            .then()
+            .catch((e) => console.error(e));
+    }
+
+    async changeToken(token: string) {
+        await this.disconnect();
+        this.tmiClient.getOptions().identity!.password = 'oauth:' + token;
+        this.tmiClient.getOptions().channels = this.channels;
+        await this.tmiClient
+            .connect()
+            .then()
+            .catch((e) => {
+                console.error(e);
+            });
     }
 }
 
@@ -136,5 +151,9 @@ export class TwitchBotService extends ServiceBase {
         for (const account of accounts) {
             await this.leaveChannel(account.id, username);
         }
+    }
+
+    async changeAccountToken(accountId: string, token: string) {
+        await this.getAccountBot(accountId)?.changeToken(token);
     }
 }

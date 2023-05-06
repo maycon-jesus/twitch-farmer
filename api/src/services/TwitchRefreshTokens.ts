@@ -31,6 +31,7 @@ export class TwitchRefreshTokensService extends ServiceBase {
                         nTokens.refreshToken,
                         nTokens.expiresAt
                     );
+                    await this.dd.services.twitchBot.changeAccountToken(account.id, nTokens.accessToken);
                 } catch (err) {
                     console.error(err);
                     if (err instanceof ErrorMaker && err.type === 'unauthorized') {

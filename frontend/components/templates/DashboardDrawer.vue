@@ -41,7 +41,7 @@
                 </template>
                 <v-list-item-title>Convidar amigos</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="{ name: 'index' }" disabled>
+            <v-list-item href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento" target="_blank">
                 <template #prepend>
                     <v-icon :icon="iconNotes"></v-icon>
                 </template>
