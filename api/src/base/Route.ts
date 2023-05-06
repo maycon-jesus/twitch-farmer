@@ -1,8 +1,6 @@
 import express from 'express';
-import {getDependencys, IDependencys} from '../libs/DependencysManager';
-import {MiddlewareBase} from './Middleware';
-
-export type RouteMethods = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'use';
+import { getDependencys, IDependencys } from '../libs/DependencysManager';
+import { MiddlewareBase } from './Middleware';
 
 export abstract class RouteBase {
     public router: express.Router;
@@ -35,5 +33,7 @@ export abstract class RouteBase {
         }
     }
 
-    abstract run?(): void;
+    run(): void {
+        return;
+    }
 }

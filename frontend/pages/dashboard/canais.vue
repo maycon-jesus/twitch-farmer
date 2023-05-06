@@ -46,6 +46,10 @@ definePageMeta({
     middleware: ['auth'],
 })
 
+useSeoMeta({
+    title: 'Canais',
+})
+
 const api = useApi()
 const ui = useUi()
 const channels = ref<ChannelResume[]>([])

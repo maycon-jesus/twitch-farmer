@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { RoutesModule } from './modules/Routes.module';
 import { DatabaseModule } from './modules/Database.module';
 import { UsersController } from './controllers/Users';
-import { setDependency } from './libs/DependencysManager';
+import { setDependency, setServiceDependency } from './libs/DependencysManager';
 import { RolesController } from './controllers/Roles';
 import { AuthController } from './controllers/Auth';
 import { InviteCodesController } from './controllers/InviteCodes';
@@ -15,9 +15,11 @@ import { WebShareProxyController } from './controllers/WebShareProxy';
 import { SecretsController } from './controllers/Secrets';
 import { TwitchChannelsController } from './controllers/TwitchChannels';
 import { StreamElementsApiController } from './controllers/StreamElementsApi';
+import { TwitchRefreshTokensService } from './services/TwitchRefreshTokens';
+import { TwitchBotService } from './services/TwitchBot';
 
 dotenv.config({
-    path: './.env'
+    path: './.env',
 });
 
 const app = express();
@@ -55,6 +57,12 @@ function loadControllers() {
 
     const streamElementsApi = new StreamElementsApiController();
     setDependency('streamElementsApi', streamElementsApi);
+
+    const twitchRefreshTokensService = new TwitchRefreshTokensService();
+    setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);
+
+    const twitchBotService = new TwitchBotService();
+    setServiceDependency('twitchBot', twitchBotService);
 }
 
 database.runMigrations().then(() => {

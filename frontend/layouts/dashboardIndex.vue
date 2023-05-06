@@ -5,7 +5,7 @@
         <v-main class="main">
             <slot></slot>
         </v-main>
-        <v-footer>GGG</v-footer>
+        <templates-footer />
     </v-app>
 </template>
 

@@ -6,7 +6,7 @@
         <v-main class="main">
             <slot></slot>
         </v-main>
-        <v-footer app absolute>GGG</v-footer>
+        <templates-footer />
     </v-app>
 </template>
 
@@ -15,3 +15,4 @@
     min-height: 100vh;
 }
 </style>
+<script lang="ts" setup></script>

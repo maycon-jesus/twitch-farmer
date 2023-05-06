@@ -12,7 +12,9 @@ export const useUserDataStore = defineStore('user-data', {
             this.userData = await this.$api<any>('/users/me')
         },
         async reset() {
+            const cookie = useCookie('authToken')
             this.userData = null
+            cookie.value = null
         },
     },
 })

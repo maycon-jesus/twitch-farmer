@@ -7,15 +7,16 @@ export default class AccountDeleteRoute extends RouteBase {
     }
 
     run() {
-        this.router.delete('/', async(req,res)=>{
-            try{
-                const params = req.params as any
-                await this.dd.twitchAccounts.deleteAccount(params.accountId)
-                res.json({success:true})
-            }catch(e:any){
-                const err=  ErrorToResponse(e)
-                res.status(err.status).json(err.error)
+        this.router.delete('/', async (req, res) => {
+            try {
+                const params = req.params as any;
+                await this.dd.services.twitchBot.removeAccount(params.accountId);
+                await this.dd.twitchAccounts.deleteAccount(params.accountId);
+                res.json({ success: true });
+            } catch (e: any) {
+                const err = ErrorToResponse(e);
+                res.status(err.status).json(err.error);
             }
-        })
+        });
     }
 }

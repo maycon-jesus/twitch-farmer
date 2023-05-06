@@ -5,14 +5,27 @@ export default class ListAccounts extends RouteBase {
     run(): void {
         this.router.get('/', async (req, res) => {
             try {
-                const accounts = await this.dd.twitchAccounts.listAccounts(req.jwt.userId);
+                const accounts = await this.dd.twitchAccounts.listAccounts({
+                    ownerId: req.jwt.userId,
+                });
                 const accountsMapped = accounts
                     .map((account) => {
+                        const accountBot = this.dd.services.twitchBot.getAccountBot(account.id);
+                        const botData = accountBot
+                            ? {
+                                  channelsConnected: accountBot.channelsConnected.length,
+                                  totalChannels: accountBot.totalChannels,
+                                  state: accountBot.state,
+                              }
+                            : undefined;
                         return {
                             id: account.id,
                             login: account.login,
                             displayName: account.displayName,
                             profileImageUrl: account.profileImageUrl,
+                            tokenInvalid: !!account.tokenInvalid,
+                            banned: !!account.banned,
+                            bot: botData,
                         };
                     })
                     .sort((a, b) => {

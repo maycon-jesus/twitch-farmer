@@ -66,6 +66,10 @@ import iconError from '~icons/material-symbols/error-rounded'
 import { ref } from 'vue'
 import { z } from 'zod'
 
+useSeoMeta({
+    title: 'Entrar',
+})
+
 const $api = useApi()
 const router = useRouter()
 const route = useRoute()

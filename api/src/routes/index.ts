@@ -16,10 +16,8 @@ export class Routes extends RouteBase {
                 new InviteCodesRoute(),
                 new PublicRoutes(),
                 new TwitchAccountsRoutes(),
-                new TwitchChannelsRoute()
+                new TwitchChannelsRoute(),
             ],
         });
     }
-
-    run(): void {}
 }

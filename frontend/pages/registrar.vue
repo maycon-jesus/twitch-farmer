@@ -99,6 +99,10 @@
 import { z } from 'zod'
 import { ref } from 'vue'
 
+useSeoMeta({
+    title: 'Registrar',
+})
+
 const route = useRoute()
 const router = useRouter()
 const $api = useApi()

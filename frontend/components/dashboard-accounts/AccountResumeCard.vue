@@ -1,39 +1,50 @@
 <template>
-    <v-card class="channel-card" width="450">
-        <div class="d-flex flex-nowrap">
-            <div class="channel-img-wrapper">
-                <img :src="account.profileImageUrl" alt="Account profile image" class="channel-img" />
+    <v-card
+        :class="{
+            mobile: $vuetify.display.xs,
+        }"
+        class="channel-card"
+        width="450"
+    >
+        <img :src="account.profileImageUrl" alt="Account profile image" class="channel-img" />
+        <v-card-text>
+            <div class="d-flex justify-space-between title-div">
+                <span class="text-h6 account-name">{{ account.displayName || account.login }}</span>
             </div>
-            <div class="flex-grow-1">
-                <v-card-text>
-                    <div class="d-flex justify-space-between">
-                        <span class="text-h6">{{ account.displayName || account.login }}</span>
-                    </div>
-                    <div class="chips-list">
-                        <v-chip color="success">Farmando</v-chip>
-                        <!--                        <v-chip>21/25 canais</v-chip>-->
-                    </div>
-                    <div class="d-flex justify-end mt-3">
-                        <v-menu>
-                            <template #activator="{ props }">
-                                <v-btn color="white" v-bind="props" variant="text">
-                                    <v-icon :icon="iconVerticalDots"></v-icon>
-                                </v-btn>
-                            </template>
-                            <v-list>
-                                <v-list-item class="text-error" color="error" @click="dialogDeleteAccountOpen = true">
-                                    <template #prepend>
-                                        <v-icon :icon="iconDelete"></v-icon>
-                                    </template>
-                                    <v-list-item-title>Excluir</v-list-item-title>
-                                </v-list-item>
-                            </v-list>
-                        </v-menu>
-                        <v-btn disabled>Ver mais</v-btn>
-                    </div>
-                </v-card-text>
+            <div class="chips-list">
+                <v-chip :color="accountStatus.color">{{ accountStatus.text }}</v-chip>
+                <v-chip v-if="account.bot"
+                    >{{ account.bot.channelsConnected }} de {{ account.bot.totalChannels }} canais
+                </v-chip>
             </div>
-        </div>
+            <div v-if="accountStatus.type === 'invalid_access'" class="mt-4">
+                <v-alert :icon="false" type="error"
+                    ><p class="text-body-1">
+                        O bot não está conseguindo acessar os dados de sua conta. Exclua ela e adicione novamente!
+                    </p></v-alert
+                >
+            </div>
+        </v-card-text>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-menu>
+                <template #activator="{ props }">
+                    <v-btn color="white" v-bind="props" variant="text">
+                        <v-icon :icon="iconVerticalDots"></v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item class="text-error" color="error" @click="dialogDeleteAccountOpen = true">
+                        <template #prepend>
+                            <v-icon :icon="iconDelete"></v-icon>
+                        </template>
+                        <v-list-item-title>Excluir</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+            <v-btn disabled>Resgates</v-btn>
+            <v-btn disabled>Ver mais</v-btn>
+        </v-card-actions>
         <dashboard-accounts-dialog-account-delete
             v-model="dialogDeleteAccountOpen"
             :account-id="account.id"
@@ -44,15 +55,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-// noinspection TypeScriptCheckImport
-import iconVerticalDots from '~icons/mdi/dots-vertical'
-// noinspection TypeScriptCheckImport
+import { computed, ref } from 'vue' // noinspection TypeScriptCheckImport
+import iconVerticalDots from '~icons/mdi/dots-vertical' // noinspection TypeScriptCheckImport
 import iconDelete from '~icons/ic/baseline-delete-forever'
-import { Account } from '~/types/Accounts'
+import { AccountResume } from '~/types/Accounts'
 
 const props = defineProps<{
-    account: Account
+    account: AccountResume
 }>()
 
 const emits = defineEmits<{
@@ -64,38 +73,89 @@ const emitAccountUpdated = () => {
 }
 
 const dialogDeleteAccountOpen = ref(false)
+
+const accountStatus = computed<{
+    color: string
+    text: string
+    type?: 'invalid_access'
+}>(() => {
+    if (props.account.tokenInvalid)
+        return {
+            color: 'error',
+            text: 'Acesso inválido',
+            type: 'invalid_access',
+        }
+    if (props.account.banned)
+        return {
+            color: 'error',
+            text: 'Conta banida',
+        }
+    if (!props.account.bot || props.account.bot.state === 'CLOSED')
+        return {
+            color: 'error',
+            text: 'Bot desligado',
+        }
+    if (props.account.bot.state === 'CONNECTING')
+        return {
+            color: 'success',
+            text: 'Bot ligando',
+        }
+    if (props.account.bot.state === 'OPEN')
+        return {
+            color: 'success',
+            text: 'Farmando',
+        }
+    if (props.account.bot.state === 'CLOSING')
+        return {
+            color: 'warn',
+            text: 'Desligando',
+        }
+    return {
+        color: 'success',
+        text: 'farmando',
+    }
+})
 </script>
 
 <style lang="scss" scoped>
 .channel-card {
+    --image-size: 128px;
     transition: transform 0.1s ease !important;
+    margin-top: calc(var(--image-size) / 2);
+    overflow: unset !important;
+    position: relative;
 
     &:hover {
         transform: scale(1.05);
     }
-}
 
-.break {
-    white-space: normal;
+    &.mobile {
+        --image-size: 84px;
+    }
 }
 
 .chips-list {
     display: flex;
     flex-flow: row wrap;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
-.channel-img-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 10px;
+.title-div {
+    min-height: calc(var(--image-size) / 2 - 16px);
+}
 
-    .channel-img {
-        aspect-ratio: 1 / 1;
-        height: 128px;
-        border-radius: 999rem;
-    }
+.channel-img {
+    aspect-ratio: 1 / 1;
+    height: var(--image-size);
+    border-radius: 999rem;
+    margin-left: 15px;
+    position: absolute;
+    top: calc(var(--image-size) / -2);
+    background: rgb(var(--v-theme-primary));
+}
+
+.account-name {
+    margin-left: calc(var(--image-size) + 15px);
 }
 </style>

@@ -10,6 +10,8 @@ import { RoutesModule } from '../modules/Routes.module';
 import { SecretsController } from '../controllers/Secrets';
 import { TwitchChannelsController } from '../controllers/TwitchChannels';
 import { StreamElementsApiController } from '../controllers/StreamElementsApi';
+import { TwitchRefreshTokensService } from '../services/TwitchRefreshTokens';
+import { TwitchBotService } from '../services/TwitchBot';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -24,14 +26,30 @@ export interface IDependencys {
     secrets: SecretsController;
     twitchChannels: TwitchChannelsController;
     streamElementsApi: StreamElementsApiController;
+    services: {
+        twitchRefreshToken: TwitchRefreshTokensService;
+        twitchBot: TwitchBotService;
+    };
 }
 
 const dependencys: {
     [dependencyName: string]: any;
-} = {};
+    services: {
+        [dependencyName: string]: any;
+    };
+} = {
+    services: {},
+};
 
 export function setDependency<K extends keyof IDependencys>(dependencyName: K, value: IDependencys[K]) {
     dependencys[dependencyName] = value;
+}
+
+export function setServiceDependency<K extends keyof IDependencys['services']>(
+    dependencyName: K,
+    value: IDependencys['services'][K]
+) {
+    dependencys.services[dependencyName] = value;
 }
 
 export function getDependencys(): any {

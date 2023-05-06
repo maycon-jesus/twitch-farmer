@@ -1,14 +1,12 @@
-import {RouteBase} from '../../base/Route';
+import { RouteBase } from '../../base/Route';
 import AddTwitchAccount from './add-account';
+import { PublicRegister } from './register';
 
 export class PublicRoutes extends RouteBase {
     constructor() {
         super({
             path: '/public',
-            childs: [new AddTwitchAccount()],
+            childs: [new AddTwitchAccount(), new PublicRegister()],
         });
-    }
-
-    run(): void {
     }
 }

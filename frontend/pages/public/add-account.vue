@@ -45,6 +45,10 @@ import iconError from '~icons/material-symbols/error-rounded'
 // noinspection TypeScriptCheckImport
 import iconSuccess from '~icons/mdi/success-circle'
 
+useSeoMeta({
+    title: 'Adicionar conta',
+})
+
 const route = useRoute()
 const $api = useApi()
 

@@ -8,6 +8,4 @@ export class UsersRoute extends RouteBase {
             childs: [new UsersMeRoute()],
         });
     }
-
-    run(): void {}
 }

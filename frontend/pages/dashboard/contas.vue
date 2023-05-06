@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { Account } from '~/types/Accounts'
+import { AccountResume } from '~/types/Accounts'
 import { useUi } from '~/store/ui'
 
 // Types
@@ -45,10 +45,13 @@ definePageMeta({
     layout: 'dashboard',
     middleware: ['auth'],
 })
+useSeoMeta({
+    title: 'Contas',
+})
 
 const api = useApi()
 const ui = useUi()
-const accounts = ref<Account[]>([])
+const accounts = ref<AccountResume[]>([])
 const search = ref('')
 const accountsToShow = computed(() => {
     return accounts.value.filter((a) => {

@@ -12,7 +12,11 @@
                 </div>
             </template>
 
-            <v-list> aa</v-list>
+            <v-list>
+                <v-list-item>
+                    <v-btn block variant="outlined" @click="logoff">Sair</v-btn>
+                </v-list-item>
+            </v-list>
         </v-menu>
     </v-app-bar>
 </template>
@@ -29,6 +33,12 @@ defineProps<{
 
 const userData = useUserDataStore()
 const ui = useUi()
+const router = useRouter()
+
+const logoff = () => {
+    userData.reset()
+    router.push({ name: 'index' })
+}
 </script>
 
 <style lang="scss">

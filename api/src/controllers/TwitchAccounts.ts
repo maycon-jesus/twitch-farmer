@@ -1,6 +1,26 @@
-import {ControllerBase} from '../base/Controller';
-import {v4} from 'uuid';
-import {ErrorMaker} from '../libs/ErrorMaker';
+import { ControllerBase } from '../base/Controller';
+import { v4 } from 'uuid';
+import { ErrorMaker } from '../libs/ErrorMaker';
+import { DateTime, DurationLike } from 'luxon';
+
+export type TwitchAccount = {
+    id: string;
+    ownerId: string;
+    email: string;
+    login: string;
+    userId: string;
+    displayName: string;
+    profileImageUrl: string;
+    accessToken: string;
+    refreshToken: string;
+    tokenExpiresAt: Date;
+    streamElementsToken: string;
+    notes: string;
+    createdAt: Date;
+    updatedAt: Date;
+    tokenInvalid: 0 | 1;
+    banned: 0 | 1;
+};
 
 export class TwitchAccountsController extends ControllerBase {
     async getAuthorizationUrl(ownerId: string) {
@@ -26,17 +46,17 @@ export class TwitchAccountsController extends ControllerBase {
         if (!preTwitchAccount)
             throw new ErrorMaker({
                 type: 'not_found',
-                errors: [{message: 'Não foi possivel encontrar à qual conta você esta tentando adicionar'}],
+                errors: [{ message: 'Não foi possivel encontrar à qual conta você esta tentando adicionar' }],
             });
         return preTwitchAccount.ownerId;
     }
 
     async getAccountByUserId(userId: string) {
-        return this.dd.database.db('twitch_accounts').where({userId: userId}).first();
+        return this.dd.database.db('twitch_accounts').where({ userId: userId }).first();
     }
 
-    async getAccountById(id: string) {
-        return this.dd.database.db('twitch_accounts').where({id}).first();
+    async getAccountById(id: string): Promise<TwitchAccount> {
+        return this.dd.database.db('twitch_accounts').where({ id }).first();
     }
 
     async insert(code: string, identifyCode: string, redirectUrl: string) {
@@ -51,7 +71,7 @@ export class TwitchAccountsController extends ControllerBase {
         if (accountExists)
             throw new ErrorMaker({
                 type: 'unprocessable_entity',
-                errors: [{message: 'Você não pode adicionar essa conta pois ela já esta farmando.'}],
+                errors: [{ message: 'Você não pode adicionar essa conta pois ela já esta farmando.' }],
             });
 
         const accountId = v4();
@@ -76,21 +96,79 @@ export class TwitchAccountsController extends ControllerBase {
         };
     }
 
-    async deleteAccount(accountId: string){
-        await this.dd.database.db('twitch_accounts').where({id: accountId}).del()
+    async deleteAccount(accountId: string) {
+        await this.dd.database.db('twitch_accounts').where({ id: accountId }).del();
     }
 
     async setStreamElementsToken(accountId: string, streamElementsToken: string) {
-        await this.dd.database.db('twitch_accounts').where({
-            id: accountId
-        }).update({
-            streamElementsToken: streamElementsToken || null
-        })
+        await this.dd.database
+            .db('twitch_accounts')
+            .where({
+                id: accountId,
+            })
+            .update({
+                streamElementsToken: streamElementsToken || null,
+            });
     }
 
-    async listAccounts(ownerId: string) {
-        return this.dd.database.db('twitch_accounts').where({
-            ownerId,
+    async setTwitchTokens(accountId: string, accessToken: string, refreshToken: string, tokenExpiresAt: DateTime) {
+        await this.dd.database
+            .db('twitch_accounts')
+            .where({
+                id: accountId,
+            })
+            .update({
+                accessToken,
+                refreshToken,
+                tokenExpiresAt: tokenExpiresAt.toISO(),
+            });
+    }
+
+    async setTokenInvalid(accountId: string) {
+        await this.dd.database
+            .db('twitch_accounts')
+            .where({
+                id: accountId,
+            })
+            .update({
+                tokenInvalid: 1,
+            });
+    }
+
+    async listAccounts(params: {
+        ownerId?: string;
+        orderBy?: 'createdAt' | 'tokenExpiresAt';
+        sort?: 'asc' | 'desc';
+        limit?: number;
+        filters?: {
+            tokenExpiresIn?: DurationLike /* time in seconds */;
+            removeBanned?: boolean;
+            removeTokenInvalid?: boolean;
+        };
+    }): Promise<TwitchAccount[]> {
+        return this.dd.database.db('twitch_accounts').where((queryBuilder) => {
+            if (params.ownerId) {
+                queryBuilder.where({ ownerId: params.ownerId });
+            }
+            if (params.orderBy) {
+                queryBuilder.orderBy(params.orderBy, params.sort);
+            }
+            if (params.filters) {
+                const filters = params.filters;
+                if (filters.tokenExpiresIn) {
+                    const dateExpires = DateTime.now().plus(filters.tokenExpiresIn).toISO();
+                    queryBuilder.andWhere('tokenExpiresAt', '<=', dateExpires);
+                }
+                if (filters.removeBanned) {
+                    queryBuilder.andWhere({ banned: 0 }).orWhereNull('banned');
+                }
+                if (filters.removeTokenInvalid) {
+                    queryBuilder.andWhere({ tokenInvalid: 0 }).orWhereNull('tokenInvalid');
+                }
+            }
+            if (params.limit) {
+                queryBuilder.limit(params.limit);
+            }
         });
     }
 }

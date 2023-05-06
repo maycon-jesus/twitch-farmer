@@ -1,5 +1,5 @@
-import {ControllerBase} from '../base/Controller';
-import {ErrorMaker} from '../libs/ErrorMaker';
+import { ControllerBase } from '../base/Controller';
+import { ErrorMaker } from '../libs/ErrorMaker';
 import jsonwebtoken from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
@@ -18,9 +18,9 @@ export class AuthController extends ControllerBase {
         const user = await this.dd.database
             .db('users')
             .select('password', 'email', 'id', 'role')
-            .where({email: data.email})
+            .where({ email: data.email })
             .first()
-            .catch((err) => {
+            .catch(() => {
                 throw new ErrorMaker({
                     errors: [
                         {

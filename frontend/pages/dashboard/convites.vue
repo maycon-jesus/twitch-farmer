@@ -51,6 +51,9 @@ definePageMeta({
     layout: 'dashboard',
     middleware: ['auth'],
 })
+useSeoMeta({
+    title: 'Convites',
+})
 
 const api = useApi()
 const ui = useUi()

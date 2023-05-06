@@ -12,6 +12,12 @@ export default defineNuxtConfig({
         },
     },
 
+    app: {
+        head: {
+            titleTemplate: '%s - Twitch BOT',
+        },
+    },
+
     css: ['~/assets/css/reset.css', 'vuetify/styles'],
 
     modules: ['unplugin-icons/nuxt', 'nuxt-icons', '@pinia/nuxt'],

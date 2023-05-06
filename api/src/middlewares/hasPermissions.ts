@@ -1,10 +1,11 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { MiddlewareBase } from '../base/Middleware';
 import { ErrorMaker, ErrorToResponse } from '../libs/ErrorMaker';
 import { RolePermission } from '../controllers/Roles';
 
 export class HasPermissionsMiddleware extends MiddlewareBase {
     private permissions: RolePermission[] = [];
+
     constructor(permissions: RolePermission[]) {
         super();
         this.permissions.push(...permissions);

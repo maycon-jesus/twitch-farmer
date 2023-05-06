@@ -39,13 +39,11 @@ export class TwitchApiController extends ControllerBase {
             login: user.login,
             displayName: user.display_name,
             profileImageUrl: user.profile_image_url,
-            email: user.email
+            email: user.email,
         };
     }
 
-    async getAccountDetailsByLogin(
-        login: string
-    ): Promise<{
+    async getAccountDetailsByLogin(login: string): Promise<{
         id: string;
         login: string;
         displayName: string;
@@ -55,32 +53,33 @@ export class TwitchApiController extends ControllerBase {
         const users = await axios
             .get(`https://api.twitch.tv/helix/users`, {
                 params: {
-                    login: login
+                    login: login,
                 },
                 headers: {
                     Authorization: 'Bearer ' + accessToken,
-                    'Client-Id': process.env.TWITCH_BOT_CLIENT_ID
+                    'Client-Id': process.env.TWITCH_BOT_CLIENT_ID,
                 },
-                proxy: this.dd.webShareProxy.getRandomProxyForAxios()
+                proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
             })
             .catch((err) => {
                 console.log(err);
                 throw new ErrorMaker({
                     type: 'other',
-                    errors: [{ message: 'Não encontramos este usuário no banco de dados da twitch' }]
+                    errors: [{ message: 'Não encontramos este usuário no banco de dados da twitch' }],
                 });
             });
-        if (users.data.data.length <= 0) throw new ErrorMaker({
-            type: 'other',
-            errors: [{ message: 'Não encontramos este usuário no banco de dados da twitch' }]
-        });
+        if (users.data.data.length <= 0)
+            throw new ErrorMaker({
+                type: 'other',
+                errors: [{ message: 'Não encontramos este usuário no banco de dados da twitch' }],
+            });
         const user = users.data.data[0];
 
         return {
             id: user.id,
             login: user.login,
             displayName: user.display_name,
-            profileImageUrl: user.profile_image_url
+            profileImageUrl: user.profile_image_url,
         };
     }
 
@@ -91,7 +90,7 @@ export class TwitchApiController extends ControllerBase {
         const tokenData = await axios
             .get(`https://id.twitch.tv/oauth2/validate`, {
                 headers: {
-                    Authorization: 'OAuth ' + accessToken
+                    Authorization: 'OAuth ' + accessToken,
                 },
                 proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
             })
@@ -130,7 +129,7 @@ export class TwitchApiController extends ControllerBase {
                     proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
                 }
             )
-            .catch((err) => {
+            .catch(() => {
                 throw new ErrorMaker({
                     type: 'other',
                     errors: [{ message: 'Ocorreu um erro na geração dos códigos de acesso da sua conta' }],
@@ -145,6 +144,36 @@ export class TwitchApiController extends ControllerBase {
             accessToken: data.data.access_token,
             expiresIn: expiresAt,
             refreshToken: data.data.refresh_token,
+        };
+    }
+
+    async refreshToken(refreshToken: string): Promise<{
+        accessToken: string;
+        refreshToken: string;
+        expiresAt: DateTime;
+    }> {
+        const nTokens = await axios
+            .post('https://id.twitch.tv/oauth2/token', {
+                client_id: process.env.TWITCH_BOT_CLIENT_ID,
+                client_secret: process.env.TWITCH_BOT_CLIENT_SECRET,
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+            })
+            .catch(() => {
+                throw new ErrorMaker({
+                    type: 'unauthorized',
+                    errors: [],
+                });
+            });
+
+        const expiresAt = DateTime.now().plus({
+            seconds: nTokens.data.expires_in,
+        });
+
+        return {
+            accessToken: nTokens.data.access_token,
+            refreshToken: nTokens.data.refresh_token,
+            expiresAt,
         };
     }
 }

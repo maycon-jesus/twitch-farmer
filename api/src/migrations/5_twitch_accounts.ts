@@ -21,9 +21,13 @@ export async function up(knex: Knex): Promise<void> {
         table.dateTime('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'));
         table.dateTime('updatedAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         table.foreign('ownerId').references('users.id');
+
+        // Meta
+        table.tinyint('banned', 1);
+        table.tinyint('tokenInvalid', 1);
     });
 }
 
 export async function down(knex: Knex): Promise<void> {
-    return knex.schema.dropTable('twitch_accounts')
+    return knex.schema.dropTable('twitch_accounts');
 }

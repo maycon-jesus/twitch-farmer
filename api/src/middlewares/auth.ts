@@ -1,6 +1,6 @@
-import type {NextFunction, Request, Response} from 'express';
-import {MiddlewareBase} from '../base/Middleware';
-import {ErrorMaker, ErrorToResponse} from '../libs/ErrorMaker';
+import type { NextFunction, Request, Response } from 'express';
+import { MiddlewareBase } from '../base/Middleware';
+import { ErrorMaker, ErrorToResponse } from '../libs/ErrorMaker';
 
 export class AuthMiddleware extends MiddlewareBase {
     async run(req: Request, res: Response, next: NextFunction) {
@@ -9,7 +9,7 @@ export class AuthMiddleware extends MiddlewareBase {
             if (!headerAuth)
                 throw new ErrorMaker({
                     type: 'forbidden',
-                    errors: [{message: 'Forneça o header "authorization" com o token de autorização'}],
+                    errors: [{ message: 'Forneça o header "authorization" com o token de autorização' }],
                 });
             req.jwt = await this.dd.auth.validateToken(headerAuth);
             next();

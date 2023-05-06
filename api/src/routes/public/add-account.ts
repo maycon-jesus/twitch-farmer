@@ -8,6 +8,7 @@ export default class AddtwitchAccount extends RouteBase {
         code: z.string(),
         redirectUrl: z.string().url(),
     });
+
     run(): void {
         this.router.post('/add-twitch-account', async (req, res) => {
             try {
@@ -22,6 +23,13 @@ export default class AddtwitchAccount extends RouteBase {
                     body.data.code,
                     body.data.identifyCode,
                     body.data.redirectUrl
+                );
+                const account = await this.dd.twitchAccounts.getAccountById(nAccount.id);
+                const channels = await this.dd.twitchChannels.listChannels(account.ownerId);
+
+                await this.dd.services.twitchBot.addAccount(
+                    account,
+                    channels.map((c) => c.login)
                 );
 
                 res.json({

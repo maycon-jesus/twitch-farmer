@@ -12,5 +12,4 @@ export class InviteCodesRoute extends RouteBase {
             childs: [new InviteCodesGenerateRoute(), new InviteCodesListRoute()],
         });
     }
-    run(): void {}
 }
