@@ -72,6 +72,10 @@ definePageMeta({
     middleware: ['auth'],
     layout: 'dashboard-index',
 })
+
+useSeoMeta({
+    title: 'Dashboard',
+})
 </script>
 
 <style lang="scss" scoped>
