@@ -55,7 +55,7 @@ export class TwitchAccountsController extends ControllerBase {
         return this.dd.database.db('twitch_accounts').where({ userId: userId }).first();
     }
 
-    async getAccountById(id: string): Promise<TwitchAccount> {
+    async getAccountById(id: string): Promise<TwitchAccount | undefined> {
         return this.dd.database.db('twitch_accounts').where({ id }).first();
     }
 
@@ -101,6 +101,14 @@ export class TwitchAccountsController extends ControllerBase {
     }
 
     async setStreamElementsToken(accountId: string, streamElementsToken: string) {
+        if (streamElementsToken) {
+            const tokenValid = await this.dd.streamElementsApi.validateToken(streamElementsToken);
+            if (!tokenValid.valid)
+                throw new ErrorMaker({
+                    type: 'unprocessable_entity',
+                    errors: [{ message: 'Token inválido' }],
+                });
+        }
         await this.dd.database
             .db('twitch_accounts')
             .where({

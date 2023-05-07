@@ -12,13 +12,13 @@
         </v-row>
         <v-row justify="center">
             <v-col cols="auto">
-                <dashboard-accounts-btn-add-account />
+                <dashboard-twitch-accounts-btn-add-account />
             </v-col>
         </v-row>
         <v-row justify="center">
             <v-col cols="12">
                 <div class="accounts-list">
-                    <lazy-dashboard-accounts-account-resume-card
+                    <lazy-dashboard-twitch-accounts-resume-card
                         v-for="account in accountsToShow"
                         :key="account.id"
                         :account="account"
@@ -88,4 +88,3 @@ getAccounts()
     gap: 15px;
 }
 </style>
-;

@@ -43,9 +43,17 @@
                 </v-list>
             </v-menu>
             <v-btn disabled>Resgates</v-btn>
-            <v-btn disabled>Ver mais</v-btn>
+            <v-btn
+                :to="{
+                    name: 'dashboard-conta-accountId',
+                    params: {
+                        accountId: $props.account.id,
+                    },
+                }"
+                >Ver mais
+            </v-btn>
         </v-card-actions>
-        <dashboard-accounts-dialog-account-delete
+        <dashboard-twitch-accounts-dialog-account-delete
             v-model="dialogDeleteAccountOpen"
             :account-id="account.id"
             :account-name="account.displayName || account.login"
