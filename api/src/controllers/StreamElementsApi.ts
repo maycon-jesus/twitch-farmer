@@ -29,12 +29,12 @@ export class StreamElementsApiController extends ControllerBase {
 
     async validateToken(token: string) {
         try {
-            await axios.get('https://api.streamelements.com/kappa/v2/channels/me', {
+            const data = await axios.get('https://api.streamelements.com/kappa/v2/channels/me', {
                 headers: {
                     authorization: `Bearer ${token}`,
                 },
             });
-            return { valid: true };
+            return { valid: true, username: data.data.username as string };
         } catch {
             return { valid: false };
         }

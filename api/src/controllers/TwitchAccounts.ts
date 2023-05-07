@@ -101,9 +101,21 @@ export class TwitchAccountsController extends ControllerBase {
     }
 
     async setStreamElementsToken(accountId: string, streamElementsToken: string) {
+        const account = await this.getAccountById(accountId);
+        if (!account)
+            throw new ErrorMaker({
+                type: 'not_found',
+                errors: [{ message: 'Conta não encontrada' }],
+            });
+
         if (streamElementsToken) {
             const tokenValid = await this.dd.streamElementsApi.validateToken(streamElementsToken);
             if (!tokenValid.valid)
+                throw new ErrorMaker({
+                    type: 'unprocessable_entity',
+                    errors: [{ message: 'Token inválido' }],
+                });
+            if (tokenValid.username !== account.login)
                 throw new ErrorMaker({
                     type: 'unprocessable_entity',
                     errors: [{ message: 'Token inválido' }],

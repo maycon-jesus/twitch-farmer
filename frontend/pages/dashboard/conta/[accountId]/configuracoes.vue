@@ -9,7 +9,13 @@
                     Configure o token do Stream Elements para que você possa resgatar no bot com sua conta.
                 </p>
                 <p>
-                    <a class="text-primary" href="#"><strong>Clique aqui</strong></a> para ver o tutorial.
+                    <a
+                        class="text-primary"
+                        href="https://docs.mayconjesus.dev/twitch-farmer/tutoriais/como-setar-o-token-do-streamelements"
+                        target="_blank"
+                        ><strong>Clique aqui</strong></a
+                    >
+                    para ver o tutorial.
                 </p>
             </v-col>
             <v-col cols="12">

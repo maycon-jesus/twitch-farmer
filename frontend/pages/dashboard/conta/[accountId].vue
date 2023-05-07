@@ -16,13 +16,15 @@
                                 <v-list>
                                     <v-list-item>
                                         <v-list-item-title>Nome</v-list-item-title>
-                                        <v-list-item-subtitle
+                                        <v-list-item-subtitle class="break"
                                             >{{ twitchAccount.account.displayName }}
                                         </v-list-item-subtitle>
                                     </v-list-item>
                                     <v-list-item>
                                         <v-list-item-title>Email</v-list-item-title>
-                                        <v-list-item-subtitle>{{ twitchAccount.account.email }}</v-list-item-subtitle>
+                                        <v-list-item-subtitle class="break">
+                                            {{ twitchAccount.account.email || 'Email não confirmado na twitch' }}
+                                        </v-list-item-subtitle>
                                     </v-list-item>
                                 </v-list>
                             </v-card-text>
@@ -107,5 +109,9 @@ twitchAccount.getAccount(route.params.accountId as any)
 <style lang="scss" scoped>
 .left-col-desktop {
     width: 300px;
+}
+
+.break {
+    -webkit-line-clamp: unset !important;
 }
 </style>
