@@ -36,4 +36,14 @@ export default defineNuxtConfig({
     build: {
         transpile: ['vuetify'],
     },
+
+    components: [
+        { path: '~/components/dashboard-accounts/account', prefix: 'twitch-account' },
+        { path: '~/components/dashboard-accounts', prefix: 'dashboard-twitch-accounts' },
+        '~/components',
+    ],
+
+    devtools: {
+        enabled: true,
+    },
 })

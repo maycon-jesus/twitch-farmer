@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
         table.uuid('id').primary();
         table.string('ownerId');
 
-        table.string('email').notNullable();
+        table.string('email').defaultTo(null);
         table.string('login').notNullable();
         table.string('userId').notNullable();
         table.string('displayName').notNullable();
@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('accessToken').notNullable();
         table.string('refreshToken').notNullable();
         table.dateTime('tokenExpiresAt').notNullable();
-        table.string('streamElementsToken').defaultTo(null);
+        table.text('streamElementsToken').defaultTo(null);
 
         table.text('notes').defaultTo(null);
 
