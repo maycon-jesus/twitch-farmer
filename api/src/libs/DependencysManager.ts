@@ -12,6 +12,7 @@ import { TwitchChannelsController } from '../controllers/TwitchChannels';
 import { StreamElementsApiController } from '../controllers/StreamElementsApi';
 import { TwitchRefreshTokensService } from '../services/TwitchRefreshTokens';
 import { TwitchBotService } from '../services/TwitchBot';
+import { StreamElementsPointsController } from '../controllers/StreamElementsPoints';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -26,6 +27,7 @@ export interface IDependencys {
     secrets: SecretsController;
     twitchChannels: TwitchChannelsController;
     streamElementsApi: StreamElementsApiController;
+    streamElementsPoints: StreamElementsPointsController;
     services: {
         twitchRefreshToken: TwitchRefreshTokensService;
         twitchBot: TwitchBotService;

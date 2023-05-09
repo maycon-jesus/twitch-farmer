@@ -5,7 +5,7 @@ import { ErrorMaker, ErrorToResponse } from '../libs/ErrorMaker';
 export class TwitchChannelsMiddleware extends MiddlewareBase {
     async run(req: Request, res: Response, next: NextFunction) {
         try {
-            const channel = await this.dd.twitchChannels.getChannel(req.params.accountId);
+            const channel = await this.dd.twitchChannels.getChannel(req.params.channelId);
             if (!channel)
                 throw new ErrorMaker({
                     type: 'not_found',

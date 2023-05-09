@@ -39,4 +39,22 @@ export class StreamElementsApiController extends ControllerBase {
             return { valid: false };
         }
     }
+
+    async getChannelUserPoints(streamElementsChannelId: string, userTwitchLogin: string) {
+        try {
+            const data = await axios.get(
+                `https://api.streamelements.com/kappa/v2/points/${streamElementsChannelId}/${userTwitchLogin}`,
+                {
+                    proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
+                }
+            );
+            return {
+                points: data.data.points as number,
+            };
+        } catch {
+            return {
+                points: 0,
+            };
+        }
+    }
 }

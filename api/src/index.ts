@@ -17,6 +17,8 @@ import { TwitchChannelsController } from './controllers/TwitchChannels';
 import { StreamElementsApiController } from './controllers/StreamElementsApi';
 import { TwitchRefreshTokensService } from './services/TwitchRefreshTokens';
 import { TwitchBotService } from './services/TwitchBot';
+import { StreamElementsPointsUpdaterService } from './services/StreamElementsPointsUpdater';
+import { StreamElementsPointsController } from './controllers/StreamElementsPoints';
 
 dotenv.config({
     path: './.env',
@@ -58,11 +60,16 @@ function loadControllers() {
     const streamElementsApi = new StreamElementsApiController();
     setDependency('streamElementsApi', streamElementsApi);
 
+    const streamElementsPoints = new StreamElementsPointsController();
+    setDependency('streamElementsPoints', streamElementsPoints);
+
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);
 
     const twitchBotService = new TwitchBotService();
     setServiceDependency('twitchBot', twitchBotService);
+
+    new StreamElementsPointsUpdaterService();
 }
 
 database.runMigrations().then(() => {

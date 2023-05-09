@@ -87,6 +87,7 @@ import { useTwitchAccount } from '~/store/twitch-account'
 import leftIcon from '~icons/material-symbols/arrow-back'
 import rightIcon from '~icons/material-symbols/arrow-forward'
 import { ref } from 'vue'
+import { useTwitchChannels } from '~/store/twitch-channels'
 
 definePageMeta({
     layout: 'dashboard',
@@ -95,6 +96,7 @@ definePageMeta({
 
 const route = useRoute()
 const twitchAccount = useTwitchAccount()
+const twitchChannels = useTwitchChannels()
 const accountId = ref(route.params.accountId)
 
 useSeoMeta({
@@ -103,6 +105,7 @@ useSeoMeta({
     },
 })
 
+twitchChannels.loadChannels()
 twitchAccount.getAccount(route.params.accountId as any)
 </script>
 

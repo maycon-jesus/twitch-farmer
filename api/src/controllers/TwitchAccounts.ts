@@ -160,35 +160,39 @@ export class TwitchAccountsController extends ControllerBase {
         orderBy?: 'createdAt' | 'tokenExpiresAt';
         sort?: 'asc' | 'desc';
         limit?: number;
+        offset?: number;
         filters?: {
             tokenExpiresIn?: DurationLike /* time in seconds */;
             removeBanned?: boolean;
             removeTokenInvalid?: boolean;
         };
     }): Promise<TwitchAccount[]> {
-        return this.dd.database.db('twitch_accounts').where((queryBuilder) => {
-            if (params.ownerId) {
-                queryBuilder.where({ ownerId: params.ownerId });
-            }
-            if (params.orderBy) {
-                queryBuilder.orderBy(params.orderBy, params.sort);
-            }
-            if (params.filters) {
-                const filters = params.filters;
-                if (filters.tokenExpiresIn) {
-                    const dateExpires = DateTime.now().plus(filters.tokenExpiresIn).toISO();
-                    queryBuilder.andWhere('tokenExpiresAt', '<=', dateExpires);
+        return this.dd.database
+            .db('twitch_accounts')
+            .where((queryBuilder) => {
+                if (params.ownerId) {
+                    queryBuilder.where({ ownerId: params.ownerId });
                 }
-                if (filters.removeBanned) {
-                    queryBuilder.andWhere({ banned: 0 }).orWhereNull('banned');
+                if (params.orderBy) {
+                    queryBuilder.orderBy(params.orderBy, params.sort);
                 }
-                if (filters.removeTokenInvalid) {
-                    queryBuilder.andWhere({ tokenInvalid: 0 }).orWhereNull('tokenInvalid');
+                if (params.filters) {
+                    const filters = params.filters;
+                    if (filters.tokenExpiresIn) {
+                        const dateExpires = DateTime.now().plus(filters.tokenExpiresIn).toISO();
+                        queryBuilder.andWhere('tokenExpiresAt', '<=', dateExpires);
+                    }
+                    if (filters.removeBanned) {
+                        queryBuilder.andWhere({ banned: 0 }).orWhereNull('banned');
+                    }
+                    if (filters.removeTokenInvalid) {
+                        queryBuilder.andWhere({ tokenInvalid: 0 }).orWhereNull('tokenInvalid');
+                    }
                 }
-            }
-            if (params.limit) {
-                queryBuilder.limit(params.limit);
-            }
-        });
+                if (params.limit) {
+                    queryBuilder.limit(params.limit);
+                }
+            })
+            .offset(params.offset || 0);
     }
 }
