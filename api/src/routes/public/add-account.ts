@@ -30,7 +30,7 @@ export default class AddtwitchAccount extends RouteBase {
                         type: 'not_found',
                         errors: [{ message: 'Conta não encontrada' }],
                     });
-                const channels = await this.dd.twitchChannels.listChannels(account.ownerId);
+                const channels = await this.dd.twitchChannels.listChannels({ ownerId: account.ownerId });
 
                 await this.dd.services.twitchBot.addAccount(
                     account,

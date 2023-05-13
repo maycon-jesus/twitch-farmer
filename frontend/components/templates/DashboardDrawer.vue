@@ -5,7 +5,7 @@
         app
         @update:model-value="ui.setDrawerOpen"
     >
-        <v-list>
+        <v-list nav>
             <v-list-subheader>Geral</v-list-subheader>
             <v-list-item :to="{ name: 'dashboard-contas' }">
                 <template #prepend>

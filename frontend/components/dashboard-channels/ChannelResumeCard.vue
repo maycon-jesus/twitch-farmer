@@ -33,7 +33,15 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-btn disabled>Loja</v-btn>
+            <v-btn
+                :to="{
+                    name: 'dashboard-canal-channelId-loja',
+                    params: {
+                        channelId: $props.channel.id,
+                    },
+                }"
+                >Loja
+            </v-btn>
             <v-btn disabled>Ver mais</v-btn>
         </v-card-actions>
         <lazy-dashboard-channels-dialog-channel-delete

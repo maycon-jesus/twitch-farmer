@@ -10,3 +10,16 @@ export type ChannelResume = {
     updatedAt: string
     userId: string
 }
+
+export type twitchChannel = {
+    createdAt: string
+    displayName: string
+    id: string
+    login: string
+    ownerId: string
+    profileImageUrl: string
+    streamElementsUserAlias: string
+    streamElementsUserId: string
+    updatedAt: string
+    userId: string
+}
