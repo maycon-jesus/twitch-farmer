@@ -10,8 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^0.4.5",
-    "@types/node": "^18.16.5",
+    "@nuxt/devtools": "^0.4.6",
+    "@types/luxon": "^3.3.0",
+    "@types/node": "^18.16.8",
     "nuxt": "^3.4.3",
     "prettier": "^2.8.8",
     "sass": "^1.62.1",
@@ -19,12 +20,13 @@
     "vite-plugin-vuetify": "^1.0.2"
   },
   "dependencies": {
-    "@iconify/json": "^2.2.61",
-    "@pinia/nuxt": "^0.4.9",
+    "@iconify/json": "^2.2.64",
+    "@pinia/nuxt": "^0.4.10",
+    "luxon": "^3.3.0",
     "nuxt-icons": "^3.2.1",
-    "pinia": "^2.0.35",
+    "pinia": "^2.0.36",
     "vue3-toastify": "^0.1.8",
-    "vuetify": "^3.2.2",
+    "vuetify": "^3.2.4",
     "zod": "^3.21.4"
   }
 }

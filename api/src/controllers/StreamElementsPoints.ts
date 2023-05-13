@@ -2,7 +2,6 @@ import { ControllerBase } from '../base/Controller';
 
 export class StreamElementsPointsController extends ControllerBase {
     async updatePoints(accountId: string, channelId: string, points: number) {
-        console.log('update points');
         const hasPointsInDb = await this.dd.database
             .db('streamelements_points')
             .where({ accountId, channelId })

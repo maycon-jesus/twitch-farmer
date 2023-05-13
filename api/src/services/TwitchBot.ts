@@ -97,7 +97,9 @@ export class TwitchBotService extends ServiceBase {
             if (channelsCache) {
                 this.addAccount(account, channelsCache);
             } else {
-                const channels = await this.dd.twitchChannels.listChannels(account.ownerId);
+                const channels = await this.dd.twitchChannels.listChannels({
+                    ownerId: account.ownerId,
+                });
                 const channelsMap = channels.map((c) => c.login);
                 this.channelsCache.set(account.ownerId, channelsMap);
                 this.addAccount(account, channelsMap);

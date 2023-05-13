@@ -51,7 +51,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useTwitchAccount } from '~/store/twitch-account'
-import vue from 'vue'
 
 const router = useRouter()
 const modalDeleteOpen = ref(false)

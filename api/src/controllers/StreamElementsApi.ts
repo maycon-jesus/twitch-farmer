@@ -2,6 +2,30 @@ import { ControllerBase } from '../base/Controller';
 import axios from 'axios';
 import { ErrorMaker } from '../libs/ErrorMaker';
 
+type StreamElementsItem = {
+    _id: string;
+    categoryName: string;
+    channel: string;
+    cooldown: {
+        user: number;
+        category: number;
+        global: number;
+    };
+    cost: number;
+    createdAt: string;
+    description: string;
+    enabled: boolean;
+    subscriberOnly: boolean;
+    name: string;
+    quantity: {
+        total: number;
+        current: number;
+    };
+    thumbnail: string;
+    updatedAt: string;
+    userInput: string[];
+};
+
 export class StreamElementsApiController extends ControllerBase {
     async getChannel(channelAlias: string): Promise<{
         userId: string;
@@ -55,6 +79,17 @@ export class StreamElementsApiController extends ControllerBase {
             return {
                 points: 0,
             };
+        }
+    }
+
+    async getChannelItems(streamElementsUserId: string) {
+        try {
+            const items = await axios.get(
+                `https://api.streamelements.com/kappa/v2/store/${streamElementsUserId}/items?source=website`
+            );
+            return items.data as StreamElementsItem[];
+        } catch {
+            return [];
         }
     }
 }

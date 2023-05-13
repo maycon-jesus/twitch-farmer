@@ -22,7 +22,7 @@ export const useTwitchChannels = defineStore('twitch-channels', {
                 .then((d) => {
                     this.channels = d as any
                 })
-                .catch((err) => {})
+                .catch(() => {})
                 .finally(() => {
                     ui.endLoading()
                 })

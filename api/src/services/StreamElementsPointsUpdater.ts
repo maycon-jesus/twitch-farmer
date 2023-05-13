@@ -29,14 +29,20 @@ export class StreamElementsPointsUpdaterService extends ServiceBase {
     }
 
     async updateAccountPoints(account: TwitchAccount) {
-        const channels = await this.dd.twitchChannels.listChannels(account.ownerId);
-        console.log('a', channels.length);
-        for (const channel of channels) {
-            const points = await this.dd.streamElementsApi.getChannelUserPoints(
-                channel.streamElementsUserId,
-                account.login
-            );
-            await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points);
+        try {
+            const channels = await this.dd.twitchChannels.listChannels({
+                ownerId: account.ownerId,
+            });
+
+            for (const channel of channels) {
+                const points = await this.dd.streamElementsApi.getChannelUserPoints(
+                    channel.streamElementsUserId,
+                    account.login
+                );
+                await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points);
+            }
+        } catch (e) {
+            console.error(e);
         }
     }
 }

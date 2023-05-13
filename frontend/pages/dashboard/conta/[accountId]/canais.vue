@@ -16,10 +16,10 @@
         <v-col
             v-for="channel in channelsFiltered"
             :key="channel.id"
-            :lg="$vuetify.display.width <= 1500 ? 6 : 4"
             cols="12"
             md="6"
             xl="3"
+            :lg="$vuetify.display.width <= 1500 ? 6 : 4"
         >
             <v-card>
                 <v-card-title>
@@ -51,6 +51,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
+// noinspection TypeScriptCheckImport
 import iconCoin from '~icons/pixelarticons/coin'
 import { useTwitchChannels } from '~/store/twitch-channels'
 import { useUi } from '~/store/ui'
@@ -86,8 +87,7 @@ const channelsFiltered = computed(() => {
     if (!search.value) return twitchChannels.channels
     return twitchChannels.channels.filter((channel) => {
         if (channel.displayName.toLowerCase().includes(search.value)) return true
-        if (channel.login.toLowerCase().includes(search.value)) return true
-        return false
+        return channel.login.toLowerCase().includes(search.value)
     })
 })
 

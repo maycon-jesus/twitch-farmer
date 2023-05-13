@@ -9,21 +9,15 @@
                 }"
             >
                 <v-row>
-                    <v-col v-if="twitchAccount.account" cols="12">
+                    <v-col v-if="twitchChannel.channel" cols="12">
                         <v-card>
-                            <v-img :src="twitchAccount.account.profileImageUrl"></v-img>
+                            <v-img :src="twitchChannel.channel.profileImageUrl"></v-img>
                             <v-card-text>
                                 <v-list>
                                     <v-list-item>
                                         <v-list-item-title>Nome</v-list-item-title>
                                         <v-list-item-subtitle class="break"
-                                            >{{ twitchAccount.account?.displayName }}
-                                        </v-list-item-subtitle>
-                                    </v-list-item>
-                                    <v-list-item>
-                                        <v-list-item-title>Email</v-list-item-title>
-                                        <v-list-item-subtitle class="break">
-                                            {{ twitchAccount.account?.email || 'Email não confirmado na twitch' }}
+                                            >{{ twitchChannel.channel?.displayName }}
                                         </v-list-item-subtitle>
                                     </v-list-item>
                                 </v-list>
@@ -36,39 +30,40 @@
                 <v-row>
                     <v-col cols="12">
                         <v-tabs :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
+                            <!--                            <v-tab-->
+                            <!--                                :to="{-->
+                            <!--                                    name: `dashboard-conta-accountId-canais`,-->
+                            <!--                                    params: {-->
+                            <!--                                        accountId:channelId,-->
+                            <!--                                    },-->
+                            <!--                                }"-->
+                            <!--                                >Canais-->
+                            <!--                            </v-tab>-->
                             <v-tab
                                 :to="{
-                                    name: `dashboard-conta-accountId-canais`,
-                                    params: {
-                                        accountId,
-                                    },
+                                    name: 'dashboard-canal-channelId-pontuacao',
+                                    params: { channelId },
                                 }"
-                                >Canais
+                                >Pontuação
                             </v-tab>
                             <v-tab
                                 :to="{
-                                    name: `dashboard-conta-accountId-resgates`,
-                                    params: {
-                                        accountId,
-                                    },
+                                    name: 'dashboard-canal-channelId-loja',
+                                    params: { channelId },
+                                }"
+                                >Loja
+                            </v-tab>
+                            <v-tab
+                                :to="{
+                                    name: 'dashboard-canal-channelId-resgates',
+                                    params: { channelId },
                                 }"
                                 >Resgates
                             </v-tab>
                             <v-tab
                                 :to="{
-                                    name: `dashboard-conta-accountId-anotacoes`,
-                                    params: {
-                                        accountId,
-                                    },
-                                }"
-                                >Anotações
-                            </v-tab>
-                            <v-tab
-                                :to="{
-                                    name: `dashboard-conta-accountId-configuracoes`,
-                                    params: {
-                                        accountId,
-                                    },
+                                    name: 'dashboard-canal-channelId-configuracoes',
+                                    params: { channelId },
                                 }"
                                 >Configurações
                             </v-tab>
@@ -76,20 +71,19 @@
                     </v-col>
                 </v-row>
 
-                <NuxtPage />
+                <NuxtPage v-bind="{ channelId }" />
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script lang="ts" setup>
-import { useTwitchAccount } from '~/store/twitch-account'
 // noinspection TypeScriptCheckImport
 import leftIcon from '~icons/material-symbols/arrow-back'
 // noinspection TypeScriptCheckImport
 import rightIcon from '~icons/material-symbols/arrow-forward'
 import { ref } from 'vue'
-import { useTwitchChannels } from '~/store/twitch-channels'
+import { useTwitchChannel } from '~/store/twitch-channel'
 
 definePageMeta({
     layout: 'dashboard',
@@ -97,18 +91,17 @@ definePageMeta({
 })
 
 const route = useRoute()
-const twitchAccount = useTwitchAccount()
-const twitchChannels = useTwitchChannels()
-const accountId = ref(route.params.accountId)
+const twitchChannel = useTwitchChannel()
+const channelId = ref(route.params.channelId)
 
 useSeoMeta({
     title: () => {
-        return twitchAccount.account?.displayName || '...'
+        return twitchChannel.channel?.displayName || '...'
     },
 })
 
-twitchChannels.loadChannels()
-twitchAccount.getAccount(route.params.accountId as any)
+twitchChannel.getChannel(route.params.channelId as any)
+twitchChannel.loadAccounts()
 </script>
 
 <style lang="scss" scoped>

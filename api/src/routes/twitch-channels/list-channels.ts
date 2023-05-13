@@ -5,7 +5,9 @@ export class ListTwitchChannelsRoute extends RouteBase {
     run() {
         this.router.get('/', async (req, res) => {
             try {
-                const channels = await this.dd.twitchChannels.listChannels(req.jwt.userId);
+                const channels = await this.dd.twitchChannels.listChannels({
+                    ownerId: req.jwt.userId,
+                });
                 res.json(channels);
             } catch (e: any) {
                 const err = ErrorToResponse(e);

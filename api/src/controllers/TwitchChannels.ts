@@ -64,8 +64,18 @@ export class TwitchChannelsController extends ControllerBase {
         await this.dd.database.db('twitch_channels').where({ id: channelId }).del();
     }
 
-    async listChannels(ownerId: string): Promise<TwitchChannel[]> {
-        return this.dd.database.db('twitch_channels').where({ ownerId: ownerId });
+    async listChannels(opts: { ownerId?: string; limit?: number; offset?: number }): Promise<TwitchChannel[]> {
+        return this.dd.database
+            .db('twitch_channels')
+            .where((queryBuilder) => {
+                if (opts.ownerId) {
+                    queryBuilder.where({ ownerId: opts.ownerId });
+                }
+                if (opts.limit) {
+                    queryBuilder.limit(opts.limit);
+                }
+            })
+            .offset(opts.offset || 0);
     }
 
     async getChannel(id: string): Promise<TwitchChannel> {

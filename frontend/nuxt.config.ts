@@ -1,4 +1,4 @@
-import vuetify from 'vite-plugin-vuetify';
+import vuetify from 'vite-plugin-vuetify'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -15,6 +15,11 @@ export default defineNuxtConfig({
     app: {
         head: {
             titleTemplate: '%s - Twitch BOT',
+            script: [
+                {
+                    src: 'https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js',
+                },
+            ],
         },
     },
 
@@ -40,6 +45,7 @@ export default defineNuxtConfig({
     components: [
         { path: '~/components/dashboard-accounts/account', prefix: 'twitch-account' },
         { path: '~/components/dashboard-accounts', prefix: 'dashboard-twitch-accounts' },
+        { path: '~/components/dashboard-channels/channel', prefix: 'twitch-channel' },
         '~/components',
     ],
 
