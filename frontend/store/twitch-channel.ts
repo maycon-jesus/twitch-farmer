@@ -3,12 +3,12 @@ import { useUi } from '~/store/ui'
 import { twitchChannel } from '~/types/Channels'
 import { AccountResume } from '~/types/Accounts'
 import { ChannelStoreItem } from '~/types/ChannelStore'
-
-const api = useApi()
-const ui = useUi()
+import { ReturnType } from 'birpc'
 
 export const useTwitchChannel = defineStore('twitch-channel', {
     state(): {
+        api: ReturnType<typeof useApi>
+        ui: ReturnType<typeof useUi>
         channel: twitchChannel | null
         accountsPoints: Record<string, number>
         accounts: AccountResume[]
@@ -23,6 +23,8 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         }
     } {
         return {
+            api: useApi(),
+            ui: useUi(),
             channel: null,
             accountsPoints: {},
             accounts: [],
@@ -56,8 +58,8 @@ export const useTwitchChannel = defineStore('twitch-channel', {
             this.accountsPoints = {}
             let remaing = this.accounts.length
             this.accounts.forEach((account) => {
-                ui.startLoading()
-                api(`/twitch-channels/${channelId}/${account.id}/points`)
+                this.ui.startLoading()
+                this.api(`/twitch-channels/${channelId}/${account.id}/points`)
                     .then((data: any) => {
                         this.accountsPoints[account.id] = data.points as any
                     })
@@ -65,7 +67,7 @@ export const useTwitchChannel = defineStore('twitch-channel', {
                         this.accountsPoints[account.id] = 0
                     })
                     .finally(() => {
-                        ui.endLoading()
+                        this.ui.endLoading()
                         remaing--
                         if (remaing === 0) {
                             this.loaded.accountsPoints = true
@@ -76,8 +78,8 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         loadAccounts(showLoading = true, force = false) {
             if (!force && this.accounts.length > 0) return
 
-            ui.startLoading()
-            api('/twitch-accounts')
+            this.ui.startLoading()
+            this.api('/twitch-accounts')
                 .then((d: any) => {
                     this.accounts = d
                 })
@@ -85,7 +87,7 @@ export const useTwitchChannel = defineStore('twitch-channel', {
                     this.accounts = []
                 })
                 .finally(() => {
-                    ui.endLoading()
+                    this.ui.endLoading()
                     this.loaded.accounts = true
                 })
         },
