@@ -105,7 +105,7 @@ export const useTwitchChannel = defineStore('twitch-channel', {
                 .filter((a) => {
                     return a[1] >= cost
                 })
-                .map(() => accounts.find((a) => a.id))
+                .map((b) => accounts.find((a) => a.id === b[0]))
                 .filter((a) => !!a) as AccountResume[]
             return b
         },
