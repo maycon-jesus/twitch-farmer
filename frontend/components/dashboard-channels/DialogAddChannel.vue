@@ -74,8 +74,8 @@ const form = ref({
 })
 
 const regex = {
-    twitchChannelUrl: /^(https:\/\/)?www\.twitch\.tv\/(\w+)$/,
-    streamElementsStoreUrl: /^(https:\/\/)?streamelements.com\/(\w+)\/store$/,
+    twitchChannelUrl: /^(https:\/\/)?www\.twitch\.tv\/(.+)$/,
+    streamElementsStoreUrl: /^(https:\/\/)?streamelements.com\/(.+)\/store$/,
 }
 const formValidators = {
     twitchChannelUrl: z
