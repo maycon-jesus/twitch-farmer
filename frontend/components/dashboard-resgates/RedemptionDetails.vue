@@ -47,7 +47,7 @@
                         <v-divider class="my-2" v-if="item.accessCode"></v-divider>
 
                         <v-list-item v-if="item.accessCode">
-                            <v-list-item-title>Código de acesso</v-list-item-title>
+                            <v-list-item-title>Código</v-list-item-title>
                             <v-list-item-subtitle>{{ item.accessCode }}</v-list-item-subtitle>
                         </v-list-item>
 

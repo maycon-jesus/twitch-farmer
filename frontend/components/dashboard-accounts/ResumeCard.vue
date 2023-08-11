@@ -14,14 +14,14 @@
             <div class="chips-list">
                 <v-chip :color="accountStatus.color">{{ accountStatus.text }}</v-chip>
                 <v-chip v-if="account.bot"
-                    >{{ account.bot.channelsConnected }} de {{ account.bot.totalChannels }} canais
+                >{{ account.bot.channelsConnected }} de {{ account.bot.totalChannels }} canais
                 </v-chip>
             </div>
             <div v-if="accountStatus.type === 'invalid_access'" class="mt-4">
                 <v-alert :icon="false" type="error"
-                    ><p class="text-body-1">
-                        O bot não está conseguindo acessar os dados de sua conta. Exclua ela e adicione novamente!
-                    </p></v-alert
+                ><p class="text-body-1">
+                    O bot não está conseguindo acessar os dados de sua conta. Exclua ela e adicione novamente!
+                </p></v-alert
                 >
             </div>
         </v-card-text>
@@ -42,7 +42,13 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-btn disabled>Resgates</v-btn>
+            <v-btn :to="{
+                name: 'dashboard-conta-accountId-resgates',
+                params: {
+                        accountId: $props.account.id,
+                    },
+            }">Resgates
+            </v-btn>
             <v-btn
                 :to="{
                     name: 'dashboard-conta-accountId',
@@ -50,7 +56,7 @@
                         accountId: $props.account.id,
                     },
                 }"
-                >Ver mais
+            >Ver mais
             </v-btn>
         </v-card-actions>
         <dashboard-twitch-accounts-dialog-account-delete
@@ -91,36 +97,36 @@ const accountStatus = computed<{
         return {
             color: 'error',
             text: 'Acesso inválido',
-            type: 'invalid_access',
+            type: 'invalid_access'
         }
     if (props.account.banned)
         return {
             color: 'error',
-            text: 'Conta banida',
+            text: 'Conta banida'
         }
     if (!props.account.bot || props.account.bot.state === 'CLOSED')
         return {
             color: 'error',
-            text: 'Bot desligado',
+            text: 'Bot desligado'
         }
     if (props.account.bot.state === 'CONNECTING')
         return {
             color: 'success',
-            text: 'Bot ligando',
+            text: 'Bot ligando'
         }
     if (props.account.bot.state === 'OPEN')
         return {
             color: 'success',
-            text: 'Farmando',
+            text: 'Farmando'
         }
     if (props.account.bot.state === 'CLOSING')
         return {
             color: 'warn',
-            text: 'Desligando',
+            text: 'Desligando'
         }
     return {
         color: 'success',
-        text: 'farmando',
+        text: 'farmando'
     }
 })
 </script>

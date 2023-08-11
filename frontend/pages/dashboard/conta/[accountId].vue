@@ -76,7 +76,7 @@
                     </v-col>
                 </v-row>
 
-                <NuxtPage />
+                <NuxtPage v-bind="{accountId}" />
             </v-col>
         </v-row>
     </v-container>
