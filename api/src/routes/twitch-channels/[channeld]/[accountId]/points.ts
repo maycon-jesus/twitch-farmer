@@ -9,7 +9,6 @@ export default class Route extends RouteBase {
 
     run() {
         this.router.get('/', async (req, res) => {
-            console.log('aaa');
             const params = req.params as any;
             const { points } = await this.dd.streamElementsPoints.getAccountChannelPoints(
                 params.accountId,

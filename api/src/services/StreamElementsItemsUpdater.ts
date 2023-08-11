@@ -35,10 +35,11 @@ export class StreamElementsItemsUpdaterService extends ServiceBase {
                         inputs: item.userInput,
                         name: item.name,
                         updatedAt: DateTime.fromISO(item.updatedAt).toISO()!,
-                        quantityCurrent: item.quantity.current,
+                        quantityCurrent: item.quantity.total === -1? -1:item.quantity.current,
                         quantityTotal: item.quantity.total,
                         subscriberOnly: item.subscriberOnly ? 1 : 0,
                         thumbnailUrl: item.thumbnail,
+                        allowMessages: item.allowMessages? 1 : 0,
                         deleted: 0,
                     });
                 }

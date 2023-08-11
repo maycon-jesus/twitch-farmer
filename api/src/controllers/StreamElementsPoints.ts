@@ -28,4 +28,16 @@ export class StreamElementsPointsController extends ControllerBase {
             };
         }
     }
+
+    async deleteByChannelId(channelId:string){
+        await this.dd.database.db('streamelements_points').where({
+            channelId
+        }).delete()
+    }
+
+    async deleteByAccountId(accountId:string){
+        await this.dd.database.db('streamelements_points').where({
+            accountId
+        }).delete()
+    }
 }

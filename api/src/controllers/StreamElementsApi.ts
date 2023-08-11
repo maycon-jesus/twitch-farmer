@@ -4,6 +4,7 @@ import { ErrorMaker } from '../libs/ErrorMaker';
 
 type StreamElementsItem = {
     _id: string;
+    allowMessages: boolean;
     categoryName: string;
     channel: string;
     cooldown: {
@@ -90,6 +91,47 @@ export class StreamElementsApiController extends ControllerBase {
             return items.data as StreamElementsItem[];
         } catch {
             return [];
+        }
+    }
+
+    async redemption(channelId:string, itemId:string, input:string[], message:string|null ,streamElementsToken:string):Promise<{
+        accessCode?: string
+    }>{
+        try{
+            const redemptionPayload:{
+                input:string[],
+                message?:string
+            } = {
+                input
+            }
+
+            if(message) redemptionPayload.message=message
+
+            const r = await axios.post<{
+                accessCode?: string
+            }>(`https://api.streamelements.com/kappa/v2/store/${channelId}/redemptions/${itemId}`, redemptionPayload, {
+                headers: {
+                    'Authorization': "Bearer " + streamElementsToken
+                },
+                proxy: this.dd.webShareProxy.getRandomProxyForAxios()
+            })
+            if(r.status !== 200) throw new ErrorMaker({
+                type: 'unknown',
+                errors: [
+                    {message: 'Ocorreu um erro ao solicitar o resgate no stream elements!'}
+                ]
+            })
+            return {
+                accessCode: r.data.accessCode
+            }
+        }catch(e){
+            console.log(e)
+            throw new ErrorMaker({
+                type: 'unknown',
+                errors: [
+                    {message: 'Ocorreu um erro ao solicitar o resgate no stream elements!'}
+                ]
+            })
         }
     }
 }

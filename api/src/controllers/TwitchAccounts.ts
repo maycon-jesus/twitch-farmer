@@ -55,8 +55,13 @@ export class TwitchAccountsController extends ControllerBase {
         return this.dd.database.db('twitch_accounts').where({ userId: userId }).first();
     }
 
-    async getAccountById(id: string): Promise<TwitchAccount | undefined> {
-        return this.dd.database.db('twitch_accounts').where({ id }).first();
+    async getAccountById(id: string): Promise<TwitchAccount> {
+        const account = await this.dd.database.db('twitch_accounts').where({ id }).first();
+        if(!account) throw new ErrorMaker({
+            type: 'not_found',
+            errors: [{message: 'Conta não encontrada!'}]
+        })
+        return account
     }
 
     async insert(code: string, identifyCode: string, redirectUrl: string) {
@@ -97,16 +102,12 @@ export class TwitchAccountsController extends ControllerBase {
     }
 
     async deleteAccount(accountId: string) {
+        await this.dd.streamElementsPoints.deleteByAccountId(accountId)
         await this.dd.database.db('twitch_accounts').where({ id: accountId }).del();
     }
 
     async setStreamElementsToken(accountId: string, streamElementsToken: string) {
         const account = await this.getAccountById(accountId);
-        if (!account)
-            throw new ErrorMaker({
-                type: 'not_found',
-                errors: [{ message: 'Conta não encontrada' }],
-            });
 
         if (streamElementsToken) {
             const tokenValid = await this.dd.streamElementsApi.validateToken(streamElementsToken);

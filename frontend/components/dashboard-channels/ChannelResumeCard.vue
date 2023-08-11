@@ -42,7 +42,12 @@
                 }"
                 >Loja
             </v-btn>
-            <v-btn disabled>Ver mais</v-btn>
+            <v-btn :to="{
+                name: 'dashboard-canal-channelId',
+                    params: {
+                        channelId: $props.channel.id,
+                    }
+            }">Ver mais</v-btn>
         </v-card-actions>
         <lazy-dashboard-channels-dialog-channel-delete
             v-model="dialogDeleteChannelOpen"

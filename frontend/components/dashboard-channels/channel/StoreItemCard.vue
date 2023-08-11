@@ -37,8 +37,9 @@
                 </v-list-item>
             </v-list>
         </v-card-text>
-        <v-card-actions class="mt-auto">
+        <v-card-actions class="mt-auto flex-column">
             <v-btn block @click="twitchChannel.openModalItemDetails(item)">Detalhes</v-btn>
+            <v-btn class="ml-0" block variant="elevated" @click="twitchChannel.openModalRedemption(item)">Resgatar</v-btn>
         </v-card-actions>
     </v-card>
 </template>

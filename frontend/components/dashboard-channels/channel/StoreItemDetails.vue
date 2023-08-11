@@ -152,11 +152,14 @@ const transformSecondsInHumanTime = (time: number) => {
 }
 
 const accountsCanBuy = computed(() => {
-    return twitchChannel.accountsCanBuy(props.item.cost).sort((a, b) => {
+
+    const a = twitchChannel.accountsCanBuy(props.item.cost).sort((a, b) => {
         const aPoints = twitchChannel.accountsPoints[a.id] || 0
         const bPoints = twitchChannel.accountsPoints[b.id] || 0
         return bPoints - aPoints
     })
+    console.log('teste2',a.length)
+    return a
 })
 </script>
 
@@ -164,7 +167,6 @@ const accountsCanBuy = computed(() => {
 .item-img-wrapper {
     display: flex;
     justify-content: center;
-    min-height: 186px;
 }
 
 .item-img {

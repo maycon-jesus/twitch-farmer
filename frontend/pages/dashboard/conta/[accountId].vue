@@ -38,12 +38,12 @@
                         <v-tabs :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
                             <v-tab
                                 :to="{
-                                    name: `dashboard-conta-accountId-canais`,
+                                    name: `dashboard-conta-accountId-pontuacao`,
                                     params: {
                                         accountId,
                                     },
                                 }"
-                                >Canais
+                                >Pontuação
                             </v-tab>
                             <v-tab
                                 :to="{
@@ -99,7 +99,7 @@ definePageMeta({
 const route = useRoute()
 const twitchAccount = useTwitchAccount()
 const twitchChannels = useTwitchChannels()
-const accountId = ref(route.params.accountId)
+const accountId = ref(route.params.accountId as string)
 
 useSeoMeta({
     title: () => {
