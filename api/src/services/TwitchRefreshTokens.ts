@@ -7,7 +7,7 @@ export class TwitchRefreshTokensService extends ServiceBase {
 
     constructor() {
         super();
-        this.cron = new cron.CronJob('0 0/1 * * * *', this.refreshTokens, null, true, undefined, this);
+        this.cron = new cron.CronJob('0 * * * * *', this.refreshTokens, null, true, undefined, this);
     }
 
     async refreshTokens() {

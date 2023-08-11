@@ -17,7 +17,8 @@ export default defineNuxtPlugin((nuxt) => {
                         background: '#2c2a4a',
                         surface: '#3E3E6B',
                         'text-surface': '#ffffff',
-                        error: '#e74c3c'
+                        error: '#e74c3c',
+                        warning: '#f1c40f'
                     }
                 }
             }

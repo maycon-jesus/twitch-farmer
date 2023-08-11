@@ -1,5 +1,5 @@
 <template>
-    <v-text-field v-model="value" :label="$props.label" readonly>
+    <v-text-field v-model="value" :label="$props.label" readonly :hide-details="$props.hideDetails">
         <template #append-inner>
             <v-tooltip>
                 <template #activator="{ props }">
@@ -25,6 +25,7 @@ import iconSuccess from '~icons/mdi/success'
 const props = defineProps<{
     label?: string
     modelValue?: string
+    hideDetails?: boolean
 }>()
 
 const value = ref('')

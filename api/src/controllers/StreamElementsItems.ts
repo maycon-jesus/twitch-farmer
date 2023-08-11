@@ -10,7 +10,7 @@ type StreamElementsItem = {
     name: string;
     description: string;
     category: string;
-    thumbnailUrl: string;
+    thumbnailUrl?: string;
     enabled: 0 | 1;
     subscriberOnly: 0 | 1;
     allowMessages: 0 | 1;

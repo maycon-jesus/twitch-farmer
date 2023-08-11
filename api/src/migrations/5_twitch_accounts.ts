@@ -15,6 +15,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('refreshToken').notNullable();
         table.dateTime('tokenExpiresAt').notNullable();
         table.text('streamElementsToken').defaultTo(null);
+        table.string('streamElementsUserId').defaultTo(null);
 
         table.text('notes').defaultTo(null);
 

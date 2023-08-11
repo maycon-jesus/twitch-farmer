@@ -28,8 +28,7 @@
                     />
                     <DashboardHomePageCard
                         :icon="iconGift"
-                        :to="{ name: 'index' }"
-                        coming-soon
+                        :to="{ name: 'dashboard-resgates' }"
                         description="Acompanhe de forma facilitada todos os seus resgates"
                         title="Resgates"
                     />
@@ -40,19 +39,19 @@
                         description="Configure seu bot de resgates automatizado"
                         title="Resgatador automático"
                     />
-                    <DashboardHomePageCard
-                        :icon="iconTutorial"
-                        :to="{ name: 'index' }"
-                        coming-soon
-                        description="Aprenda como utilizar alguns recursos do site"
-                        title="Tutoriais"
-                    />
-                    <DashboardHomePageCard
-                        :icon="iconNotes"
-                        description="Acompanhe todas as novidades que estão por vir"
-                        href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento"
-                        title="Notas de lançamento"
-                    />
+<!--                    <DashboardHomePageCard-->
+<!--                        :icon="iconTutorial"-->
+<!--                        :to="{ name: 'index' }"-->
+<!--                        coming-soon-->
+<!--                        description="Aprenda como utilizar alguns recursos do site"-->
+<!--                        title="Tutoriais"-->
+<!--                    />-->
+<!--                    <DashboardHomePageCard-->
+<!--                        :icon="iconNotes"-->
+<!--                        description="Acompanhe todas as novidades que estão por vir"-->
+<!--                        href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento"-->
+<!--                        title="Notas de lançamento"-->
+<!--                    />-->
                 </div>
             </v-col>
         </v-row>

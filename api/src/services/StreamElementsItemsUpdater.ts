@@ -3,12 +3,12 @@ import cron from 'cron';
 import { DateTime } from 'luxon';
 
 export class StreamElementsItemsUpdaterService extends ServiceBase {
-    actualPage = 1;
+    actualPage = 0;
     private cron: cron.CronJob;
 
     constructor() {
         super();
-        this.cron = new cron.CronJob('0 0/1 * * * *', this.loadItems, null, true, undefined, this);
+        this.cron = new cron.CronJob('0 * * * * *', this.loadItems, null, true, undefined, this);
     }
 
     async loadItems() {
@@ -38,7 +38,7 @@ export class StreamElementsItemsUpdaterService extends ServiceBase {
                         quantityCurrent: item.quantity.total === -1? -1:item.quantity.current,
                         quantityTotal: item.quantity.total,
                         subscriberOnly: item.subscriberOnly ? 1 : 0,
-                        thumbnailUrl: item.thumbnail,
+                        thumbnailUrl: item.thumbnail || item.alert?.graphics?.src,
                         allowMessages: item.allowMessages? 1 : 0,
                         deleted: 0,
                     });

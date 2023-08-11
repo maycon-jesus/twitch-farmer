@@ -4,6 +4,11 @@ import { ErrorMaker } from '../libs/ErrorMaker';
 
 type StreamElementsItem = {
     _id: string;
+    alert?: {
+        graphics?: {
+            src?: string
+        }
+    };
     allowMessages: boolean;
     categoryName: string;
     channel: string;
@@ -22,7 +27,7 @@ type StreamElementsItem = {
         total: number;
         current: number;
     };
-    thumbnail: string;
+    thumbnail?: string;
     updatedAt: string;
     userInput: string[];
 };
@@ -34,7 +39,7 @@ export class StreamElementsApiController extends ControllerBase {
     }> {
         try {
             const userData = await axios.get(`https://api.streamelements.com/kappa/v2/channels/${channelAlias}`, {
-                proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
+                proxy: this.dd.webShareProxy.getRandomProxyForAxios()
             });
 
             const userId = userData.data._id;
@@ -42,12 +47,12 @@ export class StreamElementsApiController extends ControllerBase {
 
             return {
                 userId,
-                alias,
+                alias
             };
         } catch {
             throw new ErrorMaker({
                 type: 'unprocessable_entity',
-                errors: [{ message: 'Usuário do streamelements inválido' }],
+                errors: [{ message: 'Usuário do streamelements inválido' }]
             });
         }
     }
@@ -56,12 +61,12 @@ export class StreamElementsApiController extends ControllerBase {
         try {
             const data = await axios.get('https://api.streamelements.com/kappa/v2/channels/me', {
                 headers: {
-                    authorization: `Bearer ${token}`,
-                },
+                    Authorization: `Bearer ${token}`
+                }
             });
-            return { valid: true, username: data.data.username as string };
+            return { valid: true, username: data.data.username as string, id: data.data._id as string };
         } catch {
-            return { valid: false };
+            return { valid: false, username: null, id: null };
         }
     }
 
@@ -70,15 +75,15 @@ export class StreamElementsApiController extends ControllerBase {
             const data = await axios.get(
                 `https://api.streamelements.com/kappa/v2/points/${streamElementsChannelId}/${userTwitchLogin}`,
                 {
-                    proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
+                    proxy: this.dd.webShareProxy.getRandomProxyForAxios()
                 }
             );
             return {
-                points: data.data.points as number,
+                points: data.data.points as number
             };
         } catch {
             return {
-                points: 0,
+                points: 0
             };
         }
     }
@@ -94,44 +99,90 @@ export class StreamElementsApiController extends ControllerBase {
         }
     }
 
-    async redemption(channelId:string, itemId:string, input:string[], message:string|null ,streamElementsToken:string):Promise<{
+    async getUserRedemptions(userId: string, streamElementsToken: string): Promise<{
+        channel: {
+            _id: string
+        },
+        completed: boolean,
+        createdAt: string,
+        input: string[],
+        item?: {
+            _id: string
+        },
+        rejected: boolean,
+        updatedAt: string,
+        _id: string,
         accessCode?: string
-    }>{
-        try{
-            const redemptionPayload:{
-                input:string[],
-                message?:string
+    }[]> {
+        try {
+            const redemptions = await axios.get<{
+                docs: {
+                    channel: {
+                        _id: string
+                    },
+                    completed: boolean,
+                    createdAt: string,
+                    input: string[],
+                    item?: {
+                        _id: string
+                    },
+                    rejected: boolean,
+                    updatedAt: string,
+                    _id: string
+                }[]
+            }>(`https://api.streamelements.com/kappa/v2/store/${userId}/redemptions/me`, {
+                params: {
+                    limit: '100',
+                    offset: '0',
+                    order: 'createdAt'
+                },
+                headers: {
+                    'Authorization': `Bearer ${streamElementsToken}`
+                }
+            });
+            return redemptions.data.docs as any;
+        } catch {
+            return [];
+        }
+    }
+
+    async redemption(channelId: string, itemId: string, input: string[], message: string | null, streamElementsToken: string): Promise<{
+        accessCode?: string
+    }> {
+        try {
+            const redemptionPayload: {
+                input: string[],
+                message?: string
             } = {
                 input
-            }
+            };
 
-            if(message) redemptionPayload.message=message
+            if (message) redemptionPayload.message = message;
 
             const r = await axios.post<{
                 accessCode?: string
             }>(`https://api.streamelements.com/kappa/v2/store/${channelId}/redemptions/${itemId}`, redemptionPayload, {
                 headers: {
-                    'Authorization': "Bearer " + streamElementsToken
+                    'Authorization': 'Bearer ' + streamElementsToken
                 },
                 proxy: this.dd.webShareProxy.getRandomProxyForAxios()
-            })
-            if(r.status !== 200) throw new ErrorMaker({
+            });
+            if (r.status !== 200) throw new ErrorMaker({
                 type: 'unknown',
                 errors: [
-                    {message: 'Ocorreu um erro ao solicitar o resgate no stream elements!'}
+                    { message: 'Ocorreu um erro ao solicitar o resgate no stream elements!' }
                 ]
-            })
+            });
             return {
                 accessCode: r.data.accessCode
-            }
-        }catch(e){
-            console.log(e)
+            };
+        } catch (e:any) {
             throw new ErrorMaker({
                 type: 'unknown',
                 errors: [
-                    {message: 'Ocorreu um erro ao solicitar o resgate no stream elements!'}
+                    { message: 'Ocorreu um erro ao solicitar o resgate no stream elements!' }
                 ]
-            })
+            });
         }
     }
 }

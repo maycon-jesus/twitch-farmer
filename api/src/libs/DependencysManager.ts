@@ -14,6 +14,7 @@ import { TwitchRefreshTokensService } from '../services/TwitchRefreshTokens';
 import { TwitchBotService } from '../services/TwitchBot';
 import { StreamElementsPointsController } from '../controllers/StreamElementsPoints';
 import { StreamElementsItemsController } from '../controllers/StreamElementsItems';
+import { StreamElementsRedemptions } from '../controllers/StreamElementsRedemptions';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -30,6 +31,7 @@ export interface IDependencys {
     streamElementsApi: StreamElementsApiController;
     streamElementsPoints: StreamElementsPointsController;
     streamElementsItems: StreamElementsItemsController;
+    streamElementsRedemptions: StreamElementsRedemptions
     services: {
         twitchRefreshToken: TwitchRefreshTokensService;
         twitchBot: TwitchBotService;

@@ -1,8 +1,10 @@
 <template>
-    <v-row>
-        <v-col cols="12">
-            <v-alert :icon="false" type="info">Em desenvovimento!</v-alert>
-        </v-col>
-    </v-row>
+    <dashboard-resgates-redemptions-table :channelId="$props.channelId" />
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useTwitchChannel } from '../../../../store/twitch-channel'
+
+const props = defineProps<{
+    channelId:string
+}>()
+</script>

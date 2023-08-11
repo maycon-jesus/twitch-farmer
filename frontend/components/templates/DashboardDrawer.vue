@@ -21,7 +21,7 @@
             </v-list-item>
 
             <v-list-subheader>Resgates</v-list-subheader>
-            <v-list-item :to="{ name: 'index' }" disabled>
+            <v-list-item :to="{ name: 'dashboard-resgates' }">
                 <template #prepend>
                     <v-icon :icon="iconGift"></v-icon>
                 </template>
@@ -41,18 +41,18 @@
                 </template>
                 <v-list-item-title>Convidar amigos</v-list-item-title>
             </v-list-item>
-            <v-list-item href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento" target="_blank">
-                <template #prepend>
-                    <v-icon :icon="iconNotes"></v-icon>
-                </template>
-                <v-list-item-title>Notas de lançamento</v-list-item-title>
-            </v-list-item>
-            <v-list-item :to="{ name: 'index' }" disabled>
-                <template #prepend>
-                    <v-icon :icon="iconTutorial"></v-icon>
-                </template>
-                <v-list-item-title>Tutoriais</v-list-item-title>
-            </v-list-item>
+<!--            <v-list-item href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento" target="_blank">-->
+<!--                <template #prepend>-->
+<!--                    <v-icon :icon="iconNotes"></v-icon>-->
+<!--                </template>-->
+<!--                <v-list-item-title>Notas de lançamento</v-list-item-title>-->
+<!--            </v-list-item>-->
+<!--            <v-list-item :to="{ name: 'index' }" disabled>-->
+<!--                <template #prepend>-->
+<!--                    <v-icon :icon="iconTutorial"></v-icon>-->
+<!--                </template>-->
+<!--                <v-list-item-title>Tutoriais</v-list-item-title>-->
+<!--            </v-list-item>-->
         </v-list>
     </v-navigation-drawer>
 </template>

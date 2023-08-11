@@ -3,14 +3,12 @@
         <v-card-title>Resgatar {{ $props.item.name }}</v-card-title>
         <v-form v-model="formValid" @submit.prevent="redemption()" v-if="!rescued" :disabled="loading">
             <v-container>
-                <v-expand-transition v-show="rescueError">
-                    <v-row>
+                <v-row>
+                    <v-expand-transition v-show="rescueError">
                         <v-col cols="12">
                             <v-alert :icon="iconError" type="error">{{ rescueError }}</v-alert>
                         </v-col>
-                    </v-row>
-                </v-expand-transition>
-                <v-row>
+                    </v-expand-transition>
                     <v-col cols="12">
                         <v-autocomplete label="Conta"
                                         :items="accounts"
@@ -68,7 +66,7 @@
                     </v-alert>
                 </v-col>
                 <v-col cols="12" v-if="rescuedAccessCode">
-                    <v-text-field label="Código" :model-value="rescuedAccessCode"></v-text-field>
+                    <form-text-field-copy label="Código" :model-value="rescuedAccessCode" hide-details></form-text-field-copy>
                 </v-col>
             </v-row>
         </v-container>

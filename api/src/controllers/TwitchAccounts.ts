@@ -15,6 +15,7 @@ export type TwitchAccount = {
     refreshToken: string;
     tokenExpiresAt: Date;
     streamElementsToken: string;
+    streamElementsUserId: string;
     notes: string;
     createdAt: Date;
     updatedAt: Date;
@@ -108,6 +109,7 @@ export class TwitchAccountsController extends ControllerBase {
 
     async setStreamElementsToken(accountId: string, streamElementsToken: string) {
         const account = await this.getAccountById(accountId);
+        let userId:null|string = null
 
         if (streamElementsToken) {
             const tokenValid = await this.dd.streamElementsApi.validateToken(streamElementsToken);
@@ -121,6 +123,7 @@ export class TwitchAccountsController extends ControllerBase {
                     type: 'unprocessable_entity',
                     errors: [{ message: 'Token inválido' }],
                 });
+            userId=tokenValid.id
         }
         await this.dd.database
             .db('twitch_accounts')
@@ -129,6 +132,7 @@ export class TwitchAccountsController extends ControllerBase {
             })
             .update({
                 streamElementsToken: streamElementsToken || null,
+                streamElementsUserId: userId
             });
     }
 
@@ -166,6 +170,7 @@ export class TwitchAccountsController extends ControllerBase {
             tokenExpiresIn?: DurationLike /* time in seconds */;
             removeBanned?: boolean;
             removeTokenInvalid?: boolean;
+            hasStreamElementsToken?:boolean
         };
     }): Promise<TwitchAccount[]> {
         return this.dd.database
@@ -188,6 +193,9 @@ export class TwitchAccountsController extends ControllerBase {
                     }
                     if (filters.removeTokenInvalid) {
                         queryBuilder.andWhere({ tokenInvalid: 0 }).orWhereNull('tokenInvalid');
+                    }
+                    if(filters.hasStreamElementsToken){
+                        queryBuilder.whereNotNull('streamElementsToken')
                     }
                 }
                 if (params.limit) {

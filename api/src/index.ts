@@ -21,6 +21,8 @@ import { StreamElementsPointsUpdaterService } from './services/StreamElementsPoi
 import { StreamElementsPointsController } from './controllers/StreamElementsPoints';
 import { StreamElementsItemsUpdaterService } from './services/StreamElementsItemsUpdater';
 import { StreamElementsItemsController } from './controllers/StreamElementsItems';
+import { StreamElementsRedemptions } from './controllers/StreamElementsRedemptions';
+import { StreamElementsRedemptionsUpdater } from './services/StreamElementsRedemptionsUpdater';
 
 dotenv.config({
     path: './.env',
@@ -68,6 +70,9 @@ function loadControllers() {
     const streamElementsItems = new StreamElementsItemsController();
     setDependency('streamElementsItems', streamElementsItems);
 
+    const streamElementsRedemptions = new StreamElementsRedemptions()
+    setDependency('streamElementsRedemptions', streamElementsRedemptions)
+
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);
 
@@ -76,6 +81,7 @@ function loadControllers() {
 
     new StreamElementsPointsUpdaterService();
     new StreamElementsItemsUpdaterService();
+    new StreamElementsRedemptionsUpdater()
 }
 
 database.runMigrations().then(() => {
