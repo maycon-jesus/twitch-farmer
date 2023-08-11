@@ -23,8 +23,16 @@
         @update:model-value="twitchChannel.closeModalItemDetails()"
     >
         <twitch-channel-store-item-details
-            v-if="twitchChannel.modalItemDetails.item"
             :item="twitchChannel.modalItemDetails.item"
+        />
+    </v-dialog>
+    <v-dialog
+        :model-value="twitchChannel.modalRedemption.open"
+        max-width="550"
+        @update:model-value="twitchChannel.closeModalRedemption()"
+    >
+        <twitch-channel-store-item-redemption
+            :item="twitchChannel.modalRedemption.item"
         />
     </v-dialog>
 </template>
@@ -70,6 +78,9 @@ watch(
     () => twitchChannel.accounts,
     () => {
         twitchChannel.loadAccountsPoints(route.params.channelId as string)
+    },
+    {
+        immediate: true
     }
 )
 </script>

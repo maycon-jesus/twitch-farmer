@@ -13,6 +13,7 @@ type StreamElementsItem = {
     thumbnailUrl: string;
     enabled: 0 | 1;
     subscriberOnly: 0 | 1;
+    allowMessages: 0 | 1;
     quantityTotal: number;
     quantityCurrent: number;
     inputs: string[];

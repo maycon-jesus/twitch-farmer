@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useUi } from '~/store/ui'
-import { twitchChannel } from '~/types/Channels'
+import { ChannelResume } from '~/types/Channels'
 import { AccountResume } from '~/types/Accounts'
 import { ChannelStoreItem } from '~/types/ChannelStore'
 import { ReturnType } from 'birpc'
@@ -9,7 +9,7 @@ export const useTwitchChannel = defineStore('twitch-channel', {
     state(): {
         api: ReturnType<typeof useApi>
         ui: ReturnType<typeof useUi>
-        channel: twitchChannel | null
+        channel: ChannelResume | null
         accountsPoints: Record<string, number>
         accounts: AccountResume[]
         loaded: {
@@ -18,6 +18,10 @@ export const useTwitchChannel = defineStore('twitch-channel', {
             accounts: boolean
         }
         modalItemDetails: {
+            open: boolean
+            item: ChannelStoreItem | null
+        },
+        modalRedemption: {
             open: boolean
             item: ChannelStoreItem | null
         }
@@ -37,6 +41,10 @@ export const useTwitchChannel = defineStore('twitch-channel', {
                 open: false,
                 item: null,
             },
+            modalRedemption: {
+                open: false,
+                item: null
+            }
         }
     },
 
@@ -93,10 +101,13 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         },
         accountsCanBuy(cost: number): AccountResume[] {
             const accounts = this.accounts
-            return Object.entries(this.accountsPoints)
-                .filter((a) => a[1] >= cost)
+            const b =  Object.entries(this.accountsPoints)
+                .filter((a) => {
+                    return a[1] >= cost
+                })
                 .map(() => accounts.find((a) => a.id))
                 .filter((a) => !!a) as AccountResume[]
+            return b
         },
         openModalItemDetails(item: ChannelStoreItem) {
             this.modalItemDetails.item = item
@@ -105,6 +116,14 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         closeModalItemDetails() {
             this.modalItemDetails.item = null
             this.modalItemDetails.open = false
+        },
+        openModalRedemption(item: ChannelStoreItem) {
+            this.modalRedemption.item = item
+            this.modalRedemption.open = true
+        },
+        closeModalRedemption() {
+            this.modalRedemption.item = null
+            this.modalRedemption.open = false
         },
     },
 })

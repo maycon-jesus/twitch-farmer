@@ -6,11 +6,6 @@ export class TwitchAccountsMiddleware extends MiddlewareBase {
     async run(req: Request, res: Response, next: NextFunction) {
         try {
             const account = await this.dd.twitchAccounts.getAccountById(req.params.accountId);
-            if (!account)
-                throw new ErrorMaker({
-                    type: 'not_found',
-                    errors: [{ message: 'Conta não encontrada!' }],
-                });
             if (account.ownerId !== req.jwt.userId)
                 throw new ErrorMaker({
                     type: 'forbidden',

@@ -2,6 +2,7 @@ import type { ZodIssue } from 'zod';
 
 export type ErrorTypes =
     | 'form_validation'
+    | 'default'
     | 'database'
     | 'forbidden'
     | 'unprocessable_entity'
@@ -57,6 +58,9 @@ export function ErrorToResponse(error: ErrorMaker | Error): {
                 status: 500,
             },
             form_validation: {
+                status: 400,
+            },
+            default: {
                 status: 400,
             },
             other: {

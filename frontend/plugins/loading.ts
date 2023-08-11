@@ -6,5 +6,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.hook('page:finish', () => {
         console.log('hook:page:finish');
         ui.endLoading('page-loading');
+        return
     });
 });

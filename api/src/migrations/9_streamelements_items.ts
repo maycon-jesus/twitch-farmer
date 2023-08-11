@@ -17,6 +17,7 @@ export async function up(knex: Knex): Promise<void> {
         table.tinyint('enabled').notNullable();
         table.tinyint('subscriberOnly').notNullable();
         table.tinyint('deleted').notNullable().defaultTo(0);
+        table.tinyint('allowMessages').notNullable().defaultTo(0);
 
         table.integer('quantityTotal').notNullable();
         table.integer('quantityCurrent').notNullable();

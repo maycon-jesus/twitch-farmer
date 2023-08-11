@@ -27,7 +27,6 @@
                     </v-list>
                 </v-card-text>
                 <v-card-actions>
-                    <v-spacer />
                     <v-btn
                         :to="{
                             name: 'dashboard-conta-accountId',

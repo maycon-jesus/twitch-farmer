@@ -45,6 +45,18 @@
                         </v-list-item>
                     </v-list>
                 </v-card-text>
+                <v-card-actions>
+                    <v-btn
+                        :to="{
+                            name: 'dashboard-canal-channelId',
+                            params: {
+                                channelId: channel.id,
+                            },
+                        }"
+                        block
+                    >Ver canal
+                    </v-btn>
+                </v-card-actions>
             </v-card>
         </v-col>
     </v-row>

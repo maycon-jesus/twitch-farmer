@@ -129,7 +129,8 @@ export class TwitchApiController extends ControllerBase {
                     proxy: this.dd.webShareProxy.getRandomProxyForAxios(),
                 }
             )
-            .catch(() => {
+            .catch((err) => {
+                console.log(err)
                 throw new ErrorMaker({
                     type: 'other',
                     errors: [{ message: 'Ocorreu um erro na geração dos códigos de acesso da sua conta' }],
