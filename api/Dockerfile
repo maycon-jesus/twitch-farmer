@@ -2,7 +2,7 @@ FROM node:18
 
 WORKDIR /app
 
-COPY ./api .
+COPY . .
 
 RUN npm ci
 
