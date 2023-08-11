@@ -49,7 +49,9 @@ export default class RedemptionsRoute extends RouteBase {
                     }
                 })
                 const count =  await this.dd.streamElementsRedemptions.countRedemptions({
-                    ownerId: req.jwt.userId
+                    ownerId: req.jwt.userId,
+                    channelId: query.data.channelId,
+                    accountId: query.data.accountId,
                 })
 
                 res.json({
