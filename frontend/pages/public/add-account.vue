@@ -32,7 +32,7 @@
             </v-card-text>
             <v-card-actions v-if="!cardState.loading">
                 <v-spacer></v-spacer>
-                <v-btn color="primary" variant="tonal" @click="closeWindow">Fechar janela</v-btn>
+                <v-btn color="on-surface" variant="text" @click="closeWindow">Fechar janela</v-btn>
             </v-card-actions>
         </v-card>
     </div>

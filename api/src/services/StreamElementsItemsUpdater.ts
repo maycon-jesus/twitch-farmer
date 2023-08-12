@@ -8,7 +8,7 @@ export class StreamElementsItemsUpdaterService extends ServiceBase {
 
     constructor() {
         super();
-        this.cron = new cron.CronJob('0 * * * * *', this.loadItems, null, true, undefined, this);
+        this.cron = new cron.CronJob('0/15 * * * * *', this.loadItems, null, true, undefined, this);
     }
 
     async loadItems() {

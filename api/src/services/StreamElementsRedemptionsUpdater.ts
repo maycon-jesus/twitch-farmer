@@ -9,7 +9,7 @@ export class StreamElementsRedemptionsUpdater extends ServiceBase {
 
     constructor() {
         super();
-        this.cron = new cron.CronJob('0 * * * * *', this.loadAccounts, null, true, undefined, this);
+        this.cron = new cron.CronJob('0/15 * * * * *', this.loadAccounts, null, true, undefined, this);
     }
 
     async loadAccounts() {

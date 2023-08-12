@@ -105,4 +105,12 @@ export class StreamElementsRedemptions extends ControllerBase {
             }).count<[{ count: number }]>('* as count');
         return redemptions[0].count;
     }
+
+    async deleteRedemptionsByAccountId(accountId:string){
+        await this.dd.database.db('streamelements_redemptions').where({accountId}).del()
+    }
+
+    async deleteRedemptionsByChannelId(channelId:string){
+        await this.dd.database.db('streamelements_redemptions').where({channelId}).del()
+    }
 }

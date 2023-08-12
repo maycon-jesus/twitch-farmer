@@ -77,7 +77,7 @@ export class TwitchAccountsController extends ControllerBase {
         if (accountExists)
             throw new ErrorMaker({
                 type: 'unprocessable_entity',
-                errors: [{ message: 'Você não pode adicionar essa conta pois ela já esta farmando.' }],
+                errors: [{ message: 'Você não pode adicionar essa conta pois ela já esta farmando!' }],
             });
 
         const accountId = v4();
@@ -104,6 +104,7 @@ export class TwitchAccountsController extends ControllerBase {
 
     async deleteAccount(accountId: string) {
         await this.dd.streamElementsPoints.deleteByAccountId(accountId)
+        await this.dd.streamElementsRedemptions.deleteRedemptionsByAccountId(accountId)
         await this.dd.database.db('twitch_accounts').where({ id: accountId }).del();
     }
 
