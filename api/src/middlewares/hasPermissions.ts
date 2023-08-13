@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from 'express';
 import { MiddlewareBase } from '../base/Middleware';
 import { ErrorMaker, ErrorToResponse } from '../libs/ErrorMaker';
-import { RolePermission } from '../controllers/Roles';
+import { RolePermissions } from '../controllers/Roles';
 
 export class HasPermissionsMiddleware extends MiddlewareBase {
-    private permissions: RolePermission[] = [];
+    private permissions: (keyof RolePermissions)[] = [];
 
-    constructor(permissions: RolePermission[]) {
+    constructor(permissions: (keyof RolePermissions)[]) {
         super();
         this.permissions.push(...permissions);
     }
@@ -15,12 +15,13 @@ export class HasPermissionsMiddleware extends MiddlewareBase {
         try {
             const user = await this.dd.users.findOne(req.jwt.userId);
             const userPerms = await this.dd.roles.getRolePermissions(user.role);
-            const notHasSomePerm = userPerms.some((userPerm) => !this.permissions.includes(userPerm));
-            if (notHasSomePerm)
-                throw new ErrorMaker({
-                    type: 'forbidden',
-                    errors: [{ message: 'Você não possui permissão para isso' }],
-                });
+            for(const permission of this.permissions){
+                if (!userPerms[permission])
+                    throw new ErrorMaker({
+                        type: 'forbidden',
+                        errors: [{ message: 'Você não possui permissão para isso' }],
+                    });
+            }
             next();
         } catch (err: any) {
             const e = ErrorToResponse(err);

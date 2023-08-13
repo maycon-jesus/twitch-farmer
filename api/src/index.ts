@@ -23,6 +23,7 @@ import { StreamElementsItemsUpdaterService } from './services/StreamElementsItem
 import { StreamElementsItemsController } from './controllers/StreamElementsItems';
 import { StreamElementsRedemptions } from './controllers/StreamElementsRedemptions';
 import { StreamElementsRedemptionsUpdater } from './services/StreamElementsRedemptionsUpdater';
+import { StreamElementsRedemptionsQueue } from './controllers/StreamElementsRedemptionsQueue';
 
 dotenv.config({
     path: './.env',
@@ -72,6 +73,10 @@ function loadControllers() {
 
     const streamElementsRedemptions = new StreamElementsRedemptions()
     setDependency('streamElementsRedemptions', streamElementsRedemptions)
+
+    const streamElementsRedemptionsQueue = new StreamElementsRedemptionsQueue()
+    setDependency('streamElementsRedemptionsQueue', streamElementsRedemptionsQueue)
+
 
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);

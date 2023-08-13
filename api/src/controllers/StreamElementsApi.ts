@@ -75,7 +75,7 @@ export class StreamElementsApiController extends ControllerBase {
             const data = await axios.get(
                 `https://api.streamelements.com/kappa/v2/points/${streamElementsChannelId}/${userTwitchLogin}`,
                 {
-                    proxy: this.dd.webShareProxy.getRandomProxyForAxios()
+                    // proxy: this.dd.webShareProxy.getRandomProxyForAxios()
                 }
             );
             return {
@@ -177,6 +177,7 @@ export class StreamElementsApiController extends ControllerBase {
                 accessCode: r.data.accessCode
             };
         } catch (e:any) {
+            console.log(e)
             throw new ErrorMaker({
                 type: 'unknown',
                 errors: [

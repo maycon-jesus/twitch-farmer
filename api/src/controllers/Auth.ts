@@ -2,11 +2,12 @@ import { ControllerBase } from '../base/Controller';
 import { ErrorMaker } from '../libs/ErrorMaker';
 import jsonwebtoken from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { RolePermissions } from './Roles';
 
 export interface IJWTPayload {
     userId: string;
     roleId: string;
-    permissions: string[];
+    permissions: RolePermissions;
 }
 
 export class AuthController extends ControllerBase {

@@ -27,7 +27,7 @@
                 </template>
                 <v-list-item-title>Resgates</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="{ name: 'index' }" disabled>
+            <v-list-item :to="{ name: 'dashboard-resgatador' }">
                 <template #prepend>
                     <v-icon :icon="iconBot"></v-icon>
                 </template>

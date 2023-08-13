@@ -25,7 +25,7 @@ export default class Route extends RouteBase {
                     type: 'not_found',
                     errors: [{message: 'Item não encontrado!'}]
                 })
-                if(account.streamElementsToken)  throw new ErrorMaker({
+                if(!account.streamElementsToken)  throw new ErrorMaker({
                     type: 'default',
                     errors:[{message: 'Conta não possui token do StreamElements configurado!'}]
                 })

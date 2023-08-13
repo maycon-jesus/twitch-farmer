@@ -8,7 +8,7 @@ export class InviteCodesRoute extends RouteBase {
     constructor() {
         super({
             path: '/invite-codes',
-            middlewares: [new AuthMiddleware(), new HasPermissionsMiddleware(['GENERATE_INVITE_CODE'])],
+            middlewares: [new AuthMiddleware(), new HasPermissionsMiddleware(['PERM_GENERATE_INVITE_CODE'])],
             childs: [new InviteCodesGenerateRoute(), new InviteCodesListRoute()],
         });
     }

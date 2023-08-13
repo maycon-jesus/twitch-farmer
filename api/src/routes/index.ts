@@ -5,6 +5,8 @@ import { PublicRoutes } from './public';
 import { TwitchAccountsRoutes } from './twitch-accounts';
 import { UsersRoute } from './users';
 import { TwitchChannelsRoute } from './twitch-channels';
+import ServiceRoute from './service';
+import RedemptionsBotRoute from './redemptions-bot';
 
 export class Routes extends RouteBase {
     constructor() {
@@ -17,6 +19,8 @@ export class Routes extends RouteBase {
                 new PublicRoutes(),
                 new TwitchAccountsRoutes(),
                 new TwitchChannelsRoute(),
+                new ServiceRoute(),
+                new RedemptionsBotRoute()
             ],
         });
     }

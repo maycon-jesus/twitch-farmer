@@ -34,8 +34,7 @@
                     />
                     <DashboardHomePageCard
                         :icon="iconBot"
-                        :to="{ name: 'index' }"
-                        coming-soon
+                        :to="{ name: 'dashboard-resgatador' }"
                         description="Configure seu bot de resgates automatizado"
                         title="Resgatador automático"
                     />
