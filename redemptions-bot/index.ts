@@ -146,6 +146,7 @@ wss.on('message', (m) => {
         if (datajson.data.enabled === false || !hasStock) {
             console.log('Parando fila', !datajson.data.enabled, !hasStock)
             queueRunEnabled[datajson.itemId] = "stop"
+            // @ts-ignore
         } else if (datajson.data.enabled !== false && hasStock) {
             enableResgate(datajson.itemId)
                 .then(() => {
