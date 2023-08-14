@@ -26,7 +26,8 @@ let channels: string[] = []
 const queueRunEnabled: Record<string, "stop" | "run" | "wait"> = {}
 
 async function enableResgate(itemId: string, force?: boolean) {
-    if (queueRunEnabled[itemId] === "wait" && !force) return;
+    if (queueRunEnabled[itemId] === "wait") return;
+    if (queueRunEnabled[itemId] === "run") return;
     console.log('Ligando fila')
 
     queueRunEnabled[itemId] = "run"
@@ -84,7 +85,6 @@ async function enableResgate(itemId: string, force?: boolean) {
 async function disableTempResgate(itemId: string, time: number) {
     queueRunEnabled[itemId] = "wait"
     setTimeout(() => {
-        queueRunEnabled[itemId] = "run"
         enableResgate(itemId)
     }, time * 1000)
 }
@@ -124,8 +124,6 @@ wss.on('open', () => {
     })
 })
 
-let start = Date.now()
-
 wss.on('message', (m) => {
     const data = m.toString()
     if (data.startsWith("42[")) {
@@ -148,8 +146,7 @@ wss.on('message', (m) => {
         if (datajson.data.enabled === false || !hasStock) {
             console.log('Parando fila', !datajson.data.enabled, !hasStock)
             queueRunEnabled[datajson.itemId] = "stop"
-        } else if (datajson.data.enabled === true && hasStock) {
-            start=Date.now()
+        } else if (datajson.data.enabled !== false && hasStock) {
             enableResgate(datajson.itemId)
                 .then(() => {
                     console.log('succ1')
