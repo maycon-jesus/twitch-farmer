@@ -38,7 +38,7 @@
                                         chips
                                         v-model="itemId"
                                         :rules="[validateItemId]"
-                                        :disabled="!channelId"
+                                        :disabled="!resgatador.loaded.storeItems || !channelId"
                                         :loading="resgatador.loading.storeItems"
                                         no-data-text="Nenhum item encontrado!">
                             <template #item="{props,item}">
@@ -48,6 +48,7 @@
                                     </v-list-item-title>
                                     <v-list-item-subtitle>
                                         <v-chip :prepend-icon="iconCoin">{{ item.raw.cost }}</v-chip>
+                                        <v-chip :prepend-icon="iconQueue" class="ml-2">{{ item.raw.queueSize }}</v-chip>
                                     </v-list-item-subtitle>
                                 </v-list-item>
                             </template>
@@ -62,6 +63,7 @@
                                     :prepend-icon="iconCoin"
                                     :text="item.raw.cost"
                                 ></v-chip>
+                                <v-chip :prepend-icon="iconQueue" class="ml-2">{{ item.raw.queueSize }}</v-chip>
                             </template>
                         </v-autocomplete>
                     </v-col>
@@ -118,9 +120,11 @@
 <script setup lang="ts">
 import { useResgatador } from '../../store/resgatador'
 import iconCoin from '~icons/pixelarticons/coin'
+import iconQueue from '~icons/fluent/people-queue-20-filled'
 
 const emits = defineEmits<{
     (ev: 'onClose'): void
+    (ev: 'itemAdded'): void
 }>()
 
 const resgatador = useResgatador()
@@ -160,6 +164,7 @@ const onSubmit = ()=> {
         .then(()=>{
             $toast.success('Item adicionado na fila de resgates')
             emits('onClose')
+            emits('itemAdded')
         })
         .catch(err => {
             apiError.value=err.errors[0].message

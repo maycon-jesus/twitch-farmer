@@ -16,12 +16,14 @@ interface StreamElementsRedemptionQueue {
 
 export class StreamElementsRedemptionsQueue extends ControllerBase {
     async getItemFromQueue(filters: {
+        id?:string,
         channelId?: string,
         accountId?: string,
         completed?: boolean
     }):Promise<StreamElementsRedemptionQueue|undefined> {
         const data = await this.dd.database.db('streamelements_redemptions_queue').where((queryBuilder) => {
             if (filters.channelId) queryBuilder.where({ channelId: filters.channelId });
+            if (filters.id) queryBuilder.where({id: filters.id});
             if (filters.accountId) queryBuilder.where({ accountId: filters.accountId });
             if (filters.completed !== undefined) queryBuilder.where({ completed: filters.completed ? 1 : 0 });
         }).first();
@@ -33,7 +35,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
         ownerId?: string,
         completed?: boolean
         order?: {
-            by: 'priority',
+            by: 'priority'|'createdAt',
             sort: 'asc'|'desc'
         },
         orderByRaw?: string
@@ -48,7 +50,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
     }
 
     async getStreamElementsItemQueueSize(itemId:string):Promise<number>{
-        const data:any =  this.dd.database.db('streamelements_redemptions_queue').where({itemId}).count('id as count')
+        const data:any = await this.dd.database.db('streamelements_redemptions_queue').where({itemId, completed: 0}).count('id as count')
         return data[0].count as number
     }
 
@@ -61,7 +63,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
         let count = 0
         allItems.find(i => {
             count++
-            if(i.id === queueItemId)return
+            if(i.id === queueItemId)return true
         })
         return count
     }
@@ -101,5 +103,22 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
             ownerId,
             priority,
         })
+    }
+
+    async setItemStatus(data:{
+        itemId:string,
+        completed:boolean,
+        error: boolean,
+        errorReason?: string
+    }){
+        await this.dd.database.db('streamelements_redemptions_queue').where({id: data.itemId}).update({
+            completed: data.completed? 1:0,
+            error: data.error? 1:0,
+            errorReason: data.errorReason||null,
+        })
+    }
+
+    async deleteItem(itemId:string){
+        await this.dd.database.db('streamelements_redemptions_queue').where({id: itemId}).del()
     }
 }

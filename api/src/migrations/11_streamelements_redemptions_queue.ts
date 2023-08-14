@@ -8,6 +8,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string('channelId').notNullable().references('twitch_channels.id')
         table.string('ownerId').notNullable().references('users.id')
         table.tinyint('completed', 1).defaultTo(0)
+        table.tinyint('error', 1).defaultTo(0)
+        table.string('errorReason').nullable().defaultTo(null)
         table.text('inputs').notNullable().defaultTo("[]")
         table.integer('priority').notNullable().defaultTo(1)
         table.dateTime('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'));

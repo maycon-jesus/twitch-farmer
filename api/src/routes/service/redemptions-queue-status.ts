@@ -2,35 +2,33 @@ import { RouteBase } from '../../base/Route';
 import { z } from 'zod';
 import { ErrorMaker, ErrorToResponse } from '../../libs/ErrorMaker';
 
-
-export default class RouteAddItem extends RouteBase {
+export default class RouteRedemptionsQueueStatus extends RouteBase {
     bodyValidator = z.object({
-        channelId: z.string().nonempty('Informe o canal'),
-        itemId: z.string().nonempty('Informe o item'),
-        accountId: z.string().nonempty('Informe a conta'),
-        inputs: z.string().array().default([])
+        completed: z.boolean(),
+        error: z.boolean(),
+        errorReason: z.string().optional()
     });
 
     constructor() {
         super({
-            path: '/add-item',
-            childs: []
+            path: '/redemptions-queue/:itemId/status'
         });
     }
 
-    run() {
+    async run() {
         this.router.post('/', async (req, res) => {
             try {
-                const rolePermissions = await this.dd.roles.getRolePermissions(req.jwt.roleId);
+                const itemId = (req.params as any).itemId as any;
                 const body = this.bodyValidator.safeParse(req.body);
                 if (!body.success)
                     throw new ErrorMaker({
                         type: 'form_validation',
                         errors: body.error.errors
                     });
-
-                await this.dd.streamElementsRedemptionsQueue.addItemToQueue(req.jwt.userId, body.data.accountId, body.data.channelId, body.data.itemId, body.data.inputs, rolePermissions.REDEMPTIONS_BOT_PRIORITY);
-                res.json({ success: true });
+                await this.dd.streamElementsRedemptionsQueue.setItemStatus({
+                    itemId,
+                    ...body.data
+                })
             } catch (e: any) {
                 console.log(e);
                 const err = ErrorToResponse(e);

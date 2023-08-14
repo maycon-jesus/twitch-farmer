@@ -63,17 +63,20 @@ export const useResgatador = defineStore('twitch-channel', {
         },
         loadItems(channelId: string) {
             const $api = useApi()
-            const ui = useUi()
 
             this.loaded.storeItems = false
-            ui.startLoading()
-            $api(`/twitch-channels/${channelId}/store/items`)
+            this.loading.storeItems = true
+            $api(`/twitch-channels/${channelId}/store/items`, {
+                params:{
+                    hideDeleted: true
+                }
+            })
                 .then((_items) => {
                     this.storeItems = _items as any[]
                     this.loaded.storeItems = true
                 })
                 .finally(() => {
-                    ui.endLoading()
+                    this.loading.storeItems = false
                 })
         },
         loadAccountsPoints(channelId: string) {

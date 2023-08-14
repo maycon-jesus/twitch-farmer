@@ -7,13 +7,13 @@
     >
         <v-list nav>
             <v-list-subheader>Geral</v-list-subheader>
-            <v-list-item :to="{ name: 'dashboard-contas' }">
+            <v-list-item :to="{ name: 'dashboard-contas' }" tag="NuxtLink">
                 <template #prepend>
                     <v-icon :icon="iconTwitch"></v-icon>
                 </template>
                 <v-list-item-title>Contas</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="{ name: 'dashboard-canais' }">
+            <v-list-item :to="{ name: 'dashboard-canais' }" tag="NuxtLink">
                 <template #prepend>
                     <v-icon :icon="iconLive"></v-icon>
                 </template>
@@ -21,13 +21,13 @@
             </v-list-item>
 
             <v-list-subheader>Resgates</v-list-subheader>
-            <v-list-item :to="{ name: 'dashboard-resgates' }">
+            <v-list-item :to="{ name: 'dashboard-resgates' }" tag="NuxtLink">
                 <template #prepend>
                     <v-icon :icon="iconGift"></v-icon>
                 </template>
                 <v-list-item-title>Resgates</v-list-item-title>
             </v-list-item>
-            <v-list-item :to="{ name: 'dashboard-resgatador' }">
+            <v-list-item :to="{ name: 'dashboard-resgatador' }" tag="NuxtLink">
                 <template #prepend>
                     <v-icon :icon="iconBot"></v-icon>
                 </template>
@@ -35,7 +35,7 @@
             </v-list-item>
 
             <v-list-subheader>Outros</v-list-subheader>
-            <v-list-item :to="{ name: 'dashboard-convites' }">
+            <v-list-item :to="{ name: 'dashboard-convites' }" tag="NuxtLink">
                 <template #prepend>
                     <v-icon :icon="iconInvite"></v-icon>
                 </template>

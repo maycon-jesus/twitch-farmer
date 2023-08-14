@@ -7,9 +7,7 @@ dotenv.config()
 
 const webShareProxy = new WebShareProxyModule()
 
-let start = Date.now()
-let end = Date.now()
-
+let ping = 0
 let queue: Record<string, {
     "id": string,
     "itemId": string,
@@ -30,7 +28,6 @@ const queueRunEnabled: Record<string, "stop" | "run" | "wait"> = {}
 async function enableResgate(itemId: string, force?: boolean) {
     if (queueRunEnabled[itemId] === "wait" && !force) return;
     console.log('Ligando fila')
-    start = Date.now()
 
     queueRunEnabled[itemId] = "run"
 
@@ -54,30 +51,42 @@ async function enableResgate(itemId: string, force?: boolean) {
             .then(async () => {
                 queueOfItem.splice(0, 1)
                 console.log('Resgatado com sucesso!')
-                console.log(Date.now() - start)
+                axios.post(`${process.env.API_URL}/service/redemptions-queue/${item.id}/status`, {
+                    completed: true,
+                    error: false
+                }).then(()=>{}).catch(()=>{})
             })
             .catch(err => {
                 console.log('g', err.response?.data?.message)
+                const errorBody = {
+                    completed: true,
+                    error: true,
+                    errorReason: err.response?.data?.message
+                }
+                const sendError = ()=>{
+                    axios.post(`${process.env.API_URL}/service/redemptions-queue/${item.id}/status`, errorBody).then(()=>{}).catch(()=>{})
+                }
                 if (err.response?.data?.message === 'Item is Out of stock') {
                     queueRunEnabled[itemId] = "stop"
                 }
                 if (err.response?.data?.message === 'Sorry you don\'t have enough points') {
                     queueOfItem.splice(0, 1)
+                    sendError()
                 }
                 if (err.response?.data?.message === 'You are redeeming too fast') {
                     queueOfItem.splice(0, 1)
+                    sendError()
                 }
             })
     } while (queueRunEnabled[itemId] === "run")
 }
 
 async function disableTempResgate(itemId: string, time: number) {
-    console.log('a', time * 1000)
     queueRunEnabled[itemId] = "wait"
     setTimeout(() => {
         queueRunEnabled[itemId] = "run"
         enableResgate(itemId)
-    }, time * 1000 - 1000)
+    }, time * 1000)
 }
 
 function updateQueue() {
@@ -106,10 +115,17 @@ wss.on('open', () => {
         })
     }, 15000)
 
+    channels.forEach(channel => {
+        wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
+    })
+
     wss.once('close', () => {
         process.exit()
     })
 })
+
+let start = Date.now()
+
 wss.on('message', (m) => {
     const data = m.toString()
     if (data.startsWith("42[")) {
@@ -127,12 +143,13 @@ wss.on('message', (m) => {
         if (!datajson) return
         const queueList = queue[datajson.itemId]
         if (!queueList || queueList.length <= 0) return;
-        const hasStock = !!datajson.data.quantity.current || datajson.data.quantity.total === -1 || datajson.data.quantity.current === -1;
+        const hasStock = !!datajson.data.quantity.current || datajson.data.quantity.total === -1;
 
         if (datajson.data.enabled === false || !hasStock) {
             console.log('Parando fila', !datajson.data.enabled, !hasStock)
             queueRunEnabled[datajson.itemId] = "stop"
         } else if (datajson.data.enabled === true && hasStock) {
+            start=Date.now()
             enableResgate(datajson.itemId)
                 .then(() => {
                     console.log('succ1')
@@ -142,11 +159,30 @@ wss.on('message', (m) => {
                 })
         }
 
-        if (datajson.data.enabled === undefined && datajson.data.quantity.current) {
+        if (datajson.data.enabled === undefined && hasStock) {
             const item = queueList[0]
-            disableTempResgate(datajson.itemId, item.cooldownGlobal).then(() => {
+            disableTempResgate(datajson.itemId, item.cooldownGlobal-(ping+200)/1000).then(() => {
             }).catch(() => {
             })
         }
     }
 })
+
+function execPing(){
+    if(wss.readyState === wss.OPEN){
+        let startPing = Date.now()
+        wss.ping()
+        wss.once('pong',()=>{
+            // console.log('endPing', Date.now()-startPing)
+            ping=Date.now()-startPing
+            setTimeout(()=>{
+                execPing()
+            },2000)
+        })
+    }else{
+        setTimeout(()=>{
+            execPing()
+        },2000)
+    }
+}
+execPing()
