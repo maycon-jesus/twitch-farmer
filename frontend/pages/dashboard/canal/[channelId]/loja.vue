@@ -21,15 +21,18 @@
         :model-value="twitchChannel.modalItemDetails.open"
         max-width="550"
         @update:model-value="twitchChannel.closeModalItemDetails()"
+        persistent
     >
         <twitch-channel-store-item-details
             :item="twitchChannel.modalItemDetails.item"
+            @on-close="twitchChannel.closeModalItemDetails()"
         />
     </v-dialog>
     <v-dialog
         :model-value="twitchChannel.modalRedemption.open"
         max-width="550"
         @update:model-value="twitchChannel.closeModalRedemption()"
+        persistent
     >
         <twitch-channel-store-item-redemption
             :item="twitchChannel.modalRedemption.item"

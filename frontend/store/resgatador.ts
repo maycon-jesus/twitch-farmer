@@ -5,7 +5,7 @@ import { AccountResume } from '~/types/Accounts'
 import { ChannelStoreItem } from '~/types/ChannelStore'
 import { ReturnType } from 'birpc'
 
-export const useResgatador = defineStore('twitch-channel', {
+export const useResgatador = defineStore('resgatador', {
     state(): {
         channels: ChannelResume[]
         accounts: AccountResume[]

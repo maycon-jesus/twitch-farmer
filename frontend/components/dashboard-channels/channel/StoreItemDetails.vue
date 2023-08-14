@@ -4,13 +4,15 @@
             <img v-if="item.thumbnailUrl" :src="item.thumbnailUrl" alt="" class="item-img" loading="lazy" />
         </div>
         <v-card-title>{{ item.name }}</v-card-title>
-        <v-tabs v-model="tab" :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
-            <v-tab value="general">Geral</v-tab>
-            <v-tab v-if="item.inputs.length > 0" value="form">Formulário</v-tab>
-            <v-tab value="cooldown">Cooldown</v-tab>
-            <v-tab value="accounts-avaible">Contas disponiveis</v-tab>
-        </v-tabs>
-        <v-window v-model="tab">
+        <div>
+            <v-tabs v-model="tab" :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
+                <v-tab value="general">Geral</v-tab>
+                <v-tab v-if="item.inputs.length > 0" value="form">Formulário</v-tab>
+                <v-tab value="cooldown">Cooldown</v-tab>
+                <v-tab value="accounts-avaible">Contas disponiveis</v-tab>
+            </v-tabs>
+        </div>
+        <v-window v-model="tab" :style="{overflow: 'initial'}">
             <v-window-item value="general">
                 <v-card-text>
                     <v-list>
@@ -101,6 +103,10 @@
                 </v-card-text>
             </v-window-item>
         </v-window>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn @click="emits('onClose')">Fechar</v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 
@@ -116,6 +122,9 @@ import { useTwitchChannel } from '~/store/twitch-channel'
 
 const props = defineProps<{
     item: ChannelStoreItem
+}>()
+const emits = defineEmits<{
+    (ev: 'onClose'): void
 }>()
 
 const tab = ref('general')

@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>Adiciona para resgatar</v-card-title>
-        <v-form @submit.prevent="onSubmit" v-model="formValid">
+        <v-form @submit.prevent="onSubmit" v-model="formValid" :disabled="loading">
             <v-container>
                 <v-row>
                     <v-col cols="12">
@@ -110,8 +110,8 @@
             </v-container>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="on-surface" variant="text" @click="emits('onClose')">Cancelar</v-btn>
-                <v-btn type="submit">Adicionar</v-btn>
+                <v-btn color="on-surface" variant="text" @click="emits('onClose')" :disabled="loading">Cancelar</v-btn>
+                <v-btn type="submit" :loading="loading">Adicionar</v-btn>
             </v-card-actions>
         </v-form>
     </v-card>
@@ -136,6 +136,7 @@ const accountId = ref<null | string>(null)
 const itemId = ref<null | string>(null)
 const formInputs = ref<string[]>([])
 const formValid = ref<boolean>(false)
+const loading = ref<boolean>(false)
 
 const validateTwitchId = (value: string) => {
     if (!value) return 'Selecione o canal que você deseja resgatar'
@@ -152,6 +153,7 @@ const validateAccountId = (value: string) => {
 
 const onSubmit = ()=> {
     if(!formValid)return;
+    loading.value=true
     $api('/redemptions-bot/add-item', {
         method: 'post',
         body: {
@@ -168,6 +170,9 @@ const onSubmit = ()=> {
         })
         .catch(err => {
             apiError.value=err.errors[0].message
+        })
+        .finally(()=>{
+            loading.value=false
         })
 }
 

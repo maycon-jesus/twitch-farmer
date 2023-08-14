@@ -55,7 +55,7 @@
                        @click="twitchChannel.closeModalRedemption()"
                        :disabled="loading">Fechar
                 </v-btn>
-                <v-btn variant="elevated" type="submit" :loading="loading">Resgatar</v-btn>
+                <v-btn type="submit" :loading="loading">Resgatar</v-btn>
             </v-card-actions>
         </v-form>
         <v-container v-if="rescued">

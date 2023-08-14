@@ -83,7 +83,7 @@ import leftIcon from '~icons/material-symbols/arrow-back'
 // noinspection TypeScriptCheckImport
 import rightIcon from '~icons/material-symbols/arrow-forward'
 import { ref } from 'vue'
-import { useTwitchChannel } from '~/store/twitch-channel'
+import { useTwitchChannel } from '../../../store/twitch-channel'
 
 definePageMeta({
     layout: 'dashboard',

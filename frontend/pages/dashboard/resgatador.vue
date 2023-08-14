@@ -68,7 +68,7 @@
                 </v-card>
             </v-col>
         </v-row>
-        <v-dialog max-width="550" v-model="openModal">
+        <v-dialog max-width="550" v-model="openModal" persistent>
             <dashboard-resgatador-modal-add-item @on-close="openModal=false"  @item-added="updateItemsPending()" />
         </v-dialog>
         <dashboard-resgatador-modal-remove-item v-model="openModalRemoveItem" v-bind="modalRemoveItemData" @item-removed="updateItemsPending()" />

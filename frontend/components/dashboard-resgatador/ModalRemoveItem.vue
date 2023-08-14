@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialogOpen" max-width="550" persistent>
+    <v-dialog v-model="dialogOpen" max-width="500" persistent>
         <v-card>
             <v-card-title>Confirmar</v-card-title>
             <v-card-text>
