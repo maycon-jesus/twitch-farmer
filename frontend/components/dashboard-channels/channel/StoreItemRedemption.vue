@@ -4,6 +4,11 @@
         <v-form v-model="formValid" @submit.prevent="redemption()" v-if="!rescued" :disabled="loading">
             <v-container>
                 <v-row>
+                    <v-col cols="12">
+                        <v-switch v-model="addToBot" label="Adicionar ao bot de resgates"></v-switch>
+                    </v-col>
+                </v-row>
+                <v-row>
                     <v-expand-transition v-show="rescueError">
                         <v-col cols="12">
                             <v-alert :icon="iconError" type="error">{{ rescueError }}</v-alert>
@@ -66,7 +71,9 @@
                     </v-alert>
                 </v-col>
                 <v-col cols="12" v-if="rescuedAccessCode">
-                    <form-text-field-copy label="Código" :model-value="rescuedAccessCode" hide-details></form-text-field-copy>
+                    <form-text-field-copy label="Código"
+                                          :model-value="rescuedAccessCode"
+                                          hide-details></form-text-field-copy>
                 </v-col>
             </v-row>
         </v-container>
@@ -97,7 +104,7 @@ const validateAccountId = (value: string) => {
     if (!value) return 'Selecione a conta que vai fazer o resgate'
 }
 const validateMessage = (value: string) => {
-    if (!props.item.allowMessages) return
+    if (!props.item.allowMessages) return true
     if (!value) return 'Informe uma mensagem'
 }
 
@@ -105,10 +112,12 @@ const inputData = ref<string[]>([])
 const messageData = ref<string>('')
 const accountId = ref<string | null>(null)
 const formValid = ref<boolean>(false)
+const addToBot = ref<boolean>(false)
 const rescued = ref(false)
 const rescuedAccessCode = ref<string | null>(null)
 const loading = ref<boolean>(false)
 const rescueError = ref<string | null>(null)
+const step = ref<'form' | 'rescued' | 'added-bot'>('form')
 
 const accounts = computed(() => {
     return twitchChannel.accountsCanBuy(props.item.cost)
@@ -118,35 +127,57 @@ const redemption = () => {
     loading.value = true
     rescueError.value = null
 
-    const body: {
-        input: string[],
-        message?: string
-    } = {
-        input: inputData.value
-    }
-
-    if (props.item.allowMessages) {
-        body.message = messageData.value
-    }
-
-    $api<{
-        accessCode: string
-    }>(`/twitch-channels/${twitchChannel.channel?.id}/${accountId.value}/redemptions/${props.item.id}`, {
-        method: 'post',
-        body
-    })
-        .then((r) => {
-            rescued.value = true
-            if (r.accessCode) {
-                rescuedAccessCode.value = r.accessCode
+    if (addToBot.value) {
+        $api('/redemptions-bot/add-item', {
+            method: 'post',
+            body: {
+                channelId: twitchChannel.channel?.id,
+                itemId: props.item.id,
+                accountId: accountId.value,
+                inputs: inputData.value
             }
-            $toast.success('Item resgatado com sucesso!')
         })
-        .catch(err => {
-            rescueError.value = err.errors[0].message
+            .then(() => {
+                $toast.success('Item adicionado na fila de resgates!')
+            })
+            .catch(err => {
+                rescueError.value = err.errors[0].message
+            })
+            .finally(() => {
+                loading.value = false
+            })
+    } else {
+        const body: {
+            input: string[],
+            message?: string
+        } = {
+            input: inputData.value
+        }
+
+        if (props.item.allowMessages) {
+            body.message = messageData.value
+        }
+
+        $api<{
+            accessCode: string
+        }>(`/twitch-channels/${twitchChannel.channel?.id}/${accountId.value}/redemptions/${props.item.id}`, {
+            method: 'post',
+            body
         })
-        .finally(() => {
-            loading.value = false
-        })
+            .then((r) => {
+                rescued.value = true
+                step.value = 'rescued'
+                if (r.accessCode) {
+                    rescuedAccessCode.value = r.accessCode
+                }
+                $toast.success('Item resgatado com sucesso!')
+            })
+            .catch(err => {
+                rescueError.value = err.errors[0].message
+            })
+            .finally(() => {
+                loading.value = false
+            })
+    }
 }
 </script>

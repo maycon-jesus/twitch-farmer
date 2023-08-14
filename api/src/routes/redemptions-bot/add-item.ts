@@ -28,6 +28,11 @@ export default class RouteAddItem extends RouteBase {
                         type: 'form_validation',
                         errors: body.error.errors
                     });
+                const account = await this.dd.twitchAccounts.getAccountById(body.data.accountId)
+                if(!account.streamElementsToken)throw new ErrorMaker({
+                    type: 'unprocessable_entity',
+                    errors: [{message:'Essa conta não possui token do StreamElements definido!'}]
+                });
 
                 await this.dd.streamElementsRedemptionsQueue.addItemToQueue(req.jwt.userId, body.data.accountId, body.data.channelId, body.data.itemId, body.data.inputs, rolePermissions.REDEMPTIONS_BOT_PRIORITY);
                 res.json({ success: true });

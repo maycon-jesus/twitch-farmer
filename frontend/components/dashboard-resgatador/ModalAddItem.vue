@@ -192,4 +192,8 @@ watch(() => channelId.value, () => {
         resgatador.storeItems = []
     }
 })
+
+watch(()=> itemId.value, ()=>{
+    formInputs.value=[]
+})
 </script>

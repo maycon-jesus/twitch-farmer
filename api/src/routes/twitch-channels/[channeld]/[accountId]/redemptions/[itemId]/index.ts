@@ -27,7 +27,7 @@ export default class Route extends RouteBase {
                 })
                 if(!account.streamElementsToken)  throw new ErrorMaker({
                     type: 'default',
-                    errors:[{message: 'Conta não possui token do StreamElements configurado!'}]
+                    errors:[{message: 'Conta não possui token do StreamElements definido!'}]
                 })
 
                 const body = this.validators.safeParse(req.body)
