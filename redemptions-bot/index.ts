@@ -120,6 +120,7 @@ wss.on('open', () => {
     })
 
     wss.once('close', () => {
+        console.log('Exit process')
         process.exit()
     })
 })
