@@ -110,8 +110,10 @@ wss.on('open', () => {
     console.log('OPen')
     const interval = setInterval(function () {
         wss.send('2');
-        channels.forEach(channel => {
-            wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
+        channels.forEach((channel,index) => {
+            setTimeout(()=>{
+                wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
+            },index*1000)
         })
     }, 15000)
 
