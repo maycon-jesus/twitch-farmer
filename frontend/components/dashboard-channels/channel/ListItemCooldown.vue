@@ -1,7 +1,7 @@
 <template>
     <v-list-item>
-        <v-list-item-title>{{ title }}</v-list-item-title>
-        <v-list-item-subtitle>{{ subtitle }}</v-list-item-subtitle>
+        <v-list-item-title class="break">{{ title }}</v-list-item-title>
+        <v-list-item-subtitle class="break">{{ subtitle }}</v-list-item-subtitle>
         <template #append>
             <v-icon :icon="iconInfo" @click="showDescription = !showDescription"></v-icon>
         </template>
@@ -23,3 +23,10 @@ const props = defineProps<{
     description: string
 }>()
 </script>
+
+<style lang="scss" scoped>
+.break {
+    -webkit-line-clamp: unset !important;
+    white-space: unset;
+}
+</style>

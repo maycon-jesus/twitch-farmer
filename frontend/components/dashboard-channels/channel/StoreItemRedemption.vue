@@ -1,6 +1,16 @@
 <template>
     <v-card>
-        <v-card-title>Resgatar {{ $props.item.name }}</v-card-title>
+        <v-list class="bg-background" :style="{overflow: 'initial'}">
+            <v-list-item>
+                <v-list-item-title>Resgatar {{ $props.item.name }}</v-list-item-title>
+                <v-list-item-subtitle>
+                    <v-chip-group>
+                        <v-chip :prepend-icon="iconCoin">{{ $props.item.cost }}</v-chip>
+                        <v-chip :prepend-icon="iconQueue">{{ $props.item.queueSize }}</v-chip>
+                    </v-chip-group>
+                </v-list-item-subtitle>
+            </v-list-item>
+        </v-list>
         <v-form v-model="formValid" @submit.prevent="redemption()" v-if="!rescued" :disabled="loading">
             <v-container>
                 <v-row>
@@ -88,6 +98,8 @@
 // noinspection TypeScriptCheckImport
 import iconInfo from '~icons/material-symbols/info'
 import iconError from '~icons/material-symbols/error'
+import iconCoin from '~icons/pixelarticons/coin'
+import iconQueue from '~icons/fluent/people-queue-20-filled'
 
 import { ChannelStoreItem } from '../../../types/ChannelStore'
 import { useTwitchChannel } from '../../../store/twitch-channel'
@@ -120,7 +132,10 @@ const rescueError = ref<string | null>(null)
 const step = ref<'form' | 'rescued' | 'added-bot'>('form')
 
 const accounts = computed(() => {
-    return twitchChannel.accountsCanBuy(props.item.cost)
+    const pointsObj = twitchChannel.accountsPoints
+    return twitchChannel.accounts.sort((a, b) => {
+        return pointsObj[b.id] - pointsObj[a.id]
+    })
 })
 
 const redemption = () => {

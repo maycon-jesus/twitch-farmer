@@ -71,7 +71,7 @@
                 <v-row>
                     <v-col cols="12">
                         <v-autocomplete label="Conta"
-                                        :items="resgatador.accounts"
+                                        :items="accountsOrder"
                                         item-value="id"
                                         item-title="displayName"
                                         chips
@@ -179,6 +179,13 @@ const onSubmit = ()=> {
 const itemInputs = computed(()=>{
     const itemSelected = resgatador.storeItems.find(i => i.id === itemId.value)
     return itemSelected?.inputs||[]
+})
+
+const accountsOrder = computed(()=>{
+    const pointsObj = resgatador.accountsPoints
+    return resgatador.accounts.sort((a,b)=>{
+        return pointsObj[b.id]-pointsObj[a.id]
+    })
 })
 
 watch(() => channelId.value, () => {

@@ -18,4 +18,5 @@ export type ChannelStoreItem = {
     createdAt: string
     updatedAt: string
     deleted: 0 | 1
+    queueSize: number
 }

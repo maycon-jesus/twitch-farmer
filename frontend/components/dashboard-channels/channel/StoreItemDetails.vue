@@ -3,7 +3,7 @@
         <div class="item-img-wrapper">
             <img v-if="item.thumbnailUrl" :src="item.thumbnailUrl" alt="" class="item-img" loading="lazy" />
         </div>
-        <v-card-title>{{ item.name }}</v-card-title>
+        <v-card-title class="break">{{ item.name }}</v-card-title>
         <div>
             <v-tabs v-model="tab" :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
                 <v-tab value="general">Geral</v-tab>
@@ -36,6 +36,10 @@
                         <v-list-item>
                             <v-list-item-title>Estoque</v-list-item-title>
                             <v-list-item-subtitle>{{ itemQuantity }}</v-list-item-subtitle>
+                        </v-list-item>
+                        <v-list-item>
+                            <v-list-item-title>Fila para resgatar</v-list-item-title>
+                            <v-list-item-subtitle>{{ item.queueSize }}</v-list-item-subtitle>
                         </v-list-item>
 
                         <v-divider class="my-2"></v-divider>
@@ -94,8 +98,8 @@
                                     <v-img :src="account.profileImageUrl"></v-img>
                                 </v-avatar>
                             </template>
-                            <v-list-item-title>{{ account.displayName }}</v-list-item-title>
-                            <v-list-item-subtitle
+                            <v-list-item-title class="break">{{ account.displayName }}</v-list-item-title>
+                            <v-list-item-subtitle class="break"
                                 >Pontuação: {{ twitchChannel.accountsPoints[account.id] }}
                             </v-list-item-subtitle>
                         </v-list-item>
@@ -131,8 +135,8 @@ const tab = ref('general')
 const twitchChannel = useTwitchChannel()
 
 const itemQuantity = computed(() => {
-    if (props.item.quantityCurrent < 0) return 'Ilimitado'
-    if (props.item.quantityCurrent <= 0) return 'Sem estoque'
+    if (props.item.quantityCurrent < 0 || props.item.quantityTotal < 0) return 'Ilimitado'
+    if (props.item.quantityCurrent <= 0 && !props.item.quantityTotal) return 'Sem estoque'
     return `${props.item.quantityCurrent} de ${props.item.quantityTotal}`
 })
 

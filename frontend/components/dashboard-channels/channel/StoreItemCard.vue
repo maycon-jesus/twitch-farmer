@@ -35,6 +35,14 @@
                     </template>
                     <v-list-item-title>Somente subscribers</v-list-item-title>
                 </v-list-item>
+                <v-divider class="my-2"></v-divider>
+                <v-list-item>
+                    <template #prepend>
+                        <v-icon :icon="iconQueue"></v-icon>
+                    </template>
+                    <v-list-item-title class="break">Fila de resgate</v-list-item-title>
+                    <v-list-item-subtitle>{{ $props.item.queueSize }}</v-list-item-subtitle>
+                </v-list-item>
             </v-list>
         </v-card-text>
         <v-card-actions class="mt-auto flex-column">
@@ -54,6 +62,7 @@ import iconBasket from '~icons/material-symbols/shopping-basket'
 import iconBasketOff from '~icons/mdi/basket-off'
 // noinspection TypeScriptCheckImport
 import iconStar from '~icons/mdi/star-circle-outline'
+import iconQueue from '~icons/fluent/people-queue-20-filled'
 import { ChannelStoreItem } from '~/types/ChannelStore'
 import { useTwitchChannel } from '~/store/twitch-channel'
 

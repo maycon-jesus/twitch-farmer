@@ -1,11 +1,13 @@
 <template>
     <v-card>
         <v-card-title>Detalhes do resgate</v-card-title>
-        <v-tabs v-model="tab" v-if="item.inputs.length > 0" :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
-            <v-tab value="general">Geral</v-tab>
-            <v-tab value="form">Formulário</v-tab>
-        </v-tabs>
-        <v-window v-model="tab">
+        <div>
+            <v-tabs v-model="tab" v-if="item.inputs.length > 0" :next-icon="rightIcon" :prev-icon="leftIcon" show-arrows>
+                <v-tab value="general">Geral</v-tab>
+                <v-tab value="form">Formulário</v-tab>
+            </v-tabs>
+        </div>
+        <v-window v-model="tab" :style="{overflow: 'initial'}">
             <v-window-item value="general">
                 <v-card-text>
                     <v-list>
