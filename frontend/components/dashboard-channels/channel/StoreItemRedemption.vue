@@ -2,7 +2,7 @@
     <v-card>
         <v-list class="bg-background" :style="{overflow: 'initial'}">
             <v-list-item>
-                <v-list-item-title>Resgatar {{ $props.item.name }}</v-list-item-title>
+                <v-list-item-title class="break">Resgatar {{ $props.item.name }}</v-list-item-title>
                 <v-list-item-subtitle>
                     <v-chip-group>
                         <v-chip :prepend-icon="iconCoin">{{ $props.item.cost }}</v-chip>
@@ -196,3 +196,10 @@ const redemption = () => {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.break {
+    -webkit-line-clamp: unset !important;
+    white-space: unset;
+}
+</style>
