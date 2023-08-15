@@ -65,7 +65,11 @@
 import iconError from '~icons/material-symbols/error-rounded'
 import { ref } from 'vue'
 import { z } from 'zod'
+import {DateTime} from "luxon"
 
+definePageMeta({
+    middleware: ['auth-login']
+})
 useSeoMeta({
     title: 'Entrar',
 })
@@ -133,7 +137,11 @@ const onSubmit = () => {
         },
     })
         .then((data) => {
-            const authCookie = useCookie('auth-token')
+            const authCookie = useCookie('auth-token', {
+                expires: DateTime.now().plus({
+                    day: 364
+                }).toJSDate()
+            })
             authCookie.value = data.token
             router.push({
                 name: (route.query.redirectTo as string) || 'dashboard',
