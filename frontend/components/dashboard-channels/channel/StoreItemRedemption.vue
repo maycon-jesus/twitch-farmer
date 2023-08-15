@@ -39,7 +39,7 @@
                                         {{ item.raw.displayName }}
                                     </v-list-item-title>
                                     <v-list-item-subtitle>
-                                        <v-chip>{{ twitchChannel.accountsPoints[item.raw.id] }}</v-chip>
+                                        <v-chip>{{ twitchChannel.accountsPoints[item.raw.id].points }}</v-chip>
                                     </v-list-item-subtitle>
                                 </v-list-item>
                             </template>
@@ -134,7 +134,7 @@ const step = ref<'form' | 'rescued' | 'added-bot'>('form')
 const accounts = computed(() => {
     const pointsObj = twitchChannel.accountsPoints
     return twitchChannel.accounts.sort((a, b) => {
-        return pointsObj[b.id] - pointsObj[a.id]
+        return pointsObj[b.id].points - pointsObj[a.id].points
     })
 })
 

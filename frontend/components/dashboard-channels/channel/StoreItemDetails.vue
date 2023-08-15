@@ -100,7 +100,7 @@
                             </template>
                             <v-list-item-title class="break">{{ account.displayName }}</v-list-item-title>
                             <v-list-item-subtitle class="break"
-                                >Pontuação: {{ twitchChannel.accountsPoints[account.id] }}
+                                >Pontuação: {{ twitchChannel.accountsPoints[account.id].points }}
                             </v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
@@ -167,8 +167,8 @@ const transformSecondsInHumanTime = (time: number) => {
 const accountsCanBuy = computed(() => {
 
     const a = twitchChannel.accountsCanBuy(props.item.cost).sort((a, b) => {
-        const aPoints = twitchChannel.accountsPoints[a.id] || 0
-        const bPoints = twitchChannel.accountsPoints[b.id] || 0
+        const aPoints = twitchChannel.accountsPoints[a.id].points || 0
+        const bPoints = twitchChannel.accountsPoints[b.id].points || 0
         return bPoints - aPoints
     })
     console.log('teste2',a.length)

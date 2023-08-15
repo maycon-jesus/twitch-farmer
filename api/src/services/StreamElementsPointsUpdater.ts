@@ -39,7 +39,7 @@ export class StreamElementsPointsUpdaterService extends ServiceBase {
                     channel.streamElementsUserId,
                     account.login
                 );
-                await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points);
+                await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points, points.rank);
             }
         } catch (e) {
             console.error(e);

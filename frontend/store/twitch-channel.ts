@@ -10,7 +10,10 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         api: ReturnType<typeof useApi>
         ui: ReturnType<typeof useUi>
         channel: ChannelResume | null
-        accountsPoints: Record<string, number>
+        accountsPoints: Record<string, {
+            rank:number,
+            points:number
+        }>
         accounts: AccountResume[]
         loaded: {
             channel: boolean
@@ -35,11 +38,11 @@ export const useTwitchChannel = defineStore('twitch-channel', {
             loaded: {
                 channel: false,
                 accountsPoints: false,
-                accounts: false,
+                accounts: false
             },
             modalItemDetails: {
                 open: false,
-                item: null,
+                item: null
             },
             modalRedemption: {
                 open: false,
@@ -64,24 +67,20 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         },
         loadAccountsPoints(channelId: string) {
             this.accountsPoints = {}
-            let remaing = this.accounts.length
-            this.accounts.forEach((account) => {
-                this.ui.startLoading()
-                this.api(`/twitch-channels/${channelId}/${account.id}/points`)
-                    .then((data: any) => {
-                        this.accountsPoints[account.id] = data.points as any
-                    })
-                    .catch(() => {
-                        this.accountsPoints[account.id] = 0
-                    })
-                    .finally(() => {
-                        this.ui.endLoading()
-                        remaing--
-                        if (remaing === 0) {
-                            this.loaded.accountsPoints = true
-                        }
-                    })
-            })
+
+            this.ui.startLoading()
+            this.api(`/twitch-channels/${channelId}/accounts-points`)
+                .then((data: any) => {
+                    this.accountsPoints = data as any
+                })
+                .catch(() => {
+                    this.accountsPoints = {}
+                })
+                .finally(() => {
+                    this.ui.endLoading()
+                    this.loaded.accountsPoints = true
+                })
+
         },
         loadAccounts(showLoading = true, force = false) {
             if (!force && this.accounts.length > 0) return
@@ -101,7 +100,7 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         },
         accountsCanBuy(cost: number): AccountResume[] {
             const accounts = this.accounts
-            const b =  Object.entries(this.accountsPoints)
+            const b = Object.entries(this.accountsPoints)
                 .filter((a) => {
                     return a[1] >= cost
                 })
@@ -124,6 +123,6 @@ export const useTwitchChannel = defineStore('twitch-channel', {
         closeModalRedemption() {
             this.modalRedemption.item = null
             this.modalRedemption.open = false
-        },
-    },
+        }
+    }
 })

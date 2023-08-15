@@ -61,7 +61,7 @@
                                     class="ml-2"
                                     v-bind="props"
                                     :prepend-icon="iconCoin"
-                                    :text="item.raw.cost"
+                                    :text="item.raw.cost.toString()"
                                 ></v-chip>
                                 <v-chip :prepend-icon="iconQueue" class="ml-2">{{ item.raw.queueSize }}</v-chip>
                             </template>
@@ -86,7 +86,9 @@
                                         {{ item.raw.displayName }}
                                     </v-list-item-title>
                                     <v-list-item-subtitle>
-                                        <v-chip :prepend-icon="iconCoin">{{ resgatador.accountsPoints[item.raw.id] }}</v-chip>
+                                        <v-chip :prepend-icon="iconCoin">
+                                            {{ resgatador.accountsPoints[item.raw.id].points }}
+                                        </v-chip>
                                     </v-list-item-subtitle>
                                 </v-list-item>
                             </template>
@@ -98,7 +100,8 @@
                                 <v-chip
                                     class="ml-2"
                                     v-bind="props"
-                                    :prepend-icon="iconCoin" :text="(resgatador.accountsPoints[item.raw.id]).toString()"
+                                    :prepend-icon="iconCoin"
+                                    :text="(resgatador.accountsPoints[item.raw.id].points).toString()"
                                 ></v-chip>
                             </template>
                         </v-autocomplete>
@@ -129,7 +132,7 @@ const emits = defineEmits<{
 
 const resgatador = useResgatador()
 const $api = useApi()
-const {$toast} = useNuxtApp()
+const { $toast } = useNuxtApp()
 const apiError = ref<null | string>(null)
 const channelId = ref<null | string>(null)
 const accountId = ref<null | string>(null)
@@ -151,9 +154,9 @@ const validateAccountId = (value: string) => {
     return true
 }
 
-const onSubmit = ()=> {
-    if(!formValid)return;
-    loading.value=true
+const onSubmit = () => {
+    if (!formValid) return
+    loading.value = true
     $api('/redemptions-bot/add-item', {
         method: 'post',
         body: {
@@ -163,34 +166,35 @@ const onSubmit = ()=> {
             inputs: formInputs.value
         }
     })
-        .then(()=>{
+        .then(() => {
             $toast.success('Item adicionado na fila de resgates')
             emits('onClose')
             emits('itemAdded')
         })
         .catch(err => {
-            apiError.value=err.errors[0].message
+            apiError.value = err.errors[0].message
         })
-        .finally(()=>{
-            loading.value=false
+        .finally(() => {
+            loading.value = false
         })
 }
 
-const itemInputs = computed(()=>{
+const itemInputs = computed(() => {
     const itemSelected = resgatador.storeItems.find(i => i.id === itemId.value)
-    return itemSelected?.inputs||[]
+    return itemSelected?.inputs || []
 })
 
-const accountsOrder = computed(()=>{
+const accountsOrder = computed(() => {
     const pointsObj = resgatador.accountsPoints
-    return resgatador.accounts.sort((a,b)=>{
-        return pointsObj[b.id]-pointsObj[a.id]
+    if (!resgatador.loaded.accountsPoints) return resgatador.accounts
+    return resgatador.accounts.sort((a, b) => {
+        return pointsObj[b.id].points - pointsObj[a.id].points
     })
 })
 
 watch(() => channelId.value, () => {
-    itemId.value=null
-    accountId.value=null
+    itemId.value = null
+    accountId.value = null
     if (channelId.value && typeof channelId.value === 'string') {
         resgatador.loadItems(channelId.value)
         resgatador.loadAccountsPoints(channelId.value)
@@ -200,7 +204,7 @@ watch(() => channelId.value, () => {
     }
 })
 
-watch(()=> itemId.value, ()=>{
-    formInputs.value=[]
+watch(() => itemId.value, () => {
+    formInputs.value = []
 })
 </script>

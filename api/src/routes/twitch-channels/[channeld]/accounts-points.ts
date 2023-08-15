@@ -14,9 +14,12 @@ export default class Route extends RouteBase {
                 ownerId: req.jwt.userId
             })
 
-            const pointsList:Record<string, number> = {}
+            const pointsList:Record<string, {
+                rank:number,
+                points: number
+            }> = {}
             for(const account of ownerAccounts){
-            const { points } = await this.dd.streamElementsPoints.getAccountChannelPoints(
+            const points = await this.dd.streamElementsPoints.getAccountChannelPoints(
                 account.id,
                 params.channelId
             );

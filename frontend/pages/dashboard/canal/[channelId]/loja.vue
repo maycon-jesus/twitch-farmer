@@ -77,13 +77,5 @@ const itemsInPage = computed(() => {
     return itemsVisible.value.slice((pagination.value - 1) * itemsPerPage.value, pagination.value * itemsPerPage.value)
 })
 
-watch(
-    () => twitchChannel.accounts,
-    () => {
-        twitchChannel.loadAccountsPoints(route.params.channelId as string)
-    },
-    {
-        immediate: true
-    }
-)
+twitchChannel.loadAccountsPoints(route.params.channelId as string)
 </script>

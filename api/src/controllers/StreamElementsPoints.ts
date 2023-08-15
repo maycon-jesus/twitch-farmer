@@ -1,7 +1,7 @@
 import { ControllerBase } from '../base/Controller';
 
 export class StreamElementsPointsController extends ControllerBase {
-    async updatePoints(accountId: string, channelId: string, points: number) {
+    async updatePoints(accountId: string, channelId: string, points: number, rank:number) {
         const hasPointsInDb = await this.dd.database
             .db('streamelements_points')
             .where({ accountId, channelId })
@@ -10,9 +10,9 @@ export class StreamElementsPointsController extends ControllerBase {
             await this.dd.database
                 .db('streamelements_points')
                 .where({ accountId, channelId })
-                .update({ value: points });
+                .update({ value: points, rank });
         } else {
-            await this.dd.database.db('streamelements_points').insert({ accountId, channelId, value: points });
+            await this.dd.database.db('streamelements_points').insert({ accountId, channelId, value: points, rank });
         }
     }
 
@@ -21,10 +21,12 @@ export class StreamElementsPointsController extends ControllerBase {
         if (pointsInDb) {
             return {
                 points: pointsInDb.value as number,
+                rank: pointsInDb.rank as number
             };
         } else {
             return {
                 points: 0,
+                rank: 0
             };
         }
     }

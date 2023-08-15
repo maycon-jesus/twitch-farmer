@@ -9,7 +9,11 @@ export const useResgatador = defineStore('resgatador', {
     state(): {
         channels: ChannelResume[]
         accounts: AccountResume[]
-        accountsPoints: Record<string, number>
+        accountsPoints: Record<string, {
+            rank: number,
+            points: number
+        }>
+        accountsRanks: Record<string, number>
         storeItems: any[],
         loaded: {
             accountsPoints: boolean,
@@ -24,6 +28,7 @@ export const useResgatador = defineStore('resgatador', {
             channels: [],
             accounts: [],
             accountsPoints: {},
+            accountsRanks: {},
             storeItems: [],
             loaded: {
                 accountsPoints: false,

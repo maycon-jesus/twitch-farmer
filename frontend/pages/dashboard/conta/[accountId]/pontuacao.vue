@@ -43,6 +43,13 @@
                             <v-list-item-title>Pontos</v-list-item-title>
                             <v-list-item-subtitle>{{ channelsPoints[channel.id] }}</v-list-item-subtitle>
                         </v-list-item>
+                        <v-list-item>
+                            <template v-slot:prepend>
+                                <v-icon :icon="iconCoin"></v-icon>
+                            </template>
+                            <v-list-item-title>Rank</v-list-item-title>
+                            <v-list-item-subtitle>{{ channelsRanks[channel.id] }}</v-list-item-subtitle>
+                        </v-list-item>
                     </v-list>
                 </v-card-text>
                 <v-card-actions>
@@ -79,6 +86,9 @@ const accountId = route.params.accountId
 const channelsPoints = ref<{
     [channelId: string]: number
 }>({})
+const channelsRanks = ref<{
+    [channelId: string]: number
+}>({})
 const search = ref('')
 
 const loadAccountPoints = (channelId: string) => {
@@ -86,6 +96,7 @@ const loadAccountPoints = (channelId: string) => {
     api(`/twitch-channels/${channelId}/${accountId}/points`)
         .then((data: any) => {
             channelsPoints.value[channelId] = data.points as any
+            channelsRanks.value[channelId] = data.rank as any
         })
         .catch(() => {
             channelsPoints.value[channelId] = 0

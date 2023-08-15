@@ -79,11 +79,13 @@ export class StreamElementsApiController extends ControllerBase {
                 }
             );
             return {
-                points: data.data.points as number
+                points: data.data.points as number,
+                rank: data.data.rank as number,
             };
         } catch {
             return {
-                points: 0
+                points: 0,
+                rank: 1
             };
         }
     }

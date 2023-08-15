@@ -22,7 +22,14 @@
                                 <v-icon :icon="iconCoin"></v-icon>
                             </template>
                             <v-list-item-title>Pontos</v-list-item-title>
-                            <v-list-item-subtitle>{{ twitchChannel.accountsPoints[account.id] }}</v-list-item-subtitle>
+                            <v-list-item-subtitle>{{ twitchChannel.accountsPoints[account.id]?.points }}</v-list-item-subtitle>
+                        </v-list-item>
+                        <v-list-item>
+                            <template v-slot:prepend>
+                                <v-icon :icon="iconCoin"></v-icon>
+                            </template>
+                            <v-list-item-title>Rank</v-list-item-title>
+                            <v-list-item-subtitle>{{ twitchChannel.accountsPoints[account.id]?.rank }}</v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
                 </v-card-text>
@@ -52,20 +59,13 @@ const twitchChannel = useTwitchChannel()
 const route = useRoute()
 
 const accountsInOrder = computed(() => {
+    if(!twitchChannel.loaded.accountsPoints)return twitchChannel.accounts
     return twitchChannel.accounts.sort((a, b) => {
-        const aPoints = twitchChannel.accountsPoints[a.id] || 0
-        const bPoints = twitchChannel.accountsPoints[b.id] || 0
+        const aPoints = twitchChannel.accountsPoints[a.id].points || 0
+        const bPoints = twitchChannel.accountsPoints[b.id].points || 0
         return bPoints - aPoints
     })
 })
 
-watch(
-    () => twitchChannel.accounts,
-    () => {
-        twitchChannel.loadAccountsPoints(route.params.channelId as string)
-    },
-    {
-        immediate: true,
-    }
-)
+twitchChannel.loadAccountsPoints(route.params.channelId as string)
 </script>
