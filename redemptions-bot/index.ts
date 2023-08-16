@@ -5,6 +5,7 @@ import {WebShareProxyModule} from "./modules/WebShareProxy";
 
 dotenv.config()
 
+const wss = new WebSocket("wss://realtime.streamelements.com/socket.io/?cluster=main&EIO=3&transport=websocket", {})
 const webShareProxy = new WebShareProxyModule()
 
 let ping = 0
@@ -94,6 +95,14 @@ function updateQueue() {
         .then(rQueue => {
             queue = rQueue.data.items
             channels = rQueue.data.channels
+
+            if(wss.readyState === wss.OPEN){
+                channels.forEach((channel,index)=>{
+                    setTimeout(()=>{
+                        wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
+                    },index*1000)
+                })
+            }
         })
         .finally(() => {
             setTimeout(() => {
@@ -104,27 +113,22 @@ function updateQueue() {
 
 updateQueue()
 
-const wss = new WebSocket("wss://realtime.streamelements.com/socket.io/?cluster=main&EIO=3&transport=websocket", {})
-
 wss.on('open', () => {
     console.log('OPen')
     const interval = setInterval(function () {
         wss.send('2');
-        channels.forEach((channel,index) => {
-            setTimeout(()=>{
-                wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
-            },index*1000)
-        })
     }, 15000)
 
-    channels.forEach(channel => {
-        wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
+    channels.forEach((channel,index)=>{
+        setTimeout(()=>{
+            wss.send(`420["subscribe",{"room":"store::${channel}"}]`)
+        },index*1000)
     })
 
     wss.once('close', () => {
         console.log('Exit process')
-        // process.exit()
         clearInterval(interval)
+        process.exit()
     })
 })
 
