@@ -165,7 +165,6 @@ const transformSecondsInHumanTime = (time: number) => {
 }
 
 const accountsCanBuy = computed(() => {
-
     const a = twitchChannel.accountsCanBuy(props.item.cost).sort((a, b) => {
         const aPoints = twitchChannel.accountsPoints[a.id].points || 0
         const bPoints = twitchChannel.accountsPoints[b.id].points || 0

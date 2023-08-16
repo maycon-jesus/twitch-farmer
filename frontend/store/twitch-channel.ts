@@ -102,9 +102,11 @@ export const useTwitchChannel = defineStore('twitch-channel', {
             const accounts = this.accounts
             const b = Object.entries(this.accountsPoints)
                 .filter((a) => {
-                    return a[1] >= cost
+                    return a[1].points >= cost
                 })
-                .map((b) => accounts.find((a) => a.id === b[0]))
+                .map((b) => {
+                    return accounts.find((a) => a.id === b[0])
+                })
                 .filter((a) => !!a) as AccountResume[]
             return b
         },
