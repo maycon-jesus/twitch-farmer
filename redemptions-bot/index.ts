@@ -147,7 +147,7 @@ wss.on('message', (m) => {
             }
         } = JSON.parse(data.slice(2))[1]
         if (!datajson) return
-        console.log(dataJson)
+        console.log(datajson)
         const queueList = queue[datajson.itemId]
         if (!queueList || queueList.length <= 0) return;
         const hasStock = !!datajson.data.quantity.current || datajson.data.quantity.total === -1;
