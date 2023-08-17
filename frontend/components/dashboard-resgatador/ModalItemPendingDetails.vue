@@ -33,7 +33,9 @@
                 <v-window-item value="form">
                     <v-card-text>
                         <v-list>
-                            <v-list-item v-for="(campo,index) in $props.item.inputs" :title="`Campo ${index+1}`" :key="index" :subtitle="campo"></v-list-item>
+                            <v-list-item v-for="(campo,index) in $props.item.inputs" :title="`Campo ${index+1}`" :key="index">
+                                <v-list-item-subtitle class="break">{{campo}}</v-list-item-subtitle>
+                            </v-list-item>
                         </v-list>
                     </v-card-text>
                 </v-window-item>
