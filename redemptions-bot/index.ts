@@ -84,8 +84,10 @@ async function enableResgate(itemId: string, force?: boolean) {
 }
 
 async function disableTempResgate(itemId: string, time: number) {
+    console.log('Esperar 2')
     queueRunEnabled[itemId] = "wait"
     setTimeout(() => {
+        console.log('Finalizar fila')
         enableResgate(itemId)
     }, time * 1000)
 }
@@ -167,6 +169,7 @@ wss.on('message', (m) => {
         }
 
         if (datajson.data.enabled === undefined && hasStock) {
+            console.log('Esperar 1')
             const item = queueList[0]
             disableTempResgate(datajson.itemId, item.cooldownGlobal-ping/1000).then(() => {
             }).catch(() => {
