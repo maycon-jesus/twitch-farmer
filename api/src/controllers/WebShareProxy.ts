@@ -69,4 +69,16 @@ export class WebShareProxyController extends ControllerBase {
             protocol: 'http',
         };
     }
+
+    transformToAxios(proxy: WebShareProxy):AxiosRequestConfig['proxy']{
+        return {
+            host: proxy.proxyAddress,
+            port: proxy.port,
+            auth: {
+                username: proxy.username,
+                password: proxy.password,
+            },
+            protocol: 'http',
+        };
+    }
 }

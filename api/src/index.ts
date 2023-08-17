@@ -24,6 +24,8 @@ import { StreamElementsItemsController } from './controllers/StreamElementsItems
 import { StreamElementsRedemptions } from './controllers/StreamElementsRedemptions';
 import { StreamElementsRedemptionsUpdater } from './services/StreamElementsRedemptionsUpdater';
 import { StreamElementsRedemptionsQueue } from './controllers/StreamElementsRedemptionsQueue';
+import { ProxyListPingController } from './controllers/ProxyListPing';
+import { ProxyPingUpdaterService } from './services/ProxyPingUpdater';
 
 dotenv.config({
     path: './.env',
@@ -77,6 +79,8 @@ function loadControllers() {
     const streamElementsRedemptionsQueue = new StreamElementsRedemptionsQueue()
     setDependency('streamElementsRedemptionsQueue', streamElementsRedemptionsQueue)
 
+    const proxyListPing = new ProxyListPingController()
+    setDependency('proxyListPing', proxyListPing)
 
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);
@@ -87,6 +91,7 @@ function loadControllers() {
     new StreamElementsPointsUpdaterService();
     new StreamElementsItemsUpdaterService();
     new StreamElementsRedemptionsUpdater()
+    new ProxyPingUpdaterService()
 }
 
 database.runMigrations().then(() => {

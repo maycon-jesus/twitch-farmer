@@ -16,6 +16,7 @@ import { StreamElementsPointsController } from '../controllers/StreamElementsPoi
 import { StreamElementsItemsController } from '../controllers/StreamElementsItems';
 import { StreamElementsRedemptions } from '../controllers/StreamElementsRedemptions';
 import { StreamElementsRedemptionsQueue } from '../controllers/StreamElementsRedemptionsQueue';
+import { ProxyListPingController } from '../controllers/ProxyListPing';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -34,6 +35,7 @@ export interface IDependencys {
     streamElementsItems: StreamElementsItemsController;
     streamElementsRedemptions: StreamElementsRedemptions
     streamElementsRedemptionsQueue: StreamElementsRedemptionsQueue
+    proxyListPing: ProxyListPingController,
     services: {
         twitchRefreshToken: TwitchRefreshTokensService;
         twitchBot: TwitchBotService;
