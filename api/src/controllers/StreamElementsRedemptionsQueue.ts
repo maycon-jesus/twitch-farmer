@@ -123,4 +123,12 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
     async deleteItem(itemId:string){
         await this.dd.database.db('streamelements_redemptions_queue').where({id: itemId}).del()
     }
+
+    async deleteItemsByChannelId(channelId:string){
+        await this.dd.database.db('streamelements_redemptions_queue').where({channelId}).del()
+    }
+
+    async deleteItemsByAccountId(accountId:string){
+        await this.dd.database.db('streamelements_redemptions_queue').where({accountId}).del()
+    }
 }

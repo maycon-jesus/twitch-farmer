@@ -63,6 +63,7 @@ export class TwitchChannelsController extends ControllerBase {
     async removeChannel(channelId: string) {
         await this.dd.streamElementsPoints.deleteByChannelId(channelId)
         await this.dd.streamElementsRedemptions.deleteRedemptionsByChannelId(channelId)
+        await this.dd.streamElementsRedemptionsQueue.deleteItemsByChannelId(channelId)
         await this.dd.database.db('twitch_channels').where({ id: channelId }).del();
     }
 

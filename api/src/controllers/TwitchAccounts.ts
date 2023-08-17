@@ -105,6 +105,7 @@ export class TwitchAccountsController extends ControllerBase {
     async deleteAccount(accountId: string) {
         await this.dd.streamElementsPoints.deleteByAccountId(accountId)
         await this.dd.streamElementsRedemptions.deleteRedemptionsByAccountId(accountId)
+        await this.dd.streamElementsRedemptionsQueue.deleteItemsByAccountId(accountId)
         await this.dd.database.db('twitch_accounts').where({ id: accountId }).del();
     }
 
