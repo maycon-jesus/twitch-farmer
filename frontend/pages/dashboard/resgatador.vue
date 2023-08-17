@@ -31,31 +31,33 @@
                                     <span class="text-body-1 ml-2">{{ item.channel.displayName }}</span>
                                 </v-expansion-panel-title>
                                 <v-expansion-panel-text>
-                                    <v-list>
-                                        <v-list-item v-for="itemItem in item.items"
-                                                     :key="itemItem.id"
-                                                     title="">
-                                            <v-list-item-title>{{ itemItem.item.name }}</v-list-item-title>
-                                            <v-list-item-subtitle>
-                                                <v-chip :prepend-avatar="itemItem.account.profileImageUrl"
-                                                        :text="itemItem.account.displayName"
-                                                        :to="{
+                                    <div class="d-flex gap-2 flex-column">
+                                        <v-card v-for="itemItem in item.items"
+                                                :key="itemItem.id" variant="outlined" >
+                                            <v-card-title>{{itemItem.item.name}}</v-card-title>
+                                            <v-card-text>
+                                               <v-chip-group>
+                                                   <v-chip :prepend-avatar="itemItem.account.profileImageUrl"
+                                                           :text="itemItem.account.displayName"
+                                                           :to="{
                                                                 name: 'dashboard-conta-accountId',
                                                                 params: {
                                                                     accountId: itemItem.accountId
                                                                 }
                                                             }"></v-chip>
-                                                <v-chip
-                                                    :prepend-icon="iconQueue"
-                                                    class="ml-2"
-                                                        :text="`Posição: ${itemItem.queuePosition}`"
-                                                        ></v-chip>
-                                            </v-list-item-subtitle>
-                                            <template #append>
-                                                <v-btn :icon="iconDelete" variant="text" @click="openModalRemove(itemItem)"></v-btn>
-                                            </template>
-                                        </v-list-item>
-                                    </v-list>
+                                                   <v-chip
+                                                       :prepend-icon="iconQueue"
+                                                       :text="`Posição: ${itemItem.queuePosition}`"
+                                                   ></v-chip>
+                                               </v-chip-group>
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn variant="text" @click="openModalRemove(itemItem)" color="error">Remover</v-btn>
+                                                <v-btn variant="text" @click="onModalPendingItemDetails(itemItem)">Detalhes</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </div>
                                 </v-expansion-panel-text>
                             </v-expansion-panel>
                         </v-expansion-panels>
@@ -72,6 +74,7 @@
             <dashboard-resgatador-modal-add-item @on-close="openModal=false"  @item-added="updateItemsPending()" />
         </v-dialog>
         <dashboard-resgatador-modal-remove-item v-model="openModalRemoveItem" v-bind="modalRemoveItemData" @item-removed="updateItemsPending()" />
+        <dashboard-resgatador-modal-item-pending-details v-model="openModalPendingItemDetails" v-bind="{item:modalPendingItemDetails}" />
     </v-container>
 </template>
 
@@ -82,36 +85,7 @@ import chevronUp from '~icons/mdi/chevron-up'
 import iconQueue from '~icons/fluent/people-queue-20-filled'
 import iconDelete from '~icons/typcn/delete'
 import iconError from '~icons/material-symbols/error'
-
-type Item = {
-    accountId: string,
-    channelId: string,
-    completed: 0 | 1,
-    createdAt: string,
-    id: string,
-    inputs: string[],
-    item: {
-        name: string,
-        cost: number,
-        subscriberOnly: 0 | 1
-    },
-    channel: {
-        id: string
-        login: string,
-        displayName: string,
-        profileImageUrl: string
-    },
-    account: {
-        id: string
-        login: string,
-        displayName: string,
-        profileImageUrl: string
-    }
-    itemId: string,
-    priority: number,
-    updatedAt: string,
-    queuePosition: number
-}
+import { ResgatadorItem } from '../../types/Resgatador'
 
 definePageMeta({
     layout: 'dashboard',
@@ -132,7 +106,9 @@ const modalRemoveItemData = ref({
     itemId: '',
     itemName: ''
 })
-const itemsList = ref<Item[]>([])
+const openModalPendingItemDetails = ref(false)
+const modalPendingItemDetails = ref<null|ResgatadorItem>(null)
+const itemsList = ref<ResgatadorItem[]>([])
 
 const itemsComputed = computed(() => {
     return itemsList.value.reduce<{ channel: Item['channel'], items: Item[] }[]>((p, v) => {
@@ -168,11 +144,27 @@ const updateItemsPending = ()=>{
 }
 updateItemsPending()
 
-const openModalRemove = (item:Item)=>{
+const openModalRemove = (item:ResgatadorItem)=>{
     openModalRemoveItem.value=true
     modalRemoveItemData.value={
         itemName: item.item.name,
         itemId: item.id
     }
 }
+
+const onModalPendingItemDetails = (item:ResgatadorItem)=>{
+    openModalPendingItemDetails.value=true
+    modalPendingItemDetails.value=item
+}
 </script>
+
+<style scoped>
+.break {
+    -webkit-line-clamp: unset !important;
+    white-space: unset;
+}
+
+.gap-2{
+    gap: 12px;
+}
+</style>

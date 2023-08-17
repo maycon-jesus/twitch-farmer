@@ -43,6 +43,13 @@
       "description": "Abrir bot de resgates",
       "url": "/dashboard/resgatador",
       "icons": [{ "src": "assets/icons/192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Bot de resgates",
+      "short_name": "Bot de resgates",
+      "description": "Abrir bot de resgates",
+      "url": "/dashboard/resgatador",
+      "icons": [{ "src": "assets/icons/192.png", "sizes": "192x192" }]
     }
   ],
   "url_handlers": [
