@@ -27,7 +27,6 @@ let channels: string[] = []
 const queueRunEnabled: Record<string, "stop" | "run" | "wait"> = {}
 
 async function enableResgate(itemId: string, force?: boolean) {
-    if (queueRunEnabled[itemId] === "wait") return;
     if (queueRunEnabled[itemId] === "run") return;
     console.log('Ligando fila')
 
