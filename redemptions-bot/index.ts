@@ -28,6 +28,7 @@ const queueRunEnabled: Record<string, "stop" | "run" | "wait"> = {}
 
 async function enableResgate(itemId: string, force?: boolean) {
     if (queueRunEnabled[itemId] === "run") return;
+    if (queueRunEnabled[itemId] === "wait" && !force) return;
     console.log('Ligando fila')
 
     queueRunEnabled[itemId] = "run"
@@ -87,7 +88,7 @@ async function disableTempResgate(itemId: string, time: number) {
     queueRunEnabled[itemId] = "wait"
     setTimeout(() => {
         console.log('Finalizar fila')
-        enableResgate(itemId)
+        enableResgate(itemId, true)
     }, time * 1000)
 }
 
