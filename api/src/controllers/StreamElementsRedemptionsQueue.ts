@@ -9,6 +9,8 @@ interface StreamElementsRedemptionQueue {
     channelId:string,
     ownerId:string,
     completed:0|1,
+    error: 0|1,
+    errorReason: string|null,
     priority:number,
     createdAt: string,
     updatedAt:string

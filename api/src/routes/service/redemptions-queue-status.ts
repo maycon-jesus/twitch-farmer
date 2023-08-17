@@ -25,10 +25,19 @@ export default class RouteRedemptionsQueueStatus extends RouteBase {
                         type: 'form_validation',
                         errors: body.error.errors
                     });
+                const registry = await this.dd.streamElementsRedemptionsQueue.getItemFromQueue({
+                    id: itemId
+                })
+                if(!registry) throw new ErrorMaker({
+                    type: 'not_found',
+                    errors: [{message:'Registro não encontrado!'}]
+                })
+                if(registry.completed && !registry.error) return res.json({})
                 await this.dd.streamElementsRedemptionsQueue.setItemStatus({
                     itemId,
                     ...body.data
                 })
+                res.json({})
             } catch (e: any) {
                 console.log(e);
                 const err = ErrorToResponse(e);
