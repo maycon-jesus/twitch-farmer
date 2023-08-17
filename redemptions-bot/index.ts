@@ -170,7 +170,7 @@ wss.on('message', (m) => {
         if (datajson.data.enabled === undefined && hasStock) {
             console.log('Esperar 1')
             const item = queueList[0]
-            disableTempResgate(datajson.itemId, item.cooldownGlobal-(ping/1000)+0.5).then(() => {
+            disableTempResgate(datajson.itemId, item.cooldownGlobal-(ping/1000)-0.5).then(() => {
             }).catch(() => {
             })
         }
