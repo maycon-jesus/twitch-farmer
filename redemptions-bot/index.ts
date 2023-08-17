@@ -168,7 +168,7 @@ wss.on('message', (m) => {
 
         if (datajson.data.enabled === undefined && hasStock) {
             const item = queueList[0]
-            disableTempResgate(datajson.itemId, item.cooldownGlobal-(ping+200)/1000).then(() => {
+            disableTempResgate(datajson.itemId, item.cooldownGlobal-ping/1000).then(() => {
             }).catch(() => {
             })
         }
