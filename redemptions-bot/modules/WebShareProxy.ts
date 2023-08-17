@@ -29,7 +29,8 @@ export class WebShareProxyModule {
                     Authorization: 'Token ' + process.env.WEBSHARE_PROXY_API_KEY,
                 },
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e.response)
                 throw new Error('Ocorreu um erro ao carregar os proxys');
             });
         this.proxyList.push(
