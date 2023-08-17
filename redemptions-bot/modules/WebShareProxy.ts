@@ -23,7 +23,7 @@ export class WebShareProxyModule {
                 params: {
                     mode: 'direct',
                     page,
-                    page_size: 2,
+                    page_size: 25,
                 },
                 headers: {
                     Authorization: 'Token ' + process.env.WEBSHARE_PROXY_API_KEY,
@@ -48,7 +48,9 @@ export class WebShareProxyModule {
         );
 
         if (proxys.data.next) {
-            await this.loadProxys(page + 1);
+            setTimeout(()=>{
+                this.loadProxys(page + 1).then(()=>{}).catch(()=>{});
+            },1000)
         }
     }
 
