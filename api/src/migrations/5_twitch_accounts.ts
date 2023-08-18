@@ -24,8 +24,8 @@ export async function up(knex: Knex): Promise<void> {
         table.foreign('ownerId').references('users.id');
 
         // Meta
-        table.tinyint('banned', 1);
-        table.tinyint('tokenInvalid', 1);
+        table.tinyint('banned', 1).notNullable().defaultTo(0);
+        table.tinyint('tokenInvalid', 1).notNullable().defaultTo(0);
     });
 }
 

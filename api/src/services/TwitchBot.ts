@@ -92,6 +92,7 @@ export class TwitchBotService extends ServiceBase {
                 removeTokenInvalid: true,
             },
         });
+
         for (const account of accounts) {
             const channelsCache = this.channelsCache.get<string[]>(account.ownerId);
             if (channelsCache) {

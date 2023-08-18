@@ -11,6 +11,7 @@ export class DeleteTwitchChannelRoute extends RouteBase {
                 await this.dd.services.twitchBot.leaveChannelForUserAccounts(req.jwt.userId, channel.login);
                 res.json({ success: true });
             } catch (e: any) {
+                console.log(e)
                 const err = ErrorToResponse(e);
                 res.status(err.status).json(err.error);
             }

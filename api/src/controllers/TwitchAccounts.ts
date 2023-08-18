@@ -175,11 +175,11 @@ export class TwitchAccountsController extends ControllerBase {
             hasStreamElementsToken?:boolean
         };
     }): Promise<TwitchAccount[]> {
-        return this.dd.database
+        return await this.dd.database
             .db('twitch_accounts')
             .where((queryBuilder) => {
                 if (params.ownerId) {
-                    queryBuilder.where({ ownerId: params.ownerId });
+                    queryBuilder.andWhere({ ownerId: params.ownerId });
                 }
                 if (params.orderBy) {
                     queryBuilder.orderBy(params.orderBy, params.sort);
@@ -191,10 +191,10 @@ export class TwitchAccountsController extends ControllerBase {
                         queryBuilder.andWhere('tokenExpiresAt', '<=', dateExpires);
                     }
                     if (filters.removeBanned) {
-                        queryBuilder.andWhere({ banned: 0 }).orWhereNull('banned');
+                        queryBuilder.andWhere({ banned: 0 });
                     }
                     if (filters.removeTokenInvalid) {
-                        queryBuilder.andWhere({ tokenInvalid: 0 }).orWhereNull('tokenInvalid');
+                        queryBuilder.andWhere({ tokenInvalid: 0 });
                     }
                     if(filters.hasStreamElementsToken){
                         queryBuilder.whereNotNull('streamElementsToken')
