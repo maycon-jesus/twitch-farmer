@@ -54,7 +54,7 @@ export class WebShareProxyController extends ControllerBase {
 
         if (proxys.data.next) {
            setTimeout(()=>{
-               await this.loadProxys(page + 1);
+               this.loadProxys(page + 1).then(()=>{}).catch(()=>{});
            }, 1000)
         }
     }
