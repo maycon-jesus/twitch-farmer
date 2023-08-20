@@ -21,7 +21,7 @@ export default class RouteListMyItems extends RouteBase {
     run() {
         this.router.get('/', async (req, res) => {
             try {
-                const items: any[] = await this.dd.streamElementsRedemptionsQueue.listItemsFromQueue({
+                const itemsPending: any[] = await this.dd.streamElementsRedemptionsQueue.listItemsFromQueue({
                     ownerId: req.jwt.userId,
                     completed: false,
                     order: {
@@ -29,7 +29,7 @@ export default class RouteListMyItems extends RouteBase {
                         sort: 'desc'
                     }
                 });
-                for(const item of items){
+                for(const item of itemsPending){
                     const channel = await this.dd.twitchChannels.getChannel(item.channelId)
                     item.channel = {
                         id: channel.id,
@@ -59,7 +59,49 @@ export default class RouteListMyItems extends RouteBase {
                     const queuePosition = await this.dd.streamElementsRedemptionsQueue.getItemQueuePosition(item.itemId,item.id)
                     item.queuePosition = queuePosition
                 }
-                res.json(items);
+
+                const itemsCompleted: any[] = await this.dd.streamElementsRedemptionsQueue.listItemsFromQueue({
+                    ownerId: req.jwt.userId,
+                    completed: true,
+                    order: {
+                        by: 'createdAt',
+                        sort: 'desc'
+                    }
+                });
+                for(const item of itemsCompleted){
+                    const channel = await this.dd.twitchChannels.getChannel(item.channelId)
+                    item.channel = {
+                        id: channel.id,
+                        login: channel.login,
+                        displayName: channel.displayName,
+                        profileImageUrl: channel.profileImageUrl
+                    }
+                    const account = await this.dd.twitchAccounts.getAccountById(item.accountId)
+                    item.account = {
+                        id: account.id,
+                        login: account.login,
+                        displayName: account.displayName,
+                        profileImageUrl: account.profileImageUrl
+                    }
+                    item.inputs = JSON.parse(item.inputs)
+                    const it = await this.dd.streamElementsItems.getItem(item.itemId)
+                    if(!it) throw new ErrorMaker({
+                        type: 'not_found',
+                        errors: [{message: 'Item não encontrado!'}]
+                    })
+                    item.item = {
+                        name: it.name,
+                        cost: it.cost,
+                        subscriberOnly: it.subscriberOnly
+                    }
+
+                    const queuePosition = await this.dd.streamElementsRedemptionsQueue.getItemQueuePosition(item.itemId,item.id)
+                    item.queuePosition = queuePosition
+                }
+                res.json({
+                    itemsPending: itemsPending,
+                    itemsCompleted: itemsCompleted
+                });
             } catch (e: any) {
                 console.log(e);
                 const err = ErrorToResponse(e);

@@ -3,6 +3,11 @@
         <v-card-title>Adiciona para resgatar</v-card-title>
         <v-form @submit.prevent="onSubmit" v-model="formValid" :disabled="loading">
             <v-container>
+                <v-row v-if="apiError">
+                    <v-col cols="12">
+                        <v-alert type="error" :icon="iconError">{{apiError}}</v-alert>
+                    </v-col>
+                </v-row>
                 <v-row>
                     <v-col cols="12">
                         <v-autocomplete label="Canal"
@@ -124,6 +129,7 @@
 import { useResgatador } from '../../store/resgatador'
 import iconCoin from '~icons/pixelarticons/coin'
 import iconQueue from '~icons/fluent/people-queue-20-filled'
+import iconError from '~icons/material-symbols/error'
 
 const emits = defineEmits<{
     (ev: 'onClose'): void
@@ -157,6 +163,8 @@ const validateAccountId = (value: string) => {
 const onSubmit = () => {
     if (!formValid) return
     loading.value = true
+    apiError.value=null
+
     $api('/redemptions-bot/add-item', {
         method: 'post',
         body: {

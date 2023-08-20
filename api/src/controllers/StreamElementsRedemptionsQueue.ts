@@ -40,12 +40,14 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
             by: 'priority'|'createdAt',
             sort: 'asc'|'desc'
         },
+        limit?:number,
         orderByRaw?: string
     }): Promise<StreamElementsRedemptionQueue[]>{
         const data = await this.dd.database.db('streamelements_redemptions_queue').where((queryBuilder) => {
             if(filters.itemId) queryBuilder.where({itemId: filters.itemId})
             if(filters.ownerId) queryBuilder.where({ownerId: filters.ownerId})
             if (filters.completed !== undefined) queryBuilder.where({ completed: filters.completed ? 1 : 0 });
+            if(filters.limit) queryBuilder.limit(filters.limit)
         })
             .orderByRaw(filters.orderByRaw||`${filters.order?.by} ${filters.order?.sort}`)
         return data
