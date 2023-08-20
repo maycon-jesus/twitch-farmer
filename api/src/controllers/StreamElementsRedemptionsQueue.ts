@@ -47,9 +47,9 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
             if(filters.itemId) queryBuilder.where({itemId: filters.itemId})
             if(filters.ownerId) queryBuilder.where({ownerId: filters.ownerId})
             if (filters.completed !== undefined) queryBuilder.where({ completed: filters.completed ? 1 : 0 });
-            if(filters.limit) queryBuilder.limit(filters.limit)
         })
             .orderByRaw(filters.orderByRaw||`${filters.order?.by} ${filters.order?.sort}`)
+            .limit(filters.limit||9999999999999)
         return data
     }
 

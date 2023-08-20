@@ -63,6 +63,7 @@ export default class RouteListMyItems extends RouteBase {
                 const itemsCompleted: any[] = await this.dd.streamElementsRedemptionsQueue.listItemsFromQueue({
                     ownerId: req.jwt.userId,
                     completed: true,
+                    limit: 25,
                     order: {
                         by: 'updatedAt',
                         sort: 'desc'
