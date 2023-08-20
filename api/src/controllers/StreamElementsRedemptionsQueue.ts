@@ -37,7 +37,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
         ownerId?: string,
         completed?: boolean
         order?: {
-            by: 'priority'|'createdAt',
+            by: 'priority'|'createdAt'|'updatedAt',
             sort: 'asc'|'desc'
         },
         limit?:number,

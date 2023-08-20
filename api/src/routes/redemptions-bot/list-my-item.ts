@@ -64,7 +64,7 @@ export default class RouteListMyItems extends RouteBase {
                     ownerId: req.jwt.userId,
                     completed: true,
                     order: {
-                        by: 'createdAt',
+                        by: 'updatedAt',
                         sort: 'desc'
                     }
                 });
