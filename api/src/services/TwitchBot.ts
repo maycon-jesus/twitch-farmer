@@ -135,7 +135,7 @@ export class TwitchBotService extends ServiceBase {
             },
         });
         for (const account of accounts) {
-            await this.joinChannel(account.id, username);
+            await this.joinChannel(account.id, username).then(()=>{}).catch(()=>{});
         }
     }
 
@@ -152,7 +152,7 @@ export class TwitchBotService extends ServiceBase {
             },
         });
         for (const account of accounts) {
-            await this.leaveChannel(account.id, username);
+            await this.leaveChannel(account.id, username).then(()=>{}).catch(()=>{});
         }
     }
 
