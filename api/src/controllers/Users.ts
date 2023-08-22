@@ -62,7 +62,7 @@ export class UsersController extends ControllerBase {
         return user;
     }
 
-    async setNtfyTopicName(userId:string, topicName:string){
+    async setNtfyTopicName(userId:string, topicName:string|null){
         await this.dd.database.db('users').where({id: userId}).update({
             ntfyTopicName: topicName
         })

@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export class Route extends RouteBase {
     bodyValidator = z.object({
-        ntfyTopicName: z.string().nonempty('Informe o nome do canal de notificações!')
+        ntfyTopicName: z.string()
     })
     constructor() {
         super({
@@ -20,7 +20,7 @@ export class Route extends RouteBase {
                     type: 'form_validation',
                     errors: body.error.errors
                 })
-                await this.dd.users.setNtfyTopicName(req.jwt.userId, body.data.ntfyTopicName)
+                await this.dd.users.setNtfyTopicName(req.jwt.userId, body.data.ntfyTopicName||null)
                 res.json({success:true})
             } catch (err: any) {
                 const e = ErrorToResponse(err);
