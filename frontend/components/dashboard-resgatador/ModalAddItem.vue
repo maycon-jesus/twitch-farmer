@@ -76,11 +76,12 @@
                 <v-row>
                     <v-col cols="12">
                         <form-select-redemption-accounts v-model="accountsIds"
-                                                         :disabled="!resgatador.loaded.accountsCooldown||!resgatador.loaded.accountsPoints"
+                                                         :disabled="!selectAccountLoaded"
                                                          :accounts="resgatador.accounts"
                                                          :accounts-points="resgatador.accountsPoints"
                                                          :item="resgatador.storeItems.find(i => i.id === itemId)"
                                                          :accountsCooldown="resgatador.accountsCooldown"
+                                                         :accountsInRedemptionBot="resgatador.accountsInRedemptionBot"
                         />
                     </v-col>
                 </v-row>
@@ -180,7 +181,7 @@ const onSubmit = () => {
         method: 'post',
         body: {
             channelId: channelId.value,
-            itemId: itemId.value[0],
+            itemId: itemId.value,
             accountsIds: accountsIds.value,
             inputs: formInputs.value
         }
@@ -211,6 +212,13 @@ const accountsOrder = computed(() => {
     })
 })
 
+const selectAccountLoaded = computed(()=>{
+    console.log('abc', resgatador.loaded)
+    return resgatador.loaded.accountsCooldown
+        && resgatador.loaded.accountsPoints
+        && resgatador.loaded.accountsInRedemptionBot
+})
+
 watch(() => channelId.value, () => {
     itemId.value = null
     accountsIds.value = null
@@ -218,6 +226,7 @@ watch(() => channelId.value, () => {
         resgatador.loadItems(channelId.value)
         resgatador.loadAccountsPoints(channelId.value)
         resgatador.loadAccountsCooldown(channelId.value)
+        resgatador.loadAccountsInRedemptionBot(channelId.value)
     } else {
         resgatador.accountsPoints = {}
         resgatador.storeItems = []

@@ -32,6 +32,9 @@
                             <v-switch label="Mostrar somente contas fora do cooldown"
                                       hide-details
                                       v-model="filterWithNoCooldown"></v-switch>
+                            <v-switch label="Mostrar contas que ja estão no bot"
+                                      hide-details
+                                      v-model="filterShowAccountsInBot"></v-switch>
                         </v-col>
                     </v-row>
                     <v-item-group :multiple="true" v-model="accountsValue">
@@ -103,6 +106,7 @@ const props = defineProps<{
         points: number
     }>
     accountsCooldown: Record<string, number>,
+    accountsInRedemptionBot: {},
     item?: any,
     modelValue: string[]|null,
     disabled?: boolean
@@ -114,6 +118,7 @@ const modalOpen = ref(false)
 const accountsValue = ref<string[]>([])
 const filterWithPoints = ref(true)
 const filterWithNoCooldown = ref(true)
+const filterShowAccountsInBot = ref(false)
 
 const accountsComputed = computed(() => {
     let accounts = props.accounts
@@ -130,6 +135,13 @@ const accountsComputed = computed(() => {
             const lastRedemptionCooldown = props.accountsCooldown[account.id]
             if (!lastRedemptionCooldown) return true
             return lastRedemptionCooldown === 0
+        })
+    }
+
+    if(!filterShowAccountsInBot.value){
+        accounts = accounts.filter(account => {
+            const accountInRedemptionBot = props.accountsInRedemptionBot[account.id]
+            return !accountInRedemptionBot
         })
     }
     return accounts

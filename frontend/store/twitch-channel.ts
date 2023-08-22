@@ -15,12 +15,14 @@ export const useTwitchChannel = defineStore('twitch-channel', {
             points:number
         }>
         accountsCooldown: Record<string, number>,
+        accountsInRedemptionBot: Record<string,boolean>
         accounts: AccountResume[]
         loaded: {
             channel: boolean
             accountsPoints: boolean
             accounts: boolean
             accountsCooldown: boolean
+            accountsInRedemptionBot: boolean
         }
         modalItemDetails: {
             open: boolean
@@ -38,11 +40,13 @@ export const useTwitchChannel = defineStore('twitch-channel', {
             accountsPoints: {},
             accounts: [],
             accountsCooldown: {},
+            accountsInRedemptionBot: {},
             loaded: {
                 channel: false,
                 accountsPoints: false,
                 accounts: false,
-                accountsCooldown: false
+                accountsCooldown: false,
+                accountsInRedemptionBot:false
             },
             modalItemDetails: {
                 open: false,
@@ -115,6 +119,21 @@ export const useTwitchChannel = defineStore('twitch-channel', {
                 })
                 .finally(() => {
                     this.loaded.accountsCooldown = true
+                })
+        },
+        loadAccountsInRedemptionBot(channelId: string) {
+            const api = useApi()
+            this.accountsInRedemptionBot = {}
+            this.loaded.accountsInRedemptionBot = false
+            api(`/twitch-channels/${channelId}/accounts-in-redemption-bot`)
+                .then((data: any) => {
+                    this.accountsInRedemptionBot = data as any
+                })
+                .catch(() => {
+                    this.accountsInRedemptionBot = {}
+                })
+                .finally(() => {
+                    this.loaded.accountsInRedemptionBot = true
                 })
         },
         accountsCanBuy(cost: number): AccountResume[] {

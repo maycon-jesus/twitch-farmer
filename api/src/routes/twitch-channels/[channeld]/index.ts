@@ -7,6 +7,7 @@ import GetChannelRoute from './get-channel';
 import AccountsPoints from './accounts-points';
 import AccountsRanks from './accounts-ranks';
 import AccountsCooldown from './accounts-cooldown';
+import AccountsInRedemptionBotRoute from './accounts-in-redemption-bot';
 
 export class TwitchChannelRoute extends RouteBase {
     constructor() {
@@ -19,6 +20,7 @@ export class TwitchChannelRoute extends RouteBase {
                 new AccountsPoints(),
                 new AccountsRanks(),
                 new AccountsCooldown(),
+                new AccountsInRedemptionBotRoute(),
                 new AccountIdRoute(),
             ],
             middlewares: [new TwitchChannelsMiddleware()]

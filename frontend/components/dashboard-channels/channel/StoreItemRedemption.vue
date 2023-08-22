@@ -25,7 +25,7 @@
                         </v-col>
                     </v-expand-transition>
                     <v-col cols="12" v-if="addToBot">
-                        <form-select-redemption-accounts :disabled="!twitchChannel.loaded.accountsCooldown" v-model="accountsIds" :accounts="accounts" :accounts-points="twitchChannel.accountsPoints" :accounts-cooldown="twitchChannel.accountsCooldown" :item="$props.item"/>
+                        <form-select-redemption-accounts :disabled="!twitchChannel.loaded.accountsCooldown||!twitchChannel.loaded.accountsInRedemptionBot||!twitchChannel.loaded.accountsPoints" v-model="accountsIds" :accounts="accounts" :accounts-points="twitchChannel.accountsPoints" :accounts-in-redemption-bot="twitchChannel.accountsInRedemptionBot" :accounts-cooldown="twitchChannel.accountsCooldown" :item="$props.item"/>
                     </v-col>
                     <v-col cols="12" v-else>
                         <v-autocomplete label="Conta"
@@ -158,6 +158,8 @@ const redemption = () => {
         })
             .then(() => {
                 $toast.success('Item adicionado na fila de resgates!')
+                twitchChannel.loadAccountsInRedemptionBot(twitchChannel.channel?.id)
+                accountsIds.value=[]
             })
             .catch(err => {
                 rescueError.value = err.errors[0].message

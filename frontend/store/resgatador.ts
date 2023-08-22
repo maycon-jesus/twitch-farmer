@@ -14,16 +14,19 @@ export const useResgatador = defineStore('resgatador', {
             points: number
         }>
         accountsCooldown: Record<string, number>,
+        accountsInRedemptionBot: Record<string, boolean>,
         storeItems: any[],
         loaded: {
             accountsPoints: boolean,
             storeItems: boolean
             accountsCooldown: boolean
+            accountsInRedemptionBot:boolean
         },
         loading: {
             accountsPoints: boolean,
             storeItems: boolean
             accountsCooldown: boolean
+            accountsInRedemptionBot:boolean
         }
     } {
         return {
@@ -31,16 +34,19 @@ export const useResgatador = defineStore('resgatador', {
             accounts: [],
             accountsPoints: {},
             accountsCooldown:{},
+            accountsInRedemptionBot: {},
             storeItems: [],
             loaded: {
                 accountsPoints: false,
                 storeItems: false,
-                accountsCooldown: false
+                accountsCooldown: false,
+                accountsInRedemptionBot:false
             },
             loading: {
                 accountsPoints: false,
                 storeItems: false,
-                accountsCooldown: false
+                accountsCooldown: false,
+                accountsInRedemptionBot:false
             }
         }
     },
@@ -137,6 +143,23 @@ export const useResgatador = defineStore('resgatador', {
                 .finally(() => {
                     this.loaded.accountsCooldown = true
                     this.loading.accountsCooldown=false
+                })
+        },
+        loadAccountsInRedemptionBot(channelId: string) {
+            const api = useApi()
+            this.accountsInRedemptionBot = {}
+            this.loaded.accountsInRedemptionBot = false
+            this.loading.accountsInRedemptionBot=true
+            api(`/twitch-channels/${channelId}/accounts-in-redemption-bot`)
+                .then((data: any) => {
+                    this.accountsInRedemptionBot = data as any
+                })
+                .catch(() => {
+                    this.accountsInRedemptionBot = {}
+                })
+                .finally(() => {
+                    this.loaded.accountsInRedemptionBot = true
+                    this.loading.accountsInRedemptionBot=false
                 })
         }
     }
