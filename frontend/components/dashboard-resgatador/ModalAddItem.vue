@@ -84,49 +84,10 @@
                                                          :accountsInRedemptionBot="resgatador.accountsInRedemptionBot"
                         />
                     </v-col>
+                    <v-col cols="12" v-for="(itemInput,index) of itemInputs" :key="index">
+                        <v-text-field :label="itemInput" v-model="formInputs[index]"></v-text-field>
+                    </v-col>
                 </v-row>
-                <!--                <v-row>-->
-                <!--                    <v-col cols="12">-->
-                <!--                        <v-autocomplete label="Conta"-->
-                <!--                                        :items="accountsOrder"-->
-                <!--                                        item-value="id"-->
-                <!--                                        item-title="displayName"-->
-                <!--                                        chips-->
-                <!--                                        v-model="accountId"-->
-                <!--                                        :rules="[validateAccountId]"-->
-                <!--                                        :disabled="!resgatador.loaded.accountsPoints||!channelId"-->
-                <!--                                        :loading="resgatador.loading.accountsPoints"-->
-                <!--                                        no-data-text="Nenhuma conta encontrada!">-->
-                <!--                            <template #item="{props,item}">-->
-                <!--                                <v-list-item v-bind="props" :prepend-avatar="item.raw.profileImageUrl" title="">-->
-                <!--                                    <v-list-item-title>-->
-                <!--                                        {{ item.raw.displayName }}-->
-                <!--                                    </v-list-item-title>-->
-                <!--                                    <v-list-item-subtitle>-->
-                <!--                                        <v-chip :prepend-icon="iconCoin">-->
-                <!--                                            {{ resgatador.accountsPoints[item.raw.id].points }}-->
-                <!--                                        </v-chip>-->
-                <!--                                    </v-list-item-subtitle>-->
-                <!--                                </v-list-item>-->
-                <!--                            </template>-->
-                <!--                            <template #chip="{props,item}">-->
-                <!--                                <v-chip-->
-                <!--                                    v-bind="props"-->
-                <!--                                    :prepend-avatar="item.raw.profileImageUrl" :text="item.raw.displayName"-->
-                <!--                                ></v-chip>-->
-                <!--                                <v-chip-->
-                <!--                                    class="ml-2"-->
-                <!--                                    v-bind="props"-->
-                <!--                                    :prepend-icon="iconCoin"-->
-                <!--                                    :text="(resgatador.accountsPoints[item.raw.id].points).toString()"-->
-                <!--                                ></v-chip>-->
-                <!--                            </template>-->
-                <!--                        </v-autocomplete>-->
-                <!--                    </v-col>-->
-                <!--                    <v-col cols="12" v-for="(itemInput,index) of itemInputs" :key="index">-->
-                <!--                        <v-text-field :label="itemInput" v-model="formInputs[index]"></v-text-field>-->
-                <!--                    </v-col>-->
-                <!--                </v-row>-->
             </v-container>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -212,7 +173,7 @@ const accountsOrder = computed(() => {
     })
 })
 
-const selectAccountLoaded = computed(()=>{
+const selectAccountLoaded = computed(() => {
     console.log('abc', resgatador.loaded)
     return resgatador.loaded.accountsCooldown
         && resgatador.loaded.accountsPoints
