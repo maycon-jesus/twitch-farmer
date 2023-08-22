@@ -21,7 +21,7 @@ export async function up(knex: Knex): Promise<void> {
 
         table.integer('quantityTotal').notNullable();
         table.integer('quantityCurrent').notNullable();
-        table.text('inputs').notNullable().defaultTo("[]");
+        table.text('inputs').notNullable();
 
         table.dateTime('createdAt').notNullable();
         table.dateTime('updatedAt').notNullable();

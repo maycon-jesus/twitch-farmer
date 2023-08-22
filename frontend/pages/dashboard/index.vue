@@ -38,6 +38,12 @@
                         description="Configure seu bot de resgates automatizado"
                         title="Resgatador automático"
                     />
+                    <DashboardHomePageCard
+                        :icon="iconSettings"
+                        :to="{ name: 'dashboard-configuracoes' }"
+                        description="Configure sua conta"
+                        title="Configurações"
+                    />
 <!--                    <DashboardHomePageCard-->
 <!--                        :icon="iconTutorial"-->
 <!--                        :to="{ name: 'index' }"-->
@@ -63,8 +69,7 @@ import iconTwitch from '~icons/mdi/twitch' // noinspection TypeScriptCheckImport
 import iconGift from '~icons/mdi/gift' // noinspection TypeScriptCheckImport
 import iconLive from '~icons/solar/play-stream-bold' // noinspection TypeScriptCheckImport
 import iconBot from '~icons/fluent/bot-20-filled' // noinspection TypeScriptCheckImport
-import iconNotes from '~icons/mdi/feature-highlight' // noinspection TypeScriptCheckImport
-import iconTutorial from '~icons/material-symbols/school'
+import iconSettings from '~icons/material-symbols/settings' // noinspection TypeScriptCheckImport
 
 definePageMeta({
     middleware: ['auth'],

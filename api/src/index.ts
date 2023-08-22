@@ -26,6 +26,7 @@ import { StreamElementsRedemptionsUpdater } from './services/StreamElementsRedem
 import { StreamElementsRedemptionsQueue } from './controllers/StreamElementsRedemptionsQueue';
 import { ProxyListPingController } from './controllers/ProxyListPing';
 import { ProxyPingUpdaterService } from './services/ProxyPingUpdater';
+import { NtfyController } from './controllers/Ntfy';
 
 dotenv.config({
     path: './.env',
@@ -87,6 +88,9 @@ function loadControllers() {
 
     const twitchBotService = new TwitchBotService();
     setServiceDependency('twitchBot', twitchBotService);
+
+    const ntfyController = new NtfyController()
+    setDependency('ntfy', ntfyController);
 
     new StreamElementsPointsUpdaterService();
     new StreamElementsItemsUpdaterService();

@@ -41,6 +41,12 @@
                 </template>
                 <v-list-item-title>Convidar amigos</v-list-item-title>
             </v-list-item>
+            <v-list-item :to="{ name: 'dashboard-configuracoes' }" tag="NuxtLink">
+                <template #prepend>
+                    <v-icon :icon="iconSettings"></v-icon>
+                </template>
+                <v-list-item-title>Configurações</v-list-item-title>
+            </v-list-item>
 <!--            <v-list-item href="https://docs.mayconjesus.dev/twitch-farmer/features/notas-de-lancamento" target="_blank">-->
 <!--                <template #prepend>-->
 <!--                    <v-icon :icon="iconNotes"></v-icon>-->
@@ -64,6 +70,7 @@ import iconTwitch from '~icons/mdi/twitch' // noinspection TypeScriptCheckImport
 import iconGift from '~icons/mdi/gift' // noinspection TypeScriptCheckImport
 import iconLive from '~icons/solar/play-stream-bold' // noinspection TypeScriptCheckImport
 import iconBot from '~icons/fluent/bot-20-filled' // noinspection TypeScriptCheckImport
+import iconSettings from '~icons/material-symbols/settings' // noinspection TypeScriptCheckImport
 import iconNotes from '~icons/mdi/feature-highlight' // noinspection TypeScriptCheckImport
 import iconTutorial from '~icons/material-symbols/school'
 import { useUi } from '~/store/ui'

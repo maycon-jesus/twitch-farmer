@@ -35,7 +35,7 @@ async function enableResgate(itemId: string, force?: boolean) {
 
     do {
         const queueOfItem = queue[itemId]
-        if (queueOfItem.length <= 0) {
+        if (!queueOfItem || queueOfItem.length <= 0) {
             queueRunEnabled[itemId] = "stop"
             continue;
         }
@@ -50,12 +50,13 @@ async function enableResgate(itemId: string, force?: boolean) {
             },
             proxy: webShareProxy.getRandomProxyForAxios()
         })
-            .then(async () => {
+            .then(async (response) => {
                 queueOfItem.splice(0, 1)
                 console.log('Resgatado com sucesso!')
                 axios.post(`${process.env.API_URL}/service/redemptions-queue/${item.id}/status`, {
                     completed: true,
-                    error: false
+                    error: false,
+                    accessCode: response.data.accessCode
                 }).then(()=>{}).catch(()=>{})
             })
             .catch(err => {
