@@ -31,6 +31,7 @@ const save = () => {
         },
     })
         .then(() => {
+            userData.userData.ntfyTopicName=ntfyTopicName.value
             $toast.success('Nome do tópico definido com sucesso!')
         })
         .catch((err) => {
