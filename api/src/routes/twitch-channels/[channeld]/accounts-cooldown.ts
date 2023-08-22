@@ -30,11 +30,10 @@ export default class Route extends RouteBase {
                         page: 1
                     }
                 });
-                if (!redemptions.length) {
+                if (!redemptions.length || !redemptions[0].itemId) {
                     datesList[account.id] = 0;
                     continue;
                 }
-                ;
                 const item = await this.dd.streamElementsItems.getItem(redemptions[0].itemId);
                 if (!item) throw new ErrorMaker({
                     type: 'not_found',

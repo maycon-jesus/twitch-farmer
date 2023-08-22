@@ -174,7 +174,6 @@ const accountsOrder = computed(() => {
 })
 
 const selectAccountLoaded = computed(() => {
-    console.log('abc', resgatador.loaded)
     return resgatador.loaded.accountsCooldown
         && resgatador.loaded.accountsPoints
         && resgatador.loaded.accountsInRedemptionBot
