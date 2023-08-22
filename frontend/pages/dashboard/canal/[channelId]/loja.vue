@@ -78,4 +78,5 @@ const itemsInPage = computed(() => {
 })
 
 twitchChannel.loadAccountsPoints(route.params.channelId as string)
+twitchChannel.loadAccountsCooldown(route.params.channelId as string)
 </script>

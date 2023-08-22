@@ -13,30 +13,34 @@ export const useResgatador = defineStore('resgatador', {
             rank: number,
             points: number
         }>
-        accountsRanks: Record<string, number>
+        accountsCooldown: Record<string, number>,
         storeItems: any[],
         loaded: {
             accountsPoints: boolean,
             storeItems: boolean
+            accountsCooldown: boolean
         },
         loading: {
             accountsPoints: boolean,
             storeItems: boolean
+            accountsCooldown: boolean
         }
     } {
         return {
             channels: [],
             accounts: [],
             accountsPoints: {},
-            accountsRanks: {},
+            accountsCooldown:{},
             storeItems: [],
             loaded: {
                 accountsPoints: false,
-                storeItems: false
+                storeItems: false,
+                accountsCooldown: false
             },
             loading: {
                 accountsPoints: false,
-                storeItems: false
+                storeItems: false,
+                accountsCooldown: false
             }
         }
     },
@@ -116,6 +120,23 @@ export const useResgatador = defineStore('resgatador', {
                 .finally(() => {
                         this.loaded.accountsPoints = true
                         this.loading.accountsPoints=false
+                })
+        },
+        loadAccountsCooldown(channelId: string) {
+            const api = useApi()
+            this.accountsCooldown = {}
+            this.loaded.accountsCooldown = false
+            this.loading.accountsCooldown=true
+            api(`/twitch-channels/${channelId}/accounts-cooldown`)
+                .then((data: any) => {
+                    this.accountsCooldown = data as any
+                })
+                .catch(() => {
+                    this.accountsCooldown = {}
+                })
+                .finally(() => {
+                    this.loaded.accountsCooldown = true
+                    this.loading.accountsCooldown=false
                 })
         }
     }

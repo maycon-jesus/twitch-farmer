@@ -5,7 +5,7 @@
             <v-container>
                 <v-row v-if="apiError">
                     <v-col cols="12">
-                        <v-alert type="error" :icon="iconError">{{apiError}}</v-alert>
+                        <v-alert type="error" :icon="iconError">{{ apiError }}</v-alert>
                     </v-col>
                 </v-row>
                 <v-row>
@@ -75,46 +75,57 @@
                 </v-row>
                 <v-row>
                     <v-col cols="12">
-                        <v-autocomplete label="Conta"
-                                        :items="accountsOrder"
-                                        item-value="id"
-                                        item-title="displayName"
-                                        chips
-                                        v-model="accountId"
-                                        :rules="[validateAccountId]"
-                                        :disabled="!resgatador.loaded.accountsPoints||!channelId"
-                                        :loading="resgatador.loading.accountsPoints"
-                                        no-data-text="Nenhuma conta encontrada!">
-                            <template #item="{props,item}">
-                                <v-list-item v-bind="props" :prepend-avatar="item.raw.profileImageUrl" title="">
-                                    <v-list-item-title>
-                                        {{ item.raw.displayName }}
-                                    </v-list-item-title>
-                                    <v-list-item-subtitle>
-                                        <v-chip :prepend-icon="iconCoin">
-                                            {{ resgatador.accountsPoints[item.raw.id].points }}
-                                        </v-chip>
-                                    </v-list-item-subtitle>
-                                </v-list-item>
-                            </template>
-                            <template #chip="{props,item}">
-                                <v-chip
-                                    v-bind="props"
-                                    :prepend-avatar="item.raw.profileImageUrl" :text="item.raw.displayName"
-                                ></v-chip>
-                                <v-chip
-                                    class="ml-2"
-                                    v-bind="props"
-                                    :prepend-icon="iconCoin"
-                                    :text="(resgatador.accountsPoints[item.raw.id].points).toString()"
-                                ></v-chip>
-                            </template>
-                        </v-autocomplete>
-                    </v-col>
-                    <v-col cols="12" v-for="(itemInput,index) of itemInputs" :key="index">
-                        <v-text-field :label="itemInput" v-model="formInputs[index]"></v-text-field>
+                        <form-select-redemption-accounts v-model="accountsIds"
+                                                         :disabled="!resgatador.loaded.accountsCooldown||!resgatador.loaded.accountsPoints"
+                                                         :accounts="resgatador.accounts"
+                                                         :accounts-points="resgatador.accountsPoints"
+                                                         :item="resgatador.storeItems.find(i => i.id === itemId)"
+                                                         :accountsCooldown="resgatador.accountsCooldown"
+                        />
                     </v-col>
                 </v-row>
+                <!--                <v-row>-->
+                <!--                    <v-col cols="12">-->
+                <!--                        <v-autocomplete label="Conta"-->
+                <!--                                        :items="accountsOrder"-->
+                <!--                                        item-value="id"-->
+                <!--                                        item-title="displayName"-->
+                <!--                                        chips-->
+                <!--                                        v-model="accountId"-->
+                <!--                                        :rules="[validateAccountId]"-->
+                <!--                                        :disabled="!resgatador.loaded.accountsPoints||!channelId"-->
+                <!--                                        :loading="resgatador.loading.accountsPoints"-->
+                <!--                                        no-data-text="Nenhuma conta encontrada!">-->
+                <!--                            <template #item="{props,item}">-->
+                <!--                                <v-list-item v-bind="props" :prepend-avatar="item.raw.profileImageUrl" title="">-->
+                <!--                                    <v-list-item-title>-->
+                <!--                                        {{ item.raw.displayName }}-->
+                <!--                                    </v-list-item-title>-->
+                <!--                                    <v-list-item-subtitle>-->
+                <!--                                        <v-chip :prepend-icon="iconCoin">-->
+                <!--                                            {{ resgatador.accountsPoints[item.raw.id].points }}-->
+                <!--                                        </v-chip>-->
+                <!--                                    </v-list-item-subtitle>-->
+                <!--                                </v-list-item>-->
+                <!--                            </template>-->
+                <!--                            <template #chip="{props,item}">-->
+                <!--                                <v-chip-->
+                <!--                                    v-bind="props"-->
+                <!--                                    :prepend-avatar="item.raw.profileImageUrl" :text="item.raw.displayName"-->
+                <!--                                ></v-chip>-->
+                <!--                                <v-chip-->
+                <!--                                    class="ml-2"-->
+                <!--                                    v-bind="props"-->
+                <!--                                    :prepend-icon="iconCoin"-->
+                <!--                                    :text="(resgatador.accountsPoints[item.raw.id].points).toString()"-->
+                <!--                                ></v-chip>-->
+                <!--                            </template>-->
+                <!--                        </v-autocomplete>-->
+                <!--                    </v-col>-->
+                <!--                    <v-col cols="12" v-for="(itemInput,index) of itemInputs" :key="index">-->
+                <!--                        <v-text-field :label="itemInput" v-model="formInputs[index]"></v-text-field>-->
+                <!--                    </v-col>-->
+                <!--                </v-row>-->
             </v-container>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -141,7 +152,7 @@ const $api = useApi()
 const { $toast } = useNuxtApp()
 const apiError = ref<null | string>(null)
 const channelId = ref<null | string>(null)
-const accountId = ref<null | string>(null)
+const accountsIds = ref<string[]>([])
 const itemId = ref<null | string>(null)
 const formInputs = ref<string[]>([])
 const formValid = ref<boolean>(false)
@@ -163,14 +174,14 @@ const validateAccountId = (value: string) => {
 const onSubmit = () => {
     if (!formValid) return
     loading.value = true
-    apiError.value=null
+    apiError.value = null
 
     $api('/redemptions-bot/add-item', {
         method: 'post',
         body: {
             channelId: channelId.value,
-            itemId: itemId.value,
-            accountId: accountId.value,
+            itemId: itemId.value[0],
+            accountsIds: accountsIds.value,
             inputs: formInputs.value
         }
     })
@@ -202,10 +213,11 @@ const accountsOrder = computed(() => {
 
 watch(() => channelId.value, () => {
     itemId.value = null
-    accountId.value = null
+    accountsIds.value = null
     if (channelId.value && typeof channelId.value === 'string') {
         resgatador.loadItems(channelId.value)
         resgatador.loadAccountsPoints(channelId.value)
+        resgatador.loadAccountsCooldown(channelId.value)
     } else {
         resgatador.accountsPoints = {}
         resgatador.storeItems = []

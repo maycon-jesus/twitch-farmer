@@ -24,7 +24,10 @@
                             <v-alert :icon="iconError" type="error">{{ rescueError }}</v-alert>
                         </v-col>
                     </v-expand-transition>
-                    <v-col cols="12">
+                    <v-col cols="12" v-if="addToBot">
+                        <form-select-redemption-accounts :disabled="!twitchChannel.loaded.accountsCooldown" v-model="accountsIds" :accounts="accounts" :accounts-points="twitchChannel.accountsPoints" :accounts-cooldown="twitchChannel.accountsCooldown" :item="$props.item"/>
+                    </v-col>
+                    <v-col cols="12" v-else>
                         <v-autocomplete label="Conta"
                                         :items="accounts"
                                         item-value="id"
@@ -123,6 +126,7 @@ const validateMessage = (value: string) => {
 const inputData = ref<string[]>([])
 const messageData = ref<string>('')
 const accountId = ref<string | null>(null)
+const accountsIds = ref<string[] | null>([])
 const formValid = ref<boolean>(false)
 const addToBot = ref<boolean>(false)
 const rescued = ref(false)
@@ -148,7 +152,7 @@ const redemption = () => {
             body: {
                 channelId: twitchChannel.channel?.id,
                 itemId: props.item.id,
-                accountId: accountId.value,
+                accountsIds: accountsIds.value,
                 inputs: inputData.value
             }
         })
