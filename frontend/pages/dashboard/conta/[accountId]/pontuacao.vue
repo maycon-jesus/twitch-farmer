@@ -41,14 +41,14 @@
                                 <v-icon :icon="iconCoin"></v-icon>
                             </template>
                             <v-list-item-title>Pontos</v-list-item-title>
-                            <v-list-item-subtitle>{{ channelsPoints[channel.id] }}</v-list-item-subtitle>
+                            <v-list-item-subtitle>{{ channelsPoints[channel.id]?.points }}</v-list-item-subtitle>
                         </v-list-item>
                         <v-list-item>
                             <template v-slot:prepend>
                                 <v-icon :icon="iconCoin"></v-icon>
                             </template>
                             <v-list-item-title>Rank</v-list-item-title>
-                            <v-list-item-subtitle>{{ channelsRanks[channel.id] }}</v-list-item-subtitle>
+                            <v-list-item-subtitle>{{ channelsPoints[channel.id]?.rank }}</v-list-item-subtitle>
                         </v-list-item>
                     </v-list>
                 </v-card-text>
@@ -84,22 +84,21 @@ const api = useApi()
 // Variables
 const accountId = route.params.accountId
 const channelsPoints = ref<{
-    [channelId: string]: number
-}>({})
-const channelsRanks = ref<{
-    [channelId: string]: number
+    [channelId: string]: {
+        points:number,
+        rank:number
+    }
 }>({})
 const search = ref('')
 
-const loadAccountPoints = (channelId: string) => {
+const loadAccountPoints = () => {
     ui.startLoading()
-    api(`/twitch-channels/${channelId}/${accountId}/points`)
+    api(`/twitch-accounts/${accountId}/points`)
         .then((data: any) => {
-            channelsPoints.value[channelId] = data.points as any
-            channelsRanks.value[channelId] = data.rank as any
+            channelsPoints.value = data as any
         })
         .catch(() => {
-            channelsPoints.value[channelId] = 0
+            channelsPoints.value = {}
         })
         .finally(() => {
             ui.endLoading()
@@ -114,16 +113,5 @@ const channelsFiltered = computed(() => {
     })
 })
 
-watch(
-    () => twitchChannels.channels,
-    () => {
-        twitchChannels.channels.forEach((channel) => {
-            loadAccountPoints(channel.id)
-        })
-        console.log('gg', twitchChannels.channels.length)
-    },
-    {
-        immediate: true,
-    }
-)
+loadAccountPoints()
 </script>
