@@ -18,6 +18,7 @@ import { StreamElementsRedemptions } from '../controllers/StreamElementsRedempti
 import { StreamElementsRedemptionsQueue } from '../controllers/StreamElementsRedemptionsQueue';
 import { ProxyListPingController } from '../controllers/ProxyListPing';
 import { NtfyController } from '../controllers/Ntfy';
+import { RedemptionDataProfilesController } from '../controllers/RedemptionDataProfiles';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -38,6 +39,7 @@ export interface IDependencys {
     streamElementsRedemptionsQueue: StreamElementsRedemptionsQueue
     proxyListPing: ProxyListPingController,
     ntfy: NtfyController,
+    redemptionDataProfiles: RedemptionDataProfilesController,
     services: {
         twitchRefreshToken: TwitchRefreshTokensService;
         twitchBot: TwitchBotService;
@@ -50,7 +52,7 @@ const dependencys: {
         [dependencyName: string]: any;
     };
 } = {
-    services: {},
+    services: {}
 };
 
 export function setDependency<K extends keyof IDependencys>(dependencyName: K, value: IDependencys[K]) {

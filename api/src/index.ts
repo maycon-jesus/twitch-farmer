@@ -27,9 +27,10 @@ import { StreamElementsRedemptionsQueue } from './controllers/StreamElementsRede
 import { ProxyListPingController } from './controllers/ProxyListPing';
 import { ProxyPingUpdaterService } from './services/ProxyPingUpdater';
 import { NtfyController } from './controllers/Ntfy';
+import { RedemptionDataProfilesController } from './controllers/RedemptionDataProfiles';
 
 dotenv.config({
-    path: './.env',
+    path: './.env'
 });
 
 const app = express();
@@ -74,14 +75,14 @@ function loadControllers() {
     const streamElementsItems = new StreamElementsItemsController();
     setDependency('streamElementsItems', streamElementsItems);
 
-    const streamElementsRedemptions = new StreamElementsRedemptions()
-    setDependency('streamElementsRedemptions', streamElementsRedemptions)
+    const streamElementsRedemptions = new StreamElementsRedemptions();
+    setDependency('streamElementsRedemptions', streamElementsRedemptions);
 
-    const streamElementsRedemptionsQueue = new StreamElementsRedemptionsQueue()
-    setDependency('streamElementsRedemptionsQueue', streamElementsRedemptionsQueue)
+    const streamElementsRedemptionsQueue = new StreamElementsRedemptionsQueue();
+    setDependency('streamElementsRedemptionsQueue', streamElementsRedemptionsQueue);
 
-    const proxyListPing = new ProxyListPingController()
-    setDependency('proxyListPing', proxyListPing)
+    const proxyListPing = new ProxyListPingController();
+    setDependency('proxyListPing', proxyListPing);
 
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);
@@ -89,13 +90,16 @@ function loadControllers() {
     const twitchBotService = new TwitchBotService();
     setServiceDependency('twitchBot', twitchBotService);
 
-    const ntfyController = new NtfyController()
+    const ntfyController = new NtfyController();
     setDependency('ntfy', ntfyController);
+
+    const redemptionDataProfiles = new RedemptionDataProfilesController();
+    setDependency('redemptionDataProfiles', redemptionDataProfiles);
 
     new StreamElementsPointsUpdaterService();
     new StreamElementsItemsUpdaterService();
-    new StreamElementsRedemptionsUpdater()
-    new ProxyPingUpdaterService()
+    new StreamElementsRedemptionsUpdater();
+    new ProxyPingUpdaterService();
 }
 
 database.runMigrations().then(() => {

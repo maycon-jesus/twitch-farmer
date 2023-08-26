@@ -35,6 +35,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
     async listItemsFromQueue(filters: {
         itemId?: string,
         ownerId?: string,
+        channelId?: string,
         completed?: boolean
         order?: {
             by: 'priority'|'createdAt'|'updatedAt',
@@ -46,6 +47,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
         const data = await this.dd.database.db('streamelements_redemptions_queue').where((queryBuilder) => {
             if(filters.itemId) queryBuilder.where({itemId: filters.itemId})
             if(filters.ownerId) queryBuilder.where({ownerId: filters.ownerId})
+            if(filters.channelId) queryBuilder.where({channelId: filters.channelId})
             if (filters.completed !== undefined) queryBuilder.where({ completed: filters.completed ? 1 : 0 });
         })
             .orderByRaw(filters.orderByRaw||`${filters.order?.by} ${filters.order?.sort}`)
