@@ -15,7 +15,30 @@
                 <dashboard-twitch-accounts-btn-add-account />
             </v-col>
         </v-row>
-        <v-row justify="center">
+        <v-row v-if="display.mdAndUp.value">
+            <v-col cols="12">
+                <v-table class="rounded">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nick</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <lazy-dashboard-twitch-accounts-resume-row
+                        v-for="(account,index) in accountsToShow"
+                        :key="account.id"
+                        :account="account"
+                        :index="index+1"
+                        @account-updated="getAccounts(false)"
+                    />
+                    </tbody>
+                </v-table>
+            </v-col>
+        </v-row>
+        <v-row justify="center" v-else>
             <v-col cols="12">
                 <div class="accounts-list">
                     <lazy-dashboard-twitch-accounts-resume-card
@@ -39,18 +62,20 @@
 import { ref } from 'vue'
 import { AccountResume } from '~/types/Accounts'
 import { useUi } from '~/store/ui'
+import { useDisplay } from 'vuetify'
 
 // Types
 definePageMeta({
     layout: 'dashboard',
-    middleware: ['auth'],
+    middleware: ['auth']
 })
 useSeoMeta({
-    title: 'Contas',
+    title: 'Contas'
 })
 
 const api = useApi()
 const ui = useUi()
+const display = useDisplay()
 const accounts = ref<AccountResume[]>([])
 const search = ref('')
 const accountsToShow = computed(() => {
