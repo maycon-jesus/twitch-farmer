@@ -3,6 +3,7 @@ import tmi from 'tmi.js';
 import type { TwitchAccount } from '../controllers/TwitchAccounts';
 import NodeCache from 'node-cache';
 import { EventEmitter } from 'events';
+import { waitTime } from '../utils/waitTime';
 
 class TwitchBot {
     tmiClient: tmi.Client;
@@ -114,6 +115,7 @@ export class TwitchBotService extends ServiceBase {
                 this.channelsCache.set(account.ownerId, channelsMap);
                 this.addAccount(account, channelsMap);
             }
+            await waitTime(1000)
         }
     }
 
