@@ -27,6 +27,8 @@ import { StreamElementsRedemptionsQueue } from './controllers/StreamElementsRede
 import { ProxyListPingController } from './controllers/ProxyListPing';
 import { ProxyPingUpdaterService } from './services/ProxyPingUpdater';
 import { NtfyController } from './controllers/Ntfy';
+import { TwitchUsersController } from './controllers/TwitchUsers';
+import { TwitchWhispersController } from './controllers/TwitchWhispers';
 
 dotenv.config({
     path: './.env',
@@ -82,6 +84,12 @@ function loadControllers() {
 
     const proxyListPing = new ProxyListPingController()
     setDependency('proxyListPing', proxyListPing)
+
+    const twitchUsers = new TwitchUsersController()
+    setDependency('twitchUsers', twitchUsers)
+
+    const twitchWhispers = new TwitchWhispersController()
+    setDependency('twitchWhispers', twitchWhispers)
 
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);

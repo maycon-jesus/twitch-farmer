@@ -2,9 +2,11 @@ import { ServiceBase } from '../base/Service';
 import tmi from 'tmi.js';
 import type { TwitchAccount } from '../controllers/TwitchAccounts';
 import NodeCache from 'node-cache';
+import { EventEmitter } from 'events';
 
 class TwitchBot {
     tmiClient: tmi.Client;
+    events= new EventEmitter()
 
     constructor(private twitchAccount: TwitchAccount, private channels: string[]) {
         this.tmiClient = new tmi.Client({
@@ -18,12 +20,15 @@ class TwitchBot {
             .then((r) => {
                 console.log(r);
                 this.enterChannels();
-
-                this.tmiClient.on('whisper', (from,user,message,self)=>{
-                    console.log('whisper', from,user,message,self)
-                })
             })
             .catch((err) => console.error(err));
+
+        this.tmiClient.on('whisper' as any, (from,user,message,self)=>{
+            this.events.emit('whisper', {
+                user,
+                message
+            })
+        })
     }
 
     get state() {
@@ -117,7 +122,18 @@ export class TwitchBotService extends ServiceBase {
     }
 
     addAccount(account: TwitchAccount, channels: string[]) {
-        this.bots[account.id] = new TwitchBot(account, channels);
+        const twitchBot = new TwitchBot(account, channels)
+        this.bots[account.id] = twitchBot;
+        twitchBot.events.on('whisper', ({user,message})=> {
+            this.dd.twitchWhispers.onMessage({
+                'thread-id': user['thread-id'],
+                username: user.username,
+                'user-id': user['user-id'],
+            }, {
+                username: account.login,
+                userId: account.userId
+            },message)
+        })
     }
 
     async removeAccount(accountId: string) {
