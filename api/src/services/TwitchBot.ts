@@ -18,6 +18,10 @@ class TwitchBot {
             .then((r) => {
                 console.log(r);
                 this.enterChannels();
+
+                this.tmiClient.on('whisper', (from,user,message,self)=>{
+                    console.log('whisper', from,user,message,self)
+                })
             })
             .catch((err) => console.error(err));
     }

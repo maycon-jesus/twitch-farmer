@@ -34,6 +34,11 @@
                         :index="index+1"
                         @account-updated="getAccounts(false)"
                     />
+                    <tr v-if="accountsToShow.length === 0">
+                        <td colspan="4">
+                            {{ search ? 'Nenhuma conta encontrada!' : 'Você não adicionou nenhuma conta ainda' }}
+                        </td>
+                    </tr>
                     </tbody>
                 </v-table>
             </v-col>

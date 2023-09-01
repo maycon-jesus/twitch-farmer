@@ -38,11 +38,6 @@
                         </v-col>
                     </v-row>
                     <v-item-group :multiple="true" v-model="accountsValue">
-                        <v-row v-if="accountsComputed.length===0">
-                            <v-col cols="12">
-                                <v-alert variant="tonal">Nenhum conta encontrada!</v-alert>
-                            </v-col>
-                        </v-row>
                         <v-table>
                             <thead>
                             <tr>
@@ -53,6 +48,11 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <tr v-if="accountsComputed.length===0">
+                                <td colspan="4">
+                                    <v-alert variant="tonal">Nenhum conta encontrada!</v-alert>
+                                </td>
+                            </tr>
                             <v-item v-slot="{isSelected, toggle}" :value="account.id" v-for="account in accountsComputed" :key="account.id">
                                 <tr @click="toggle" class="cursor-pointer">
                                     <td>
