@@ -11,7 +11,6 @@ export async function up(knex: Knex): Promise<any> {
         table.dateTime('updatedAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         table.uuid('role').notNullable();
         table.foreign('role').references('user_roles.id');
-        table.string('ntfyTopicName').defaultTo(null)
     });
 }
 

@@ -46,13 +46,12 @@ export default class RouteRedemptionsQueueStatus extends RouteBase {
                     const account = await this.dd.twitchAccounts.getAccountById(registry.accountId);
                     const item = await this.dd.streamElementsItems.getItem(registry.itemId);
                     if (item) {
-                        const msg = this.dd.ntfy.makeRedemptionMessage({
+                        await this.dd.notifications.sendRedemptionNotification(registry.ownerId, {
                             itemName: item.name,
                             accountName: account.displayName,
                             channelName: channel.displayName,
                             accessCode: body.data.accessCode
-                        });
-                        await this.dd.ntfy.sendMessageToUser(registry.ownerId, msg)
+                        })
                     }
                 }
 

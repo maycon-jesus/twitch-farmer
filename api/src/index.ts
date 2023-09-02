@@ -26,9 +26,9 @@ import { StreamElementsRedemptionsUpdater } from './services/StreamElementsRedem
 import { StreamElementsRedemptionsQueue } from './controllers/StreamElementsRedemptionsQueue';
 import { ProxyListPingController } from './controllers/ProxyListPing';
 import { ProxyPingUpdaterService } from './services/ProxyPingUpdater';
-import { NtfyController } from './controllers/Ntfy';
 import { TwitchUsersController } from './controllers/TwitchUsers';
 import { TwitchWhispersController } from './controllers/TwitchWhispers';
+import { NotificationsController } from './controllers/Notifications';
 
 dotenv.config({
     path: './.env',
@@ -91,14 +91,14 @@ function loadControllers() {
     const twitchWhispers = new TwitchWhispersController()
     setDependency('twitchWhispers', twitchWhispers)
 
+    const notifications = new NotificationsController()
+    setDependency('notifications', notifications)
+
     const twitchRefreshTokensService = new TwitchRefreshTokensService();
     setServiceDependency('twitchRefreshToken', twitchRefreshTokensService);
 
     const twitchBotService = new TwitchBotService();
     setServiceDependency('twitchBot', twitchBotService);
-
-    const ntfyController = new NtfyController()
-    setDependency('ntfy', ntfyController);
 
     new StreamElementsPointsUpdaterService();
     new StreamElementsItemsUpdaterService();

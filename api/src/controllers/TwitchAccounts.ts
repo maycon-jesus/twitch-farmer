@@ -52,8 +52,9 @@ export class TwitchAccountsController extends ControllerBase {
         return preTwitchAccount.ownerId;
     }
 
-    async getAccountByUserId(userId: string) {
-        return this.dd.database.db('twitch_accounts').where({ userId: userId }).first();
+    async getAccountByUserId(userId: string): Promise<TwitchAccount|undefined> {
+        const account: TwitchAccount|undefined = await this.dd.database.db('twitch_accounts').where({ userId: userId }).first();
+        return account
     }
 
     async getAccountById(id: string): Promise<TwitchAccount> {

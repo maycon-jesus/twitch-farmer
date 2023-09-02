@@ -126,8 +126,8 @@ export class TwitchBotService extends ServiceBase {
     addAccount(account: TwitchAccount, channels: string[]) {
         const twitchBot = new TwitchBot(account, channels)
         this.bots[account.id] = twitchBot;
-        twitchBot.events.on('whisper', ({user,message})=> {
-            this.dd.twitchWhispers.onMessage({
+        twitchBot.events.on('whisper', async ({user,message})=> {
+            await this.dd.twitchWhispers.onMessage({
                 'thread-id': user['thread-id'],
                 username: user.username,
                 'user-id': user['user-id'],

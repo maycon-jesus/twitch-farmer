@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useUserDataStore = defineStore('user-data', {
     state() {
         return {
-            userData: null as null | { id: string; role: string; firstName: string; lastName: string, ntfyTopicName: string|null },
+            userData: null as null | { id: string; role: string; firstName: string; lastName: string },
             $api: useApi(),
         }
     },

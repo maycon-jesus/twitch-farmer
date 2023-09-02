@@ -12,7 +12,6 @@ export interface IUser {
     role: string;
     createdAt: Date;
     updatedAt: Date;
-    ntfyTopicName: string|null
 }
 
 export class UsersController extends ControllerBase {
@@ -60,11 +59,5 @@ export class UsersController extends ControllerBase {
                 errors: [{message: 'Usuário não encontrado'}],
             });
         return user;
-    }
-
-    async setNtfyTopicName(userId:string, topicName:string|null){
-        await this.dd.database.db('users').where({id: userId}).update({
-            ntfyTopicName: topicName
-        })
     }
 }

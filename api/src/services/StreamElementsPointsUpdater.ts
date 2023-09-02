@@ -1,6 +1,7 @@
 import { ServiceBase } from '../base/Service';
 import cron from 'cron';
 import { TwitchAccount } from '../controllers/TwitchAccounts';
+import { waitTime } from '../utils/waitTime';
 
 export class StreamElementsPointsUpdaterService extends ServiceBase {
     actualPage = 1;
@@ -40,6 +41,7 @@ export class StreamElementsPointsUpdaterService extends ServiceBase {
                     account.login
                 );
                 await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points, points.rank);
+                await waitTime(1000)
             }
         } catch (e) {
             console.error(e);
