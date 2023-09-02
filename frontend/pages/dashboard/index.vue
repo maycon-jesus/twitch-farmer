@@ -7,6 +7,9 @@
         </v-row>
         <v-row>
             <v-col cols="12">
+                <v-alert variant="tonal">NOVIDADE: Receba alertas em seu Telegram quando o bot resgatar algum item ou receber sussurros. <nuxt-link class="text-amber" :to="{name: 'dashboard-configuracoes'}">[CONFIGURAR]</nuxt-link></v-alert>
+            </v-col>
+            <v-col cols="12">
                 <div :class="{ tablet: $vuetify.display.mdAndDown, mobile: $vuetify.display.xs }" class="cards-list">
                     <DashboardHomePageCard
                         :icon="iconTwitch"
