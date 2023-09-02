@@ -28,7 +28,7 @@
                             <v-list-item title="Status">
                                 <v-list-item-subtitle  class="break"><v-chip :text="getStatus().text" :color="getStatus().color"></v-chip></v-list-item-subtitle>
                             </v-list-item>
-                            <v-list-item title="Mensagem do erro">
+                            <v-list-item title="Mensagem do erro" v-if="$props.item.errorReason">
                                 <v-list-item-subtitle  class="break">{{$props.item.errorReason||'Motivo do erro não informado'}}</v-list-item-subtitle>
                             </v-list-item>
                             <v-divider></v-divider>
