@@ -36,12 +36,14 @@ export class StreamElementsPointsUpdaterService extends ServiceBase {
             });
 
             for (const channel of channels) {
-                const points = await this.dd.streamElementsApi.getChannelUserPoints(
-                    channel.streamElementsUserId,
-                    account.login
-                );
-                await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points, points.rank);
-                await waitTime(1000)
+                try{
+                    const points = await this.dd.streamElementsApi.getChannelUserPoints(
+                        channel.streamElementsUserId,
+                        account.login
+                    );
+                    await this.dd.streamElementsPoints.updatePoints(account.id, channel.id, points.points, points.rank);
+                    await waitTime(1000)
+                }catch {}
             }
         } catch (e) {
             console.error(e);
