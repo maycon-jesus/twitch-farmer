@@ -17,9 +17,9 @@ import { StreamElementsItemsController } from '../controllers/StreamElementsItem
 import { StreamElementsRedemptions } from '../controllers/StreamElementsRedemptions';
 import { StreamElementsRedemptionsQueue } from '../controllers/StreamElementsRedemptionsQueue';
 import { ProxyListPingController } from '../controllers/ProxyListPing';
-import { NtfyController } from '../controllers/Ntfy';
 import { TwitchUsersController } from '../controllers/TwitchUsers';
 import { TwitchWhispersController } from '../controllers/TwitchWhispers';
+import { NotificationsController } from '../controllers/Notifications';
 
 export interface IDependencys {
     database: DatabaseModule;
@@ -39,7 +39,7 @@ export interface IDependencys {
     streamElementsRedemptions: StreamElementsRedemptions
     streamElementsRedemptionsQueue: StreamElementsRedemptionsQueue
     proxyListPing: ProxyListPingController,
-    ntfy: NtfyController,
+    notifications: NotificationsController,
     twitchUsers: TwitchUsersController
     twitchWhispers: TwitchWhispersController
     services: {

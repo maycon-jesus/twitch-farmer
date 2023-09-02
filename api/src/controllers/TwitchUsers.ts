@@ -16,9 +16,9 @@ export class TwitchUsersController extends ControllerBase {
         }).first()
         return user
     }
-    async addUserIfNotExists(twitchUserLogin:string):Promise<string> {
+    async addUserIfNotExists(twitchUserLogin:string):Promise<TwitchUser> {
         const userExists:any = await this.getUserByLogin(twitchUserLogin)
-        if(userExists) return userExists.id
+        if(userExists) return userExists
         const twitchAccount = await this.dd.twitchApi.getAccountDetailsByLogin(twitchUserLogin);
         await this.dd.database.db('twitch_users').insert({
             id: twitchAccount.id,
@@ -26,6 +26,7 @@ export class TwitchUsersController extends ControllerBase {
             displayName: twitchAccount.displayName,
             profileImageUrl: twitchAccount.profileImageUrl
         })
-        return twitchAccount.id
+        const user = await this.getUserByLogin(twitchUserLogin) as TwitchUser
+        return user
     }
 }

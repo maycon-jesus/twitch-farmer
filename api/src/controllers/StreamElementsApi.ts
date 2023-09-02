@@ -83,10 +83,7 @@ export class StreamElementsApiController extends ControllerBase {
                 rank: data.data.rank as number,
             };
         } catch {
-            return {
-                points: 0,
-                rank: 1
-            };
+            throw new Error('Não foi possivel obter os pontos!')
         }
     }
 
@@ -97,7 +94,7 @@ export class StreamElementsApiController extends ControllerBase {
             );
             return items.data as StreamElementsItem[];
         } catch {
-            return [];
+            throw new Error('Não foi possivel carregar os items!')
         }
     }
 
