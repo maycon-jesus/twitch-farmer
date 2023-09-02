@@ -20,11 +20,12 @@ export class TwitchWhispersController extends ControllerBase {
         }
     }
 
-    async addWhisperToThread(threadId:string,message:string){
+    async addWhisperToThread(threadId:string,authorId:string,message:string){
         await this.dd.database.db('whispers').insert({
             id: v4(),
             threadId,
-            message
+            message,
+            authorId
         })
     }
 
@@ -39,6 +40,6 @@ export class TwitchWhispersController extends ControllerBase {
         await this.dd.twitchUsers.addUserIfNotExists(from.username)
         await this.dd.twitchUsers.addUserIfNotExists(to.username)
         await this.createThreadIfNotExists(from['thread-id'], from['user-id'], to.userId)
-        await this.addWhisperToThread(from['thread-id'], message)
+        await this.addWhisperToThread(from['thread-id'], from['user-id'],message)
     }
 }
