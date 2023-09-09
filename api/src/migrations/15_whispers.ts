@@ -5,6 +5,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('id').primary();
 
         table.string('threadId').notNullable().references('whispers_threads.id')
+        table.string('authorId').notNullable().references('twitch_users.id')
         table.text('message').notNullable()
 
         table.dateTime('createdAt').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP'));

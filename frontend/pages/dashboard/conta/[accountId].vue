@@ -65,6 +65,15 @@
                             </v-tab>
                             <v-tab
                                 :to="{
+                                    name: `dashboard-conta-accountId-sussurros`,
+                                    params: {
+                                        accountId,
+                                    },
+                                }"
+                            >Sussurros
+                            </v-tab>
+                            <v-tab
+                                :to="{
                                     name: `dashboard-conta-accountId-configuracoes`,
                                     params: {
                                         accountId,

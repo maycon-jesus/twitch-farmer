@@ -16,6 +16,14 @@ export class TwitchUsersController extends ControllerBase {
         }).first()
         return user
     }
+
+    async getUserById(twitchId:string):Promise<TwitchUser|undefined>{
+        const user = await this.dd.database.db('twitch_users').where({
+            id: twitchId
+        }).first()
+        return user
+    }
+
     async addUserIfNotExists(twitchUserLogin:string):Promise<TwitchUser> {
         const userExists:any = await this.getUserByLogin(twitchUserLogin)
         if(userExists) return userExists

@@ -1,5 +1,23 @@
 import { ControllerBase } from '../base/Controller';
 import { v4 } from 'uuid';
+import { DateTime } from 'luxon';
+
+export type TwitchThread = {
+    id:string,
+    twitchUserId1:string,
+    twitchUserId2:string,
+    createdAt:string,
+    updatedAt:string
+}
+
+export type TwitchWhisper = {
+    id:string,
+    threadId:string,
+    message:string,
+    createdAt:string,
+    updatedAt:string,
+    authorId: string
+}
 
 export class TwitchWhispersController extends ControllerBase {
     async getThread(threadId:string){
@@ -17,6 +35,8 @@ export class TwitchWhispersController extends ControllerBase {
                 twitchUserId1: userId1,
                 twitchUserId2: userId2,
             })
+        }else{
+            await this.dd.database.db('whispers_threads').update({updatedAt: DateTime.now().toISO()}).where({id: threadId})
         }
     }
 
@@ -27,6 +47,20 @@ export class TwitchWhispersController extends ControllerBase {
             message,
             authorId
         })
+    }
+
+    async getThreadsFromAccountId(twitchAccountId:string): Promise<TwitchThread[]>{
+        const data = await this.dd.database.db('whispers_threads').where({
+            twitchUserId1: twitchAccountId
+        }).orWhere({
+            twitchUserId2: twitchAccountId
+        }).orderBy('updatedAt', 'desc')
+        return data
+    }
+
+    async getWhispersFromThreadId(threadId:string): Promise<TwitchWhisper[]>{
+        const data = await this.dd.database.db('whispers').where({threadId}).orderBy('createdAt','desc')
+        return data
     }
 
     async onMessage(from: {
