@@ -31,6 +31,10 @@ jobs:
           app: '${{ secrets.CAPROVER_API_APP_NAME }}'
           token: '${{ secrets.CAPROVER_API_TOKEN }}'
 
+      - name: Sleep 2 minutes
+        run: sleep 120s
+        shell: bash
+
       - name: Deploy App Redemptions-Bot to CapRover
         uses: caprover/deploy-from-github@v1.0.1
         with:
