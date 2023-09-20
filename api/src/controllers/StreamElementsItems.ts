@@ -33,7 +33,7 @@ export class StreamElementsItemsController extends ControllerBase {
             ...item,
             category: item.category || null,
             thumbnailUrl: item.thumbnailUrl || null,
-            inputs: JSON.stringify(item.inputs),
+            inputs: JSON.stringify(item.inputs)
         };
         if (itemExists) {
             await this.dd.database.db('streamelements_items').update(itemToDb).where({ id: item.id });
@@ -55,7 +55,7 @@ export class StreamElementsItemsController extends ControllerBase {
         return items.map((i) => {
             return {
                 ...i,
-                inputs: JSON.parse(i.inputs),
+                inputs: JSON.parse(i.inputs)
             };
         });
     }

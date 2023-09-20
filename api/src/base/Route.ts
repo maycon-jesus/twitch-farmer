@@ -17,7 +17,7 @@ export abstract class RouteBase {
         this.path = config.path || '/';
         this.router = express.Router({
             mergeParams: true,
-            strict: true,
+            strict: true
         });
         this.dd = getDependencys();
 

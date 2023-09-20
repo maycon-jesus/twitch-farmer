@@ -1,0 +1,39 @@
+name: Deploy
+run-name: deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Production
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+      - name: "Package in .tar"
+        uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          cwd: "./"
+          files: |
+            api/
+            redemptions-bot/
+          outPath: deploy.tar
+
+      - name: Deploy App API to CapRover
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_API_APP_NAME }}'
+          token: '${{ secrets.CAPROVER_API_TOKEN }}'
+
+      - name: Deploy App Redemptions-Bot to CapRover
+        uses: caprover/deploy-from-github@v1.0.1
+        with:
+          server: '${{ secrets.CAPROVER_SERVER }}'
+          app: '${{ secrets.CAPROVER_BOT_APP_NAME }}'
+          token: '${{ secrets.CAPROVER_BOT_TOKEN }}'
