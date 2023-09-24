@@ -1,5 +1,7 @@
 import { ControllerBase } from '../base/Controller';
 import { TelegrafModule } from '../modules/Telegraf.module';
+import { sendMessageToCategory } from 'discord-webhook-util';
+import { DateTime } from 'luxon';
 
 type NotificationSettings = {
     userId: string,
@@ -47,8 +49,25 @@ export class NotificationsController extends ControllerBase {
         itemName: string,
         channelName: string,
         accountName: string,
-        accessCode?: string
+        accessCode?: string,
+        ownerName:string
     }) {
+        // Admin discord
+        const adminDescription = [
+            `**Usuário:** ${data.ownerName}`,
+            `**Item:** ${data.itemName}`,
+            `**Canal:** ${data.channelName}`
+        ]
+        await sendMessageToCategory('notification-redemptions', {
+            embeds: [{
+                title: `🎉 Resgate feito com sucesso!`,
+                color: '#2ecc71',
+                timestamp: DateTime.now().toISO()!,
+                description: adminDescription.join('\n'),
+            }]
+        })
+
+        // User telegram
         const userSettings = await this.getUserSettings(userId);
         if (!userSettings.enableRedemptions) return;
         if (userSettings.telegramChatId) {

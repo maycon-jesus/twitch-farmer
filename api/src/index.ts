@@ -29,10 +29,13 @@ import { ProxyPingUpdaterService } from './services/ProxyPingUpdater';
 import { TwitchUsersController } from './controllers/TwitchUsers';
 import { TwitchWhispersController } from './controllers/TwitchWhispers';
 import { NotificationsController } from './controllers/Notifications';
+import { registerWebhookInCategory } from 'discord-webhook-util';
 
 dotenv.config({
     path: './.env',
 });
+
+registerWebhookInCategory('notification-redemptions', process.env.DISCORD_REDEMPTIONS_WEBHOOK!)
 
 const app = express();
 

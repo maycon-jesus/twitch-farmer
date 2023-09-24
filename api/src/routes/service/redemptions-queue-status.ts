@@ -1,6 +1,7 @@
 import { RouteBase } from '../../base/Route';
 import { z } from 'zod';
 import { ErrorMaker, ErrorToResponse } from '../../libs/ErrorMaker';
+import { sendMessageToCategory } from 'discord-webhook-util';
 
 export default class RouteRedemptionsQueueStatus extends RouteBase {
     bodyValidator = z.object({
@@ -45,13 +46,20 @@ export default class RouteRedemptionsQueueStatus extends RouteBase {
                     const channel = await this.dd.twitchChannels.getChannel(registry.channelId);
                     const account = await this.dd.twitchAccounts.getAccountById(registry.accountId);
                     const item = await this.dd.streamElementsItems.getItem(registry.itemId);
+                    const owner = await this.dd.users.findOne(registry.ownerId)
+
                     if (item) {
-                        await this.dd.notifications.sendRedemptionNotification(registry.ownerId, {
-                            itemName: item.name,
-                            accountName: account.displayName,
-                            channelName: channel.displayName,
-                            accessCode: body.data.accessCode
-                        })
+                        try{
+                            await this.dd.notifications.sendRedemptionNotification(registry.ownerId, {
+                                itemName: item.name,
+                                accountName: account.displayName,
+                                channelName: channel.displayName,
+                                accessCode: body.data.accessCode,
+                                ownerName: owner.firstName
+                            })
+                        }catch(e) {
+                            console.log(e)
+                        }
                     }
                 }
 

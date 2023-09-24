@@ -25,9 +25,8 @@ export class TelegrafModule extends ServiceBase {
         }).catch();
     }
 
-    sendMessage(chatId: string,message:string) {
-
-        this.telegraf.telegram.sendMessage(chatId, message, {
+    async sendMessage(chatId: string,message:string) {
+        await this.telegraf.telegram.sendMessage(chatId, message, {
             parse_mode: 'MarkdownV2'
         });
     }
