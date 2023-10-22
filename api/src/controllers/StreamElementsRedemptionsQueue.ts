@@ -60,7 +60,7 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
 
     async getStreamElementsItemQueueSize(itemId:string):Promise<number>{
         const data:any = await this.dd.database.db('streamelements_redemptions_queue')
-            .where({itemId, completed: 0, suspended: 1})
+            .where({itemId, completed: 0, suspended: 0})
             .count('id as count')
         return data[0].count as number
     }
