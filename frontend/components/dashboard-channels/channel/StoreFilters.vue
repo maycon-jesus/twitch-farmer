@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import { ChannelStoreItem } from '~/types/ChannelStore'
+import type { ChannelStoreItem } from '~/types/ChannelStore'
 import { DateTime } from 'luxon'
 
 const props = defineProps<{

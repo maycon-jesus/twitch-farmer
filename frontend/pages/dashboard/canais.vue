@@ -38,7 +38,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useUi } from '~/store/ui'
-import { ChannelResume } from '~/types/Channels'
+import type { ChannelResume } from '~/types/Channels'
 
 // Types
 definePageMeta({

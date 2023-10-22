@@ -42,7 +42,8 @@ export default class RouteListMyItems extends RouteBase {
                         id: account.id,
                         login: account.login,
                         displayName: account.displayName,
-                        profileImageUrl: account.profileImageUrl
+                        profileImageUrl: account.profileImageUrl,
+                        hasStreamElementsToken: !!account.streamElementsToken
                     }
                     item.inputs = JSON.parse(item.inputs)
                     const it = await this.dd.streamElementsItems.getItem(item.itemId)

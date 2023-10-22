@@ -122,7 +122,7 @@
 </template>
 
 <script lang="ts" setup>
-import { AccountResume } from '../../types/Accounts'
+import type { AccountResume } from '~/types/Accounts'
 import iconCheckBoxUnChecked from '~icons/fluent/checkbox-unchecked-24-regular'
 import iconCheckBoxChecked from '~icons/fluent/checkbox-checked-24-filled'
 import iconCoin from '~icons/pixelarticons/coin'

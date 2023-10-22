@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import iconEye from '~icons/mdi/eye'
 import { useUi } from '../../store/ui'
-import { Redemption } from '../../types/Redemptions'
+import type { Redemption } from '~/types/Redemptions'
 import { DateTime } from 'luxon'
 
 const props = defineProps<{

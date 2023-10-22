@@ -61,7 +61,7 @@
 <script lang="ts" setup>
 import iconQueue from '~icons/fluent/people-queue-20-filled'
 import { ref } from 'vue'
-import { ResgatadorCompletedItem, ResgatadorItem } from '../../types/Resgatador'
+import type { ResgatadorCompletedItem, ResgatadorItem } from '~/types/Resgatador'
 import { DateTime } from 'luxon'
 
 const props = defineProps<{

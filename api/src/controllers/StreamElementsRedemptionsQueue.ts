@@ -13,7 +13,8 @@ interface StreamElementsRedemptionQueue {
     errorReason: string|null,
     priority:number,
     createdAt: string,
-    updatedAt:string
+    updatedAt:string,
+    suspended: 0|1
 }
 
 export class StreamElementsRedemptionsQueue extends ControllerBase {
@@ -35,7 +36,9 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
     async listItemsFromQueue(filters: {
         itemId?: string,
         ownerId?: string,
-        completed?: boolean
+        accountId?: string,
+        completed?: boolean,
+        hideSuspended?: boolean,
         order?: {
             by: 'priority'|'createdAt'|'updatedAt',
             sort: 'asc'|'desc'
@@ -46,6 +49,8 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
         const data = await this.dd.database.db('streamelements_redemptions_queue').where((queryBuilder) => {
             if(filters.itemId) queryBuilder.where({itemId: filters.itemId})
             if(filters.ownerId) queryBuilder.where({ownerId: filters.ownerId})
+            if(filters.accountId) queryBuilder.where({accountId: filters.accountId})
+            if(filters.hideSuspended) queryBuilder.where({suspended: 0})
             if (filters.completed !== undefined) queryBuilder.where({ completed: filters.completed ? 1 : 0 });
         })
             .orderByRaw(filters.orderByRaw||`${filters.order?.by} ${filters.order?.sort}`)
@@ -54,7 +59,9 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
     }
 
     async getStreamElementsItemQueueSize(itemId:string):Promise<number>{
-        const data:any = await this.dd.database.db('streamelements_redemptions_queue').where({itemId, completed: 0}).count('id as count')
+        const data:any = await this.dd.database.db('streamelements_redemptions_queue')
+            .where({itemId, completed: 0, suspended: 1})
+            .count('id as count')
         return data[0].count as number
     }
 
@@ -62,7 +69,8 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
         const allItems = await this.listItemsFromQueue({
             itemId,
             completed: false,
-            orderByRaw: 'priority desc, createdAt asc'
+            orderByRaw: 'priority desc, createdAt asc',
+            hideSuspended: true
         })
         let count = 0
         allItems.find(i => {
@@ -132,5 +140,25 @@ export class StreamElementsRedemptionsQueue extends ControllerBase {
 
     async deleteItemsByAccountId(accountId:string){
         await this.dd.database.db('streamelements_redemptions_queue').where({accountId}).del()
+    }
+
+    async setItemQueueSuspended(itemId:string, suspended:boolean){
+        await this.dd.database.db('streamelements_redemptions_queue').where({id: itemId}).update({suspended: suspended? 1:0})
+    }
+
+    async setAllItemsQueueSuspended(suspended: boolean, filters?: {
+        accountId?:string
+    }){
+        const allItems = await this.listItemsFromQueue({
+            completed: false,
+            accountId: filters?.accountId,
+            order: {
+                by: 'createdAt',
+                sort: 'desc'
+            }
+        })
+        for(const item of allItems){
+            await this.setItemQueueSuspended(item.id, suspended)
+        }
     }
 }

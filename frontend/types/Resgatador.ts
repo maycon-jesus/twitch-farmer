@@ -5,6 +5,7 @@ export type ResgatadorItem = {
     createdAt: string,
     id: string,
     inputs: string[],
+    suspended: 0|1,
     item: {
         name: string,
         cost: number,

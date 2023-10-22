@@ -16,6 +16,7 @@
                 <v-chip v-if="account.bot"
                 >{{ account.bot.channelsConnected }} de {{ account.bot.totalChannels }} canais
                 </v-chip>
+                <v-chip v-if="!account.hasStreamElementsToken" color="warning">Sem token do StreamElements</v-chip>
             </div>
             <div v-if="accountStatus.type === 'invalid_access'" class="mt-4">
                 <v-alert :icon="false" type="error"
@@ -72,7 +73,7 @@
 import { computed, ref } from 'vue' // noinspection TypeScriptCheckImport
 import iconVerticalDots from '~icons/mdi/dots-vertical' // noinspection TypeScriptCheckImport
 import iconDelete from '~icons/ic/baseline-delete-forever'
-import { AccountResume } from '~/types/Accounts'
+import type { AccountResume } from '~/types/Accounts'
 
 const props = defineProps<{
     account: AccountResume

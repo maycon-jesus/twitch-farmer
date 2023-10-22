@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ResgatadorCompletedItem } from '../../types/Resgatador'
+import type { ResgatadorCompletedItem } from '~/types/Resgatador'
 import { DateTime } from 'luxon'
 
 const props = defineProps<{

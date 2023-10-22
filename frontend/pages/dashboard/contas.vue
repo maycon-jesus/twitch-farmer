@@ -65,7 +65,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { AccountResume } from '~/types/Accounts'
+import type { AccountResume } from '~/types/Accounts'
 import { useUi } from '~/store/ui'
 import { useDisplay } from 'vuetify'
 

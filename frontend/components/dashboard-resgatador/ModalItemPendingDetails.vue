@@ -53,7 +53,7 @@
 <script lang="ts" setup>
 import iconQueue from '~icons/fluent/people-queue-20-filled'
 import { ref } from 'vue'
-import { ResgatadorItem } from '../../types/Resgatador'
+import type { ResgatadorItem } from '~/types/Resgatador'
 
 const props = defineProps<{
     modelValue: boolean

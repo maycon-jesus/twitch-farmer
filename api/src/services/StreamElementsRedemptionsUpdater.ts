@@ -47,7 +47,7 @@ export class StreamElementsRedemptionsUpdater extends ServiceBase {
             const channel = channels.find(c => c.streamElementsUserId === redemption.channel._id);
             if (!channel) continue;
             if (redemption.item?._id) {
-                const itemExistOnDb = await this.dd.streamElementsItems.getItem(redemption.item?._id);
+                const itemExistOnDb = await this.dd.streamElementsItems.getItem(redemption.item?._id!);
                 if (!itemExistOnDb) continue;
             }
 

@@ -104,7 +104,7 @@ import iconError from '~icons/material-symbols/error'
 import iconCoin from '~icons/pixelarticons/coin'
 import iconQueue from '~icons/fluent/people-queue-20-filled'
 
-import { ChannelStoreItem } from '../../../types/ChannelStore'
+import type { ChannelStoreItem } from '~/types/ChannelStore'
 import { useTwitchChannel } from '../../../store/twitch-channel'
 
 const twitchChannel = useTwitchChannel()

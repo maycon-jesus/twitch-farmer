@@ -137,6 +137,9 @@ export class TwitchAccountsController extends ControllerBase {
                 streamElementsToken: streamElementsToken || null,
                 streamElementsUserId: userId
             });
+        await this.dd.streamElementsRedemptionsQueue.setAllItemsQueueSuspended(false, {
+            accountId: accountId
+        })
     }
 
     async setTwitchTokens(accountId: string, accessToken: string, refreshToken: string, tokenExpiresAt: DateTime) {

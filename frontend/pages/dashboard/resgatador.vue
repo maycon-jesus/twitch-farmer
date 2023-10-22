@@ -56,8 +56,15 @@
                                             </td>
                                             <td>
                                                 <v-chip
+                                                    v-if="!itemItem.suspended"
                                                     :prepend-icon="iconQueue"
                                                     :text="`Posição: ${itemItem.queuePosition}`"
+                                                ></v-chip>
+                                                <v-chip
+                                                    v-else
+                                                    :prepend-icon="iconQueue"
+                                                    color="warning"
+                                                    text="Resgate suspenso"
                                                 ></v-chip>
                                             </td>
                                             <td>
@@ -135,7 +142,7 @@ import chevronUp from '~icons/mdi/chevron-up'
 import iconQueue from '~icons/fluent/people-queue-20-filled'
 import iconDelete from '~icons/typcn/delete'
 import iconError from '~icons/material-symbols/error'
-import { ResgatadorCompletedItem, ResgatadorItem } from '../../types/Resgatador'
+import type { ResgatadorCompletedItem, ResgatadorItem } from '~/types/Resgatador'
 import { useDisplay } from 'vuetify'
 
 definePageMeta({

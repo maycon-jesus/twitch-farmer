@@ -1,4 +1,4 @@
-export type AccountResume = {
+export interface AccountResume {
     id: string
     login: string
     displayName: string
@@ -9,5 +9,6 @@ export type AccountResume = {
         channelsConnected: number
         totalChannels: number
         state: 'CONNECTING' | 'OPEN' | 'CLOSING' | 'CLOSED'
-    }
+    },
+    hasStreamElementsToken: boolean
 }
