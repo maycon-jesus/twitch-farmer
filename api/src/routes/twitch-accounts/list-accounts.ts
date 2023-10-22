@@ -26,6 +26,7 @@ export default class ListAccounts extends RouteBase {
                             tokenInvalid: !!account.tokenInvalid,
                             banned: !!account.banned,
                             bot: botData,
+                            hasStreamElementsToken: !!account.streamElementsToken
                         };
                     })
                     .sort((a, b) => {

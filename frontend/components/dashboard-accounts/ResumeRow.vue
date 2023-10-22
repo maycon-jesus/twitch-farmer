@@ -14,6 +14,7 @@
                     }}
                     canais
                 </v-chip>
+                <v-chip v-if="!account.hasStreamElementsToken" color="warning">Sem token do StreamElements</v-chip>
             </ui-chip-group>
         </td>
         <td>
@@ -42,7 +43,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue' // noinspection TypeScriptCheckImport
-import { AccountResume } from '~/types/Accounts'
+import type { AccountResume } from '~/types/Accounts'
 
 const props = defineProps<{
     account: AccountResume
@@ -52,12 +53,6 @@ const props = defineProps<{
 const emits = defineEmits<{
     (e: 'account-updated'): void
 }>()
-
-const emitAccountUpdated = () => {
-    emits('account-updated')
-}
-
-const dialogDeleteAccountOpen = ref(false)
 
 const accountStatus = computed<{
     color: string

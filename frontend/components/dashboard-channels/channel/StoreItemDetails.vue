@@ -120,7 +120,7 @@ import leftIcon from '~icons/material-symbols/arrow-back'
 // noinspection TypeScriptCheckImport
 import rightIcon from '~icons/material-symbols/arrow-forward'
 import { computed, ref } from 'vue'
-import { ChannelStoreItem } from '~/types/ChannelStore'
+import type { ChannelStoreItem } from '~/types/ChannelStore'
 import { DateTime } from 'luxon'
 import { useTwitchChannel } from '~/store/twitch-channel'
 

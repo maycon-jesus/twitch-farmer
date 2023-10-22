@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ChannelResume } from '~/types/Channels'
+import type { ChannelResume } from '~/types/Channels'
 import { useUi } from '~/store/ui'
 
 export const useTwitchChannels = defineStore('twitch-channels', {

@@ -89,7 +89,7 @@
 import leftIcon from '~icons/material-symbols/arrow-back'
 // noinspection TypeScriptCheckImport
 import rightIcon from '~icons/material-symbols/arrow-forward'
-import { Redemption } from '../../types/Redemptions'
+import type { Redemption } from '~/types/Redemptions'
 import { computed } from 'vue'
 import { DateTime } from 'luxon'
 

@@ -63,7 +63,7 @@ import iconBasketOff from '~icons/mdi/basket-off'
 // noinspection TypeScriptCheckImport
 import iconStar from '~icons/mdi/star-circle-outline'
 import iconQueue from '~icons/fluent/people-queue-20-filled'
-import { ChannelStoreItem } from '~/types/ChannelStore'
+import type { ChannelStoreItem } from '~/types/ChannelStore'
 import { useTwitchChannel } from '~/store/twitch-channel'
 
 const twitchChannel = useTwitchChannel()

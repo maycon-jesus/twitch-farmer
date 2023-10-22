@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('ownerId').notNullable().references('users.id')
         table.tinyint('completed', 1).defaultTo(0)
         table.tinyint('error', 1).defaultTo(0)
+        table.tinyint('suspended', 1).defaultTo(0)
         table.string('errorReason').nullable().defaultTo(null)
         table.text('inputs').notNullable()
         table.integer('priority').notNullable().defaultTo(1)

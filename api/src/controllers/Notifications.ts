@@ -4,23 +4,28 @@ import { sendMessageToCategory } from 'discord-webhook-util';
 import { DateTime } from 'luxon';
 
 type NotificationSettings = {
-    userId: string,
-    enableRedemptions: 0 | 1,
-    enableWhispers: 0 | 1,
-    telegramUsername: string | null
-    telegramChatId: string | null
-}
+    userId: string;
+    enableRedemptions: 0 | 1;
+    enableWhispers: 0 | 1;
+    telegramUsername: string | null;
+    telegramChatId: string | null;
+};
 
 export class NotificationsController extends ControllerBase {
     private telegraf: TelegrafModule = new TelegrafModule();
 
     async getUserSettings(userId: string): Promise<NotificationSettings> {
-        const userSettings: NotificationSettings | undefined = await this.dd.database.db('notifications_settings').where({ userId }).first();
-        return userSettings as any || {
-            userId,
-            enableRedemptions: 1,
-            enableWhispers: 1
-        };
+        const userSettings: NotificationSettings | undefined = await this.dd.database
+            .db('notifications_settings')
+            .where({ userId })
+            .first();
+        return (
+            (userSettings as any) || {
+                userId,
+                enableRedemptions: 1,
+                enableWhispers: 1,
+            }
+        );
     }
 
     async updateUserSettings(userId: string, settings: Partial<NotificationSettings>) {
@@ -28,44 +33,55 @@ export class NotificationsController extends ControllerBase {
         if (!userSettings) {
             await this.dd.database.db('notifications_settings').insert({
                 userId,
-                ...settings
+                ...settings,
             });
         } else {
-            await this.dd.database.db('notifications_settings').update({
-                ...settings
-            }).where({ userId });
+            await this.dd.database
+                .db('notifications_settings')
+                .update({
+                    ...settings,
+                })
+                .where({ userId });
         }
     }
 
     async setTelegramChatId(telegramUsername: string, telegramChatId: string) {
         const userFind = await this.dd.database.db('notifications_settings').where({ telegramUsername }).first();
         if (!userFind) throw new Error('Nenhuma conta encontrada para vincular o seu telegram a ela!');
-        await this.dd.database.db('notifications_settings').update({
-            telegramChatId
-        }).where({ telegramUsername });
+        await this.dd.database
+            .db('notifications_settings')
+            .update({
+                telegramChatId,
+            })
+            .where({ telegramUsername });
     }
 
-    async sendRedemptionNotification(userId: string, data: {
-        itemName: string,
-        channelName: string,
-        accountName: string,
-        accessCode?: string,
-        ownerName:string
-    }) {
+    async sendRedemptionNotification(
+        userId: string,
+        data: {
+            itemName: string;
+            channelName: string;
+            accountName: string;
+            accessCode?: string;
+            ownerName: string;
+        }
+    ) {
         // Admin discord
         const adminDescription = [
             `**Usuário:** ${data.ownerName}`,
             `**Item:** ${data.itemName}`,
-            `**Canal:** ${data.channelName}`
-        ]
+            `**Canal:** ${data.channelName}`,
+        ];
         await sendMessageToCategory('notification-redemptions', {
-            embeds: [{
-                title: `🎉 Resgate feito com sucesso!`,
-                color: '#2ecc71',
-                timestamp: DateTime.now().toISO()!,
-                description: adminDescription.join('\n'),
-            }]
-        })
+            embeds: [
+                {
+                    title: `🎉 Resgate feito com sucesso!`,
+                    color: '#2ecc71',
+                    timestamp: DateTime.now().toISO()!,
+                    description: adminDescription.join('\n'),
+                },
+            ],
+        });
 
         // User telegram
         const userSettings = await this.getUserSettings(userId);
@@ -76,36 +92,39 @@ export class NotificationsController extends ControllerBase {
                 '',
                 `*Item:* ${data.itemName}`,
                 `*Canal:* ${data.channelName}`,
-                `*Conta:* ${data.accountName}`
+                `*Conta:* ${data.accountName}`,
             ];
             if (data.accessCode) {
                 message.push('');
                 message.push(`Código: \`${data.accessCode}\``);
             }
-            try{
+            try {
                 this.telegraf.sendMessage(userSettings.telegramChatId, message.join('\n'));
-            }catch(e){
-                console.log(e)
+            } catch (e) {
+                console.log(e);
             }
         }
     }
 
-    async sendWhisperNotification(userId: string, data: {
-        fromUser: string,
-        toUser: string,
-        toUserId:string
-    }) {
+    async sendWhisperNotification(
+        userId: string,
+        data: {
+            fromUser: string;
+            toUser: string;
+            toUserId: string;
+        }
+    ) {
         const userSettings = await this.getUserSettings(userId);
-        console.log(userSettings)
+        console.log(userSettings);
         if (!userSettings.enableWhispers) return;
         if (userSettings.telegramChatId) {
             const message = [
                 `💬 Você recebeu um susurro na twitch de *${data.fromUser}* na conta *[${data.toUser}](${process.env.FRONTEND_URL}/dashboard/conta/${data.toUserId})*\\.`,
             ];
-            try{
+            try {
                 this.telegraf.sendMessage(userSettings.telegramChatId, message.join('\n'));
-            }catch(e){
-                console.log(e)
+            } catch (e) {
+                console.log(e);
             }
         }
     }

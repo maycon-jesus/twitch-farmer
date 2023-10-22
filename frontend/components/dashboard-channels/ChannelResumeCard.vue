@@ -63,7 +63,7 @@
 import { ref } from 'vue' // noinspection TypeScriptCheckImport
 import iconVerticalDots from '~icons/mdi/dots-vertical' // noinspection TypeScriptCheckImport
 import iconDelete from '~icons/ic/baseline-delete-forever'
-import { ChannelResume } from '~/types/Channels'
+import type { ChannelResume } from '~/types/Channels'
 
 const props = defineProps<{
     channel: ChannelResume

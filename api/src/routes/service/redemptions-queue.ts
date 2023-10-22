@@ -11,7 +11,8 @@ export default class RouteRedemptionsQueue extends RouteBase {
        this.router.get('/', async (req,res)=> {
            const items:any[] = await this.dd.streamElementsRedemptionsQueue.listItemsFromQueue({
                completed: false,
-               orderByRaw: 'priority desc, createdAt asc'
+               orderByRaw: 'priority desc, createdAt asc',
+               hideSuspended: true
            })
            const channels:string[] = []
 

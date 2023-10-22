@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ChannelStoreItem } from '~/types/ChannelStore'
+import type { ChannelStoreItem } from '~/types/ChannelStore'
 import { ref } from 'vue'
 import { useTwitchChannel } from '~/store/twitch-channel'
 import { useUi } from '~/store/ui'
