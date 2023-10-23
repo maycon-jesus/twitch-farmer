@@ -66,8 +66,8 @@ export class StreamElementsApiController extends ControllerBase {
                 proxy: this.dd.webShareProxy.getRandomProxyForAxios()
             });
             return { valid: true, username: data.data.username as string, id: data.data._id as string };
-        } catch (err){
-            const isUnauthorized = err.response.status === 401
+        } catch (err:any){
+            const isUnauthorized = err.response?.status === 401
             return { valid: !isUnauthorized, username: null, id: null };
         }
     }
