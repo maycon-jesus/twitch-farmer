@@ -62,11 +62,13 @@ export class StreamElementsApiController extends ControllerBase {
             const data = await axios.get('https://api.streamelements.com/kappa/v2/channels/me', {
                 headers: {
                     Authorization: `Bearer ${token}`
-                }
+                },
+                proxy: this.dd.webShareProxy.getRandomProxyForAxios()
             });
             return { valid: true, username: data.data.username as string, id: data.data._id as string };
-        } catch {
-            return { valid: false, username: null, id: null };
+        } catch (err){
+            const isUnauthorized = err.response.status === 401
+            return { valid: !isUnauthorized, username: null, id: null };
         }
     }
 
