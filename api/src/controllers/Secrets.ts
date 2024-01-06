@@ -27,6 +27,7 @@ export class SecretsController extends ControllerBase {
         }
 
         const expired = twitchToken.expiresAt ? (DateTime.fromJSDate(twitchToken.expiresAt).diffNow().get('second') < 0) : false;
+        console.log('Teste espirado', DateTime.fromJSDate(twitchToken.expiresAt).diffNow().get('second'))
         if (expired) {
             const data = await axios.post('https://id.twitch.tv/oauth2/token', {
                 client_id: process.env.TWITCH_BOT_CLIENT_ID,
