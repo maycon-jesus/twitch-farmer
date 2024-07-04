@@ -30,7 +30,7 @@ export class WebShareProxyModule {
                 },
             })
             .catch((e) => {
-                console.log(e.response)
+                console.log(e)
                 throw new Error('Ocorreu um erro ao carregar os proxys');
             });
         this.proxyList.push(
