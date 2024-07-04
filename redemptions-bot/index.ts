@@ -107,6 +107,7 @@ function updateQueue() {
                 })
             }
         })
+        .catch(err => console.error(err))
         .finally(() => {
             setTimeout(() => {
                 updateQueue()
